@@ -38,3 +38,12 @@ let time = `${
 let date = document.getElementById("date");
 
 date.insertAdjacentHTML("beforeend", time);
+
+// Add More Comments in HTML
+
+let card = document.getElementsByClassName("card");
+let button_new_post = document.getElementById("new-post");
+
+button_new_post.addEventListener("click", () => {
+    
+})
