@@ -19,6 +19,17 @@ body {
   font-family: "Readex Pro", monospace;
 }
 
+ul {
+  list-style: none;
+}
+
+button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  font-family: "Readex Pro", monospace;
+}
+
 .container {
   padding: 2rem;
   display: -ms-grid;
@@ -28,27 +39,83 @@ body {
   grid-gap: 2rem;
   width: clamp(100px, 95%, 1400px);
   margin: 0 auto;
+  opacity: 0;
+  -webkit-animation: fadeUp 0.7s forwards;
+          animation: fadeUp 0.7s forwards;
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
 }
 
-.container ul {
+.container main {
+  display: -ms-grid;
+  display: grid;
+  grid-row-gap: 1.5rem;
+}
+
+.container aside {
+  display: -ms-grid;
+  display: grid;
+  grid-row-gap: 1.5rem;
+  -ms-grid-rows: 100px 10rem;
+      grid-template-rows: 100px 10rem;
+}
+
+.container aside section {
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+  padding: 1em;
+}
+
+.container aside .aside-panel {
+  display: -ms-grid;
+  display: grid;
+  grid-gap: 15px;
+  -ms-grid-rows: 2fr 1fr;
+      grid-template-rows: 2fr 1fr;
+}
+
+.container aside .aside-panel button {
+  color: white;
+  border-radius: 5px;
+  background: var(--lightblue);
+  border: 2px solid var(--lightblue);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.container aside .aside-panel button:hover {
+  color: var(--lightblue);
+  background: white;
+}
+
+.container aside .aside-panel input:focus {
+  outline: none;
+}
+
+.container aside .aside-panel input {
+  padding: 0;
+  margin: 0;
+}
+
+nav ul {
   -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
           box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-  padding: 0.3em 0.5em;
-  list-style: none;
+  padding: 0.4em 0.5em;
 }
 
-.container ul li {
-  padding: 0.5em 0.5em;
+nav ul li {
+  padding: 0.5em;
 }
 
-.container ul a {
+nav ul li a {
   position: relative;
   font-size: 1.1rem;
-  color: #404040;
+  color: #4d4d4d;
 }
 
-.container ul a::after {
+nav ul li a::after {
   content: "";
   background: var(--lightblue);
   width: 100%;
@@ -64,22 +131,15 @@ body {
           transform-origin: left;
 }
 
-.container ul a:hover {
+nav ul li a:hover {
   color: var(--lightblue);
   -webkit-transition: 0.2s;
   transition: 0.2s;
 }
 
-.container ul a:hover::after {
+nav ul li a:hover::after {
   -webkit-transform: scaleX(1);
           transform: scaleX(1);
-}
-
-.container aside section {
-  border-radius: 5px;
-  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-          box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-  padding: 1em;
 }
 
 .card {
@@ -101,13 +161,9 @@ body {
 }
 
 .toolbar button {
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  font-family: "Readex Pro", monospace;
   -webkit-transition: 0.2s;
   transition: 0.2s;
-  margin-right: .2rem;
+  margin-right: 0.2rem;
 }
 
 .toolbar button#like:hover {
@@ -124,5 +180,31 @@ body {
 
 .toolbar button#reports:hover {
   color: var(--lightblue);
+}
+
+@-webkit-keyframes fadeUp {
+  from {
+    -webkit-transform: translateY(20rem);
+            transform: translateY(20rem);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    -webkit-transform: translateY(20rem);
+            transform: translateY(20rem);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
 }
 /*# sourceMappingURL=style.css.map */
