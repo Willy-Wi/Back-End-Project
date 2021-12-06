@@ -1,3 +1,4 @@
+# Ignore Files, so they don't get pushed into the repository
 node_modules/
 *.log
 *.logs
