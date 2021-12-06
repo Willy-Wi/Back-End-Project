@@ -12,7 +12,7 @@ class UnderlineText(WrittenText):
 
     def render(self):
         return "<u>{}</u>".format(self.__wrapped.render())
-
+ 
 
 class BoldWrapper(WrittenText):
     def __init__(self, wrapped):
