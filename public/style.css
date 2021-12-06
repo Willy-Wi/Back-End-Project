@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap");
 :root {
   --lightblue: hsl(200, 100%, 50%);
 }
@@ -16,28 +16,7 @@ a {
 }
 
 body {
-  font-family: "DM Mono", monospace;
-}
-
-button {
-  cursor: pointer;
-  font-family: "DM Mono", monospace;
-}
-
-button#like:hover {
-  color: var(--lightblue);
-}
-
-button#dislike:hover {
-  color: var(--lightblue);
-}
-
-button#comments:hover {
-  color: var(--lightblue);
-}
-
-button#reports:hover {
-  color: var(--lightblue);
+  font-family: "Readex Pro", monospace;
 }
 
 .container {
@@ -60,13 +39,47 @@ button#reports:hover {
 }
 
 .container ul li {
-  padding: 0.3em 0.5em;
+  padding: 0.5em 0.5em;
+}
+
+.container ul a {
+  position: relative;
+  font-size: 1.1rem;
+  color: #404040;
+}
+
+.container ul a::after {
+  content: "";
+  background: var(--lightblue);
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  -webkit-transform: scaleX(0);
+          transform: scaleX(0);
+  -webkit-transform-origin: left;
+          transform-origin: left;
 }
 
 .container ul a:hover {
   color: var(--lightblue);
-  -webkit-transition: 0.1s;
-  transition: 0.1s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.container ul a:hover::after {
+  -webkit-transform: scaleX(1);
+          transform: scaleX(1);
+}
+
+.container aside section {
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+  padding: 1em;
 }
 
 .card {
@@ -90,5 +103,26 @@ button#reports:hover {
 .toolbar button {
   border: 0;
   background-color: transparent;
+  cursor: pointer;
+  font-family: "Readex Pro", monospace;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  margin-right: .2rem;
+}
+
+.toolbar button#like:hover {
+  color: var(--lightblue);
+}
+
+.toolbar button#dislike:hover {
+  color: var(--lightblue);
+}
+
+.toolbar button#comments:hover {
+  color: var(--lightblue);
+}
+
+.toolbar button#reports:hover {
+  color: var(--lightblue);
 }
 /*# sourceMappingURL=style.css.map */
