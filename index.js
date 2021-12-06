@@ -1,6 +1,7 @@
 import express from "express";
 // import mysql2 from "mysql2";
 
+// Hostname and Port is not too important, as it varies across different computers and users
 const hostname = "localhost";
 const port = 3036;
 
