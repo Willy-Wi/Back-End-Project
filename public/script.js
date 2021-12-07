@@ -39,11 +39,40 @@ let date = document.getElementById("date");
 
 date.insertAdjacentHTML("beforeend", time);
 
-// Add More Comments in HTML
+// Create New Post
 
-let card = document.getElementsByClassName("card");
-let button_new_post = document.getElementById("new-post");
+let create_post = document.getElementById("create-post");
 
-button_new_post.addEventListener("click", () => {
-    
-})
+create_post.onclick = () => {
+    let card_list = document.getElementById("card-list");
+    let textarea_post = document.getElementById("textarea-post");
+    let invalid_input = document.getElementById("invalid-input");
+
+    let error_message = "Character Limit Cannot Exceed 256";
+
+    if (textarea_post.length > 256) return invalid_input.innerHTML = error_message;
+
+    let new_post = `
+    <article class="card">
+        <div class="card-author">
+            <img src="" alt="" />
+            <h4>Willy Wijaya</h4>
+        </div>
+        <div class="card-comment">
+            <p>
+                ${textarea_post.value}
+            </p>
+            <img src="" alt="" />
+        </div>
+        <hr />
+        <div class="toolbar">
+            <button id="like">Like</button>
+            <button id="dislike">Disike</button>
+            <button id="comments">Comments</button>
+            <button id="reports">Reports</button>
+        </div>
+    </article>
+    `;
+    textarea_post.value = "";
+    card_list.insertAdjacentHTML("beforeend", new_post);
+};
