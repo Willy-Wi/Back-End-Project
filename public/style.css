@@ -40,6 +40,7 @@ textarea {
   outline: none;
   scrollbar-color: var(--lightblue) transparent;
   scrollbar-width: thin;
+  font-size: 0.9rem;
 }
 
 .container {
@@ -68,8 +69,8 @@ textarea {
   display: -ms-grid;
   display: grid;
   grid-row-gap: 1.5rem;
-  -ms-grid-rows: 6.4rem 12rem;
-      grid-template-rows: 6.4rem 12rem;
+  -ms-grid-rows: 6.4rem 15rem;
+      grid-template-rows: 6.4rem 15rem;
 }
 
 .container aside section {
@@ -83,8 +84,8 @@ textarea {
   display: -ms-grid;
   display: grid;
   grid-gap: 5px;
-  -ms-grid-rows: 2fr 15px 1fr;
-      grid-template-rows: 2fr 15px 1fr;
+  -ms-grid-rows: 3fr 15px 1fr;
+      grid-template-rows: 3fr 15px 1fr;
 }
 
 .container aside .aside-panel button {
