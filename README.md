@@ -1,7 +1,7 @@
 # Back-End Project
 
 ## Links
-> [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Awesome Link"){:target="_blank"}
+> [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Awesome Link")
 
 ## Code Blocks
 To run the `index.js` file. You need to install a couple of dependencies.
