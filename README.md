@@ -1,11 +1,9 @@
 # Back-End Project
 
 ## Links
----
 > [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Awesome Link")
 
 ## Code Blocks
----
 To run the `index.js` file. You need to install a couple of dependencies.
 ```bash
 npm install express mysql2
@@ -13,7 +11,6 @@ npm install express mysql2
 
 However, since a database has not been created, it is not needed.
 ## Task List
----
 * [ ] Register
 * [ ] Login
 * [ ] Forgot password
