@@ -10,6 +10,10 @@
           box-sizing: border-box;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 a {
   text-decoration: none;
   color: black;
@@ -30,6 +34,14 @@ button {
   font-family: "Readex Pro", monospace;
 }
 
+textarea {
+  resize: none;
+  font-family: "Readex Pro", monospace;
+  outline: none;
+  scrollbar-color: var(--lightblue) transparent;
+  scrollbar-width: thin;
+}
+
 .container {
   padding: 2rem;
   display: -ms-grid;
@@ -42,8 +54,8 @@ button {
   opacity: 0;
   -webkit-animation: fadeUp 0.7s forwards;
           animation: fadeUp 0.7s forwards;
-  -webkit-animation-delay: 0.5s;
-          animation-delay: 0.5s;
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
 }
 
 .container main {
@@ -56,8 +68,8 @@ button {
   display: -ms-grid;
   display: grid;
   grid-row-gap: 1.5rem;
-  -ms-grid-rows: 100px 10rem;
-      grid-template-rows: 100px 10rem;
+  -ms-grid-rows: 6.4rem 12rem;
+      grid-template-rows: 6.4rem 12rem;
 }
 
 .container aside section {
@@ -70,9 +82,9 @@ button {
 .container aside .aside-panel {
   display: -ms-grid;
   display: grid;
-  grid-gap: 15px;
-  -ms-grid-rows: 2fr 1fr;
-      grid-template-rows: 2fr 1fr;
+  grid-gap: 5px;
+  -ms-grid-rows: 2fr 15px 1fr;
+      grid-template-rows: 2fr 15px 1fr;
 }
 
 .container aside .aside-panel button {
@@ -95,6 +107,12 @@ button {
 
 .container aside .aside-panel input {
   padding: 0;
+  margin: 0;
+}
+
+p#invalid-input {
+  color: #d0393e;
+  font-size: 0.7rem;
   margin: 0;
 }
 
