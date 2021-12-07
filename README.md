@@ -10,8 +10,8 @@ npm init
 
 npm install express mysql2
 ```
-
 However, since a database has not been created, it is not needed.
+
 ## Task List
 * [ ] Register
 * [ ] Login
@@ -24,9 +24,9 @@ However, since a database has not been created, it is not needed.
 * [ ] Chatting
 * [ ] Follow/unfollow feature
 * [ ] Share post
-* [ ] Like/unlike feature
+* [ ] Like/Unlike feature
 * [ ] Report inappropriate content, user, etc.
-* [ ] Add,edit,delete post
+* [ ] Add, edit, and delete post
 * [ ] Realtime notifications
-* [ ] Light / dark mode
+* [ ] Light/Dark mode
 * [ ] Coming soon
