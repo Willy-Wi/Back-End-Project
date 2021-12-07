@@ -48,9 +48,11 @@ create_post.onclick = () => {
     let textarea_post = document.getElementById("textarea-post");
     let invalid_input = document.getElementById("invalid-input");
 
-    let error_message = "Character Limit Cannot Exceed 256";
+    let character_limit_message = "Character Limit Cannot Exceed 256...";
+    let empty_message = "Write something...";
 
-    if (textarea_post.length > 256) return invalid_input.innerHTML = error_message;
+    if (textarea_post.value.length > 128) return invalid_input.innerHTML = character_limit_message;
+    if (textarea_post.value.length < 1) return invalid_input.innerHTML = empty_message;
 
     let new_post = `
     <article class="card">
@@ -74,5 +76,6 @@ create_post.onclick = () => {
     </article>
     `;
     textarea_post.value = "";
+    invalid_input.innerHTML = "";
     card_list.insertAdjacentHTML("beforeend", new_post);
 };
