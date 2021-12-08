@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 03:25 PM
+-- Generation Time: Dec 08, 2021 at 04:14 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -37,6 +37,23 @@ CREATE TABLE `comments` (
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL,
   `deleted_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comment_likes`
+--
+
+CREATE TABLE `comment_likes` (
+  `id` int NOT NULL,
+  `from_user_id` int NOT NULL,
+  `to_user_id` int NOT NULL,
+  `comment_id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `notify_id` int NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -97,11 +114,26 @@ CREATE TABLE `posts` (
   `post_type` int NOT NULL,
   `user_id` int NOT NULL,
   `post` text COLLATE utf8mb4_general_ci,
-  `pushlish` int DEFAULT NULL,
   `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_assets`
+--
+
+CREATE TABLE `post_assets` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `type` int NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -152,7 +184,18 @@ CREATE TABLE `user_messages` (
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_comments_users` (`from_user_id`),
-  ADD KEY `FK_comments_posts` (`post_id`);
+  ADD KEY `FK_comments_posts` (`post_id`),
+  ADD KEY `FK_comments_notification` (`notify_id`);
+
+--
+-- Indexes for table `comment_likes`
+--
+ALTER TABLE `comment_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_fromuser_comment_likes_comments` (`from_user_id`),
+  ADD KEY `FK_comment_likes_comments` (`comment_id`),
+  ADD KEY `FK_comment_likes_posts` (`post_id`),
+  ADD KEY `FK_comment_likes_notifications` (`notify_id`);
 
 --
 -- Indexes for table `followers`
@@ -183,6 +226,14 @@ ALTER TABLE `posts`
   ADD KEY `FK_posts_users` (`user_id`);
 
 --
+-- Indexes for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_post_assets_users` (`user_id`),
+  ADD KEY `FK_post_assets_posts` (`post_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -203,6 +254,12 @@ ALTER TABLE `user_messages`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `comment_likes`
+--
+ALTER TABLE `comment_likes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -230,6 +287,12 @@ ALTER TABLE `posts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -243,8 +306,18 @@ ALTER TABLE `users`
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
+  ADD CONSTRAINT `FK_comments_notification` FOREIGN KEY (`notify_id`) REFERENCES `notification` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `FK_comments_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `FK_comments_users` FOREIGN KEY (`from_user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `comment_likes`
+--
+ALTER TABLE `comment_likes`
+  ADD CONSTRAINT `FK_comment_likes_comments` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_comment_likes_notifications` FOREIGN KEY (`notify_id`) REFERENCES `notification` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_comment_likes_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_fromuser_comment_likes_comments` FOREIGN KEY (`from_user_id`) REFERENCES `comments` (`from_user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `followers`
@@ -269,6 +342,13 @@ ALTER TABLE `notification`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  ADD CONSTRAINT `FK_post_assets_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_post_assets_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `user_messages`
