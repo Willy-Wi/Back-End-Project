@@ -1,3 +1,5 @@
+// Get Current DateTime
+
 const currenDate = new Date();
 
 const month = [
@@ -51,8 +53,10 @@ create_post.onclick = () => {
     let character_limit_message = "Character Limit Cannot Exceed 256...";
     let empty_message = "Write something...";
 
-    if (textarea_post.value.length > 128) return invalid_input.innerHTML = character_limit_message;
-    if (textarea_post.value.length < 1) return invalid_input.innerHTML = empty_message;
+    if (textarea_post.value.length > 128)
+        return (invalid_input.innerHTML = character_limit_message);
+    if (textarea_post.value.length < 1)
+        return (invalid_input.innerHTML = empty_message);
 
     let new_post = `
     <article class="card">
@@ -79,3 +83,26 @@ create_post.onclick = () => {
     invalid_input.innerHTML = "";
     card_list.insertAdjacentHTML("beforeend", new_post);
 };
+
+// ? Aku gak tau kekmana buat nya wkwkwk
+
+// const form = document.getElementById("reg-form");
+// form.addEventListener("submit", registerUser);
+
+// async function registerUser(event) {
+//     event.preventDefault();
+//     const username = document.getElementById("username").value;
+//     const password = document.getElementById("password").value;
+
+//     const result = await fetch("/api/register", {
+//         method: "post",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             username, password
+//         })
+//     }).then(res => res.json());
+
+//     console.log(result);
+// }
