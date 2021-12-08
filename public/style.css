@@ -41,6 +41,7 @@ textarea {
   scrollbar-color: var(--lightblue) transparent;
   scrollbar-width: thin;
   font-size: 0.9rem;
+  padding: 0.5em;
 }
 
 .container {
