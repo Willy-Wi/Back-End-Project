@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Ace</title>
         <link rel="stylesheet" href="style.css" />
+        <script src="font-awesome-link.js"></script>
     </head>
     <body>
         <div class="container">
@@ -96,16 +97,20 @@
                     <h3 id="date"></h3>
                     <p>Good Day Gamers. How's your day been going ay?</p>
                 </section>
-                <section class="aside-panel">
+                <form class="aside-panel">
                     <textarea
                         name=""
-                        id="textarea-post"
+                        id="textarea-create-post"
                         cols="30"
                         placeholder="What are you thinking?"
                     ></textarea>
+                    <div class="create-post-toolbar">
+                        <label for="attach-file-post"><i class="fa fa-paperclip"></i></label>
+                        <input type="file" name="attach-file" id="attach-file-post">
+                    </div>
                     <p id="invalid-input"></p>
-                    <button id="create-post">Create a new post</button>
-                </section>
+                    <input type="submit" value="Create new post" id="create-post">
+                </form>
             </aside>
         </div>
         <script src="script.js"></script>
