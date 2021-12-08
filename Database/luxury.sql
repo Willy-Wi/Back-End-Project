@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 03:21 PM
+-- Generation Time: Dec 08, 2021 at 03:25 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -51,6 +51,22 @@ CREATE TABLE `followers` (
   `follow_to_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `likes`
+--
+
+CREATE TABLE `likes` (
+  `id` int NOT NULL,
+  `to_user_id` int NOT NULL,
+  `from_user_id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `notify_id` int NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -146,6 +162,13 @@ ALTER TABLE `followers`
   ADD KEY `FK_followers_users` (`user_id`);
 
 --
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_likes_posts` (`to_user_id`);
+
+--
 -- Indexes for table `notification`
 --
 ALTER TABLE `notification`
@@ -189,6 +212,12 @@ ALTER TABLE `followers`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
@@ -222,6 +251,12 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `followers`
   ADD CONSTRAINT `FK_followers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `FK_likes_posts` FOREIGN KEY (`to_user_id`) REFERENCES `posts` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `notification`
