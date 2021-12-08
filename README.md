@@ -10,10 +10,6 @@ npm init
 
 npm install express mysql2
 ```
-When creating ```package.json```, make sure to include this into it.
-```json
-"type": "module"
-```
 
 ## Task List
 * [ ] Register
