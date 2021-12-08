@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 03:56 PM
+-- Generation Time: Dec 08, 2021 at 04:07 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -114,7 +114,6 @@ CREATE TABLE `posts` (
   `post_type` int NOT NULL,
   `user_id` int NOT NULL,
   `post` text COLLATE utf8mb4_general_ci,
-  `pushlish` int DEFAULT NULL,
   `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
