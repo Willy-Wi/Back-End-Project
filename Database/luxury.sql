@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 11:29 AM
+-- Generation Time: Dec 08, 2021 at 12:23 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -20,6 +20,37 @@ SET time_zone = "+00:00";
 --
 -- Database: `luxury`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `followers`
+--
+
+CREATE TABLE `followers` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `follow_to_id` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int NOT NULL,
+  `to_user_id` int NOT NULL,
+  `from_user_id` int NOT NULL,
+  `type` int NOT NULL,
+  `post_id` int NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  `deleted_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -55,6 +86,19 @@ CREATE TABLE `user_messages` (
 --
 
 --
+-- Indexes for table `followers`
+--
+ALTER TABLE `followers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_followers_users` (`user_id`);
+
+--
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -65,11 +109,23 @@ ALTER TABLE `users`
 --
 ALTER TABLE `user_messages`
   ADD PRIMARY KEY (`date_time_of_msg`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `FK_user_messages_users` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `followers`
+--
+ALTER TABLE `followers`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -82,10 +138,16 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `followers`
+--
+ALTER TABLE `followers`
+  ADD CONSTRAINT `FK_followers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `user_messages`
 --
 ALTER TABLE `user_messages`
-  ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `FK_user_messages_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
