@@ -49,6 +49,7 @@ textarea {
   scrollbar-width: thin;
   font-size: 0.9rem;
   padding: 0.5em;
+  border: 1px solid #999999;
 }
 
 .container {
@@ -77,11 +78,11 @@ textarea {
   display: -ms-grid;
   display: grid;
   grid-row-gap: 1.5rem;
-  -ms-grid-rows: 6.4rem 15rem;
-      grid-template-rows: 6.4rem 15rem;
+  -ms-grid-rows: 6.4rem 17rem;
+      grid-template-rows: 6.4rem 17rem;
 }
 
-.container aside section {
+.container aside section, .container aside form {
   border-radius: 5px;
   -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
           box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
@@ -91,28 +92,50 @@ textarea {
 .container aside .aside-panel {
   display: -ms-grid;
   display: grid;
-  grid-gap: 5px;
-  -ms-grid-rows: 3fr 15px 1fr;
-      grid-template-rows: 3fr 15px 1fr;
+  grid-row-gap: 0.5rem;
+  -ms-grid-rows: 4fr auto 10px 2.5rem;
+      grid-template-rows: 4fr auto 10px 2.5rem;
 }
 
-.container aside .aside-panel button {
-  color: white;
-  border-radius: 5px;
-  background: var(--lightblue);
-  border: 2px solid var(--lightblue);
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
+.container aside .aside-panel label {
+  padding: 0.5em;
 }
 
-.container aside .aside-panel button:hover {
+.container aside .aside-panel label:hover {
   color: var(--lightblue);
-  background: white;
 }
 
 .container aside .aside-panel input {
   padding: 0;
   margin: 0;
+}
+
+.container aside .aside-panel input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.container aside .aside-panel input[type="submit"] {
+  border: 2px solid var(--lightblue);
+  background: var(--lightblue);
+  color: white;
+  border-radius: 5px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.container aside .aside-panel input[type="submit"]:hover {
+  color: var(--lightblue);
+  background: white;
+}
+
+.create-post-toolbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #999999;
+  margin-top: -9px;
 }
 
 p#invalid-input {
