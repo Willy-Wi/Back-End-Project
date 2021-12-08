@@ -1,4 +1,5 @@
-import express from "express";
+const express = require('express');
+const bodyParser = require('body-parser');
 // import mysql2 from "mysql2";
 
 // Hostname and Port is not too important, as it varies across different computers and users
@@ -19,9 +20,14 @@ const app = express();
 // });
 
 app.use(express.static("public"));
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.sendFile("public/index.html");
+});
+
+app.get("/api/register", (req, res) => {
+    res.sendFile("public/register.html");
 });
 
 app.listen(port, () => {
