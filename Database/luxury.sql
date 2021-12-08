@@ -3,7 +3,6 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 04:07 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -123,6 +122,22 @@ CREATE TABLE `posts` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `post_assets`
+--
+
+CREATE TABLE `post_assets` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `post_id` int NOT NULL,
+  `type` int NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -210,6 +225,14 @@ ALTER TABLE `posts`
   ADD KEY `FK_posts_users` (`user_id`);
 
 --
+-- Indexes for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_post_assets_users` (`user_id`),
+  ADD KEY `FK_post_assets_posts` (`post_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -263,6 +286,12 @@ ALTER TABLE `posts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -312,6 +341,13 @@ ALTER TABLE `notification`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `post_assets`
+--
+ALTER TABLE `post_assets`
+  ADD CONSTRAINT `FK_post_assets_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_post_assets_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `user_messages`
