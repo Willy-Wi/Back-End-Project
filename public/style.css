@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap");
 :root {
   --lightblue: hsl(200, 100%, 50%);
+  --font: "IBM Plex Sans";
 }
 
 * {
@@ -20,23 +23,27 @@ a {
 }
 
 body {
-  font-family: "Readex Pro", monospace;
+  font-family: var(--font), monospace;
 }
 
 ul {
   list-style: none;
 }
 
+input:focus {
+  outline: none;
+}
+
 button {
   border: 0;
   background-color: transparent;
   cursor: pointer;
-  font-family: "Readex Pro", monospace;
+  font-family: var(--font), monospace;
 }
 
 textarea {
   resize: none;
-  font-family: "Readex Pro", monospace;
+  font-family: var(--font), monospace;
   outline: none;
   scrollbar-color: var(--lightblue) transparent;
   scrollbar-width: thin;
@@ -101,10 +108,6 @@ textarea {
 .container aside .aside-panel button:hover {
   color: var(--lightblue);
   background: white;
-}
-
-.container aside .aside-panel input:focus {
-  outline: none;
 }
 
 .container aside .aside-panel input {
@@ -180,6 +183,10 @@ nav ul li a:hover::after {
   display: flex;
 }
 
+.card-author h3 {
+  margin: 0.5rem 0;
+}
+
 .toolbar button {
   -webkit-transition: 0.2s;
   transition: 0.2s;
@@ -226,5 +233,74 @@ nav ul li a:hover::after {
             transform: translateY(0);
     opacity: 1;
   }
+}
+
+.reg-form {
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+}
+
+.reg-form form {
+  display: -ms-grid;
+  display: grid;
+  grid-gap: 10px;
+  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+  width: clamp(100px, 50%, 400px);
+  margin: 0 auto;
+  border-radius: 5px;
+  padding: 2em;
+}
+
+.reg-form form p {
+  font-size: 1rem;
+}
+
+.reg-form form p#no-account {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.9rem;
+}
+
+.reg-form form p#no-account a {
+  color: #ff0009;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.reg-form form p#no-account a:hover {
+  color: #ff999c;
+}
+
+.reg-form form input {
+  border-radius: 5px;
+  padding: 0.7em 0.8em;
+  font-size: 1rem;
+}
+
+.reg-form form input[type="text"],
+.reg-form form input[type="password"] {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.4rem;
+}
+
+.reg-form form input[type="submit"] {
+  border: 2px solid var(--lightblue);
+  background: var(--lightblue);
+  color: white;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  font-weight: bold;
+  margin-top: 0.8rem;
+  letter-spacing: 1px;
+  padding: 0.6em;
+  font-size: 1.1rem;
+}
+
+.reg-form form input[type="submit"]:hover {
+  color: var(--lightblue);
+  background: white;
 }
 /*# sourceMappingURL=style.css.map */
