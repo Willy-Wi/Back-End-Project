@@ -1,33 +1,38 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-// import mysql2 from "mysql2";
+import express from "express";
+import bodyParser from "body-parser";
+import mysql2 from "mysql2";
 
-// Hostname and Port is not too important, as it varies across different computers and users
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
 const hostname = "localhost";
-const port = 3036;
+const port = 3000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
-// const conn = mysql2.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "",
-// });
+const conn = mysql2.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "test_db",
+});
 
-// conn.connect((err) => {
-//     if (err) throw err;
-//     console.log("MySQL WorkBench is Connected...!");
-// });
+conn.connect((err) => {
+    if (err) throw err;
+    console.log("MySQL WorkBench is Connected...!");
+});
 
-app.use(express.static("public"));
+app.use(express.static("./public"));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-    res.sendFile("public/index.html");
+    res.sendFile(__dirname + "/public/home.html");
 });
 
 app.get("/api/register", (req, res) => {
-    res.sendFile("public/register.html");
+    res.sendFile(__dirname + "/public/register.html");
 });
 
 app.listen(port, () => {
