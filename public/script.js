@@ -47,15 +47,15 @@ let create_post = document.getElementById("create-post");
 
 create_post.onclick = () => {
     let card_list = document.getElementById("card-list");
-    let textarea_post = document.getElementById("textarea-post");
+    let textarea_create_post = document.getElementById("textarea-create-post");
     let invalid_input = document.getElementById("invalid-input");
 
     let character_limit_message = "Character Limit Cannot Exceed 256...";
     let empty_message = "Write something...";
 
-    if (textarea_post.value.length > 128)
+    if (textarea_create_post.value.length > 128)
         return (invalid_input.innerHTML = character_limit_message);
-    if (textarea_post.value.length < 1)
+    if (textarea_create_post.value.length < 1)
         return (invalid_input.innerHTML = empty_message);
 
     let new_post = `
@@ -66,7 +66,7 @@ create_post.onclick = () => {
         </div>
         <div class="card-comment">
             <p>
-                ${textarea_post.value}
+                ${textarea_create_post.value}
             </p>
             <img src="" alt="" />
         </div>
@@ -79,7 +79,7 @@ create_post.onclick = () => {
         </div>
     </article>
     `;
-    textarea_post.value = "";
+    textarea_create_post.value = "";
     invalid_input.innerHTML = "";
     card_list.insertAdjacentHTML("beforeend", new_post);
 };
