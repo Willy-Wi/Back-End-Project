@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 12:23 PM
+-- Generation Time: Dec 08, 2021 at 02:04 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -24,15 +24,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int NOT NULL,
+  `from_user_id` int NOT NULL,
+  `reply_to_user` int NOT NULL,
+  `post_id` int NOT NULL,
+  `comment` text COLLATE utf8mb4_general_ci NOT NULL,
+  `notify_id` int NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  `deleted_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `followers`
 --
 
 CREATE TABLE `followers` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
-  `follow_to_id` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL,
-  `updated_at` timestamp NOT NULL
+  `follow_to_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -44,12 +62,30 @@ CREATE TABLE `followers` (
 CREATE TABLE `notification` (
   `id` int NOT NULL,
   `to_user_id` int NOT NULL,
-  `from_user_id` int NOT NULL,
+  `from_user_id` int DEFAULT NULL,
   `type` int NOT NULL,
   `post_id` int NOT NULL,
-  `created_at` timestamp NOT NULL,
-  `updated_at` timestamp NOT NULL,
-  `deleted_at` timestamp NOT NULL
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE `posts` (
+  `id` int NOT NULL,
+  `post_type` int NOT NULL,
+  `user_id` int NOT NULL,
+  `post` text COLLATE utf8mb4_general_ci,
+  `pushlish` int DEFAULT NULL,
+  `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -62,10 +98,19 @@ CREATE TABLE `users` (
   `user_id` int NOT NULL,
   `first_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `telepon` text COLLATE utf8mb4_general_ci NOT NULL,
-  `alamat` text COLLATE utf8mb4_general_ci NOT NULL,
-  `user_created` datetime NOT NULL
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `telepon` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `user_created` datetime NOT NULL,
+  `status` int DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `cover_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `photo_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -86,6 +131,12 @@ CREATE TABLE `user_messages` (
 --
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `followers`
 --
 ALTER TABLE `followers`
@@ -96,7 +147,15 @@ ALTER TABLE `followers`
 -- Indexes for table `notification`
 --
 ALTER TABLE `notification`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_notification_users` (`to_user_id`);
+
+--
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_posts_users` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -116,6 +175,12 @@ ALTER TABLE `user_messages`
 --
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `followers`
 --
 ALTER TABLE `followers`
@@ -125,6 +190,12 @@ ALTER TABLE `followers`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -142,6 +213,18 @@ ALTER TABLE `users`
 --
 ALTER TABLE `followers`
   ADD CONSTRAINT `FK_followers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `FK_notification_users` FOREIGN KEY (`to_user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `posts`
+--
+ALTER TABLE `posts`
+  ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `user_messages`
