@@ -37,15 +37,15 @@ app.get("/login", (req, res) => {
 // ! Work in Progress
 
 app.post("/", (req, res) => {
-    if (!req.files) return res.status(400).send("No files were uploaded...");
+    if (!req.files) return; // res.status(400).sendFile(__dirname + "/public/home.html");
 
     let file = req.files.afp;
 
     let uploadPath = __dirname + "/uploads/" + file.name;
 
-    file.mv(uploadPath, function (err) {
+    file.mv(uploadPath, (err) => {
         if (err) return res.status(500).send(err);
-        res.sendFile(__dirname + "/public/home.html");
+        // res.sendFile(__dirname + "/public/home.html");
     });
 });
 
