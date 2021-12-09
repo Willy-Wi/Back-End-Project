@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql2 = require("mysql2");
-const fileUpload = require("express-fileupload");
+// const fileUpload = require("express-fileupload");
 
 const port = 3000;
 
@@ -36,18 +36,18 @@ app.get("/login", (req, res) => {
 
 // ! Work in Progress
 
-app.post("/", (req, res) => {
-    if (!req.files) return; // res.status(400).sendFile(__dirname + "/public/home.html");
+// app.post("/", (req, res) => {
+//     if (!req.files) return; // res.status(400).sendFile(__dirname + "/public/home.html");
 
-    let file = req.files.afp;
+//     let file = req.files.afp;
 
-    let uploadPath = __dirname + "/uploads/" + file.name;
+//     let uploadPath = __dirname + "/uploads/" + file.name;
 
-    file.mv(uploadPath, (err) => {
-        if (err) return res.status(500).send(err);
-        // res.sendFile(__dirname + "/public/home.html");
-    });
-});
+//     file.mv(uploadPath, (err) => {
+//         if (err) return res.status(500).send(err);
+//         // res.sendFile(__dirname + "/public/home.html");
+//     });
+// });
 
 app.listen(port, () => {
     console.log(`Server Running at localhost:${port}`);
