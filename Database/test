@@ -44,7 +44,7 @@ app.post("/register", (req, res) =>{
     let sql = "INSERT INTO `users` SET ?";
     let query = conn.query(sql, data, (err, results) => {
         if(err) return res.status(500).send(err);
-        res.sendFile(__dirname + "/views/home.html");
+        res.sendFile(__dirname + "/public/home.html");
     });
 });
 
@@ -57,7 +57,7 @@ app.post("/", (req, res) => {
 
     file.mv(uploadPath, function(err) {
         if (err) return res.status(500).send(err);
-        res.sendFile(__dirname + "/views/home.html");
+        res.sendFile(__dirname + "/public/home.html");
     });
 });
 
