@@ -1,15 +1,9 @@
-import express from "express";
-import bodyParser from "body-parser";
-import mysql2 from "mysql2";
+const express = require("express");
+const bodyParser = require("body-parser");
+const mysql2 = require("mysql2");
+const fileUpload = require("express-fileupload");
 
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const hostname = "localhost";
 const port = 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const app = express();
 const conn = mysql2.createConnection({
@@ -26,15 +20,35 @@ conn.connect((err) => {
 
 app.use(express.static("./public"));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/home.html");
 });
 
-app.get("/api/register", (req, res) => {
+app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/public/register.html");
 });
 
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/public/login.html");
+});
+
+// ! Work in Progress
+
+app.post("/", (req, res) => {
+    if (!req.files) return res.status(400).send("No files were uploaded...");
+
+    let file = req.files.afp;
+
+    let uploadPath = __dirname + "/uploads/" + file.name;
+
+    file.mv(uploadPath, function (err) {
+        if (err) return res.status(500).send(err);
+        res.sendFile(__dirname + "/public/home.html");
+    });
+});
+
 app.listen(port, () => {
-    console.log(`Server Running at ${hostname}:${port}`);
+    console.log(`Server Running at localhost:${port}`);
 });

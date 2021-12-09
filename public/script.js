@@ -47,16 +47,15 @@ let create_post = document.getElementById("create-post");
 
 create_post.onclick = () => {
     let card_list = document.getElementById("card-list");
-    let textarea_create_post = document.getElementById("textarea-create-post");
-    let invalid_input = document.getElementById("invalid-input");
+    let message = document.getElementById("textarea-create-post");
+    let invalid = document.getElementById("invalid-input");
+    let attach_file = document.getElementById("attach_file-post");
 
-    let character_limit_message = "Character Limit Cannot Exceed 256...";
-    let empty_message = "Write something...";
+    let ch_limit_msg = "Character Limit Cannot Exceed 128...";
+    let empty_msg = "Write something...";
 
-    if (textarea_create_post.value.length > 128)
-        return (invalid_input.innerHTML = character_limit_message);
-    if (textarea_create_post.value.length < 1)
-        return (invalid_input.innerHTML = empty_message);
+    if (message.value.length > 128) return (invalid.innerHTML = ch_limit_msg);
+    if (message.value.length < 1) return (invalid.innerHTML = empty_msg);
 
     let new_post = `
     <article class="card">
@@ -66,7 +65,7 @@ create_post.onclick = () => {
         </div>
         <div class="card-comment">
             <p>
-                ${textarea_create_post.value}
+                ${message.value}
             </p>
             <img src="" alt="" />
         </div>
@@ -79,8 +78,8 @@ create_post.onclick = () => {
         </div>
     </article>
     `;
-    textarea_create_post.value = "";
-    invalid_input.innerHTML = "";
+    message.value = "";
+    invalid.innerHTML = "";
     card_list.insertAdjacentHTML("beforeend", new_post);
 };
 
