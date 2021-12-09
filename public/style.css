@@ -82,7 +82,8 @@ textarea {
       grid-template-rows: 6.4rem 17rem;
 }
 
-.container aside section, .container aside form {
+.container aside section,
+.container aside .aside-panel {
   border-radius: 5px;
   -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
           box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
@@ -99,6 +100,8 @@ textarea {
 
 .container aside .aside-panel label {
   padding: 0.5em;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .container aside .aside-panel label:hover {
