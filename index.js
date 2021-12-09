@@ -20,7 +20,7 @@ conn.connect((err) => {
 
 app.use(express.static("./public"));
 app.use(bodyParser.json());
-app.use(fileUpload());
+// app.use(fileUpload());
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/home.html");
