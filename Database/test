@@ -1,0 +1,66 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql2 = require('mysql2');
+const fileUpload = require("express-fileupload");
+
+const hostname = "localhost";
+const port = 3036;
+
+const app = express();
+const conn = mysql2.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "(database)",
+});
+
+conn.connect((err) => {
+    if (err) throw err;
+    console.log("Database is Connected...!");
+});
+
+app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(fileUpload());
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/home.html");
+});
+
+app.get("/register", (req, res) => {
+    res.sendFile(__dirname + "/public/register.html");
+});
+
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/public/login.html");
+});
+
+app.post("/register", (req, res) =>{
+    let data = {first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, username: req.body.username, password: req.body.password};
+    let sql = "INSERT INTO `users` SET ?";
+    let query = conn.query(sql, data, (err, results) => {
+        if(err) return res.status(500).send(err);
+        res.sendFile(__dirname + "/public/home.html");
+    });
+});
+
+app.post("/", (req, res) => {
+    if(!req.files) return res.status(400).send("No files were uploaded...");
+
+    let file = req.files.afp;
+
+    let uploadPath = __dirname + "/uploads/" + file.name;
+
+    file.mv(uploadPath, function(err) {
+        if (err) return res.status(500).send(err);
+        res.sendFile(__dirname + "/public/home.html");
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server Running at ${hostname}:${port}`);
+});

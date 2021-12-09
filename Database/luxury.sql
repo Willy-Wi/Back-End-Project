@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2021 at 08:45 AM
+-- Generation Time: Dec 09, 2021 at 10:20 AM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.10
 
@@ -175,20 +175,27 @@ CREATE TABLE `users` (
   `user_id` int NOT NULL,
   `first_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `telepon` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `alamat` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `user_created` datetime NOT NULL,
+  `user_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` int DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `cover_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `photo_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `username`, `password`, `telepon`, `alamat`, `user_created`, `status`, `birthday`, `cover_url`, `photo_url`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '123', '123', '123@gmail.com', '123', '123', NULL, NULL, '2021-12-09 16:18:44', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -352,7 +359,7 @@ ALTER TABLE `type_reports`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
