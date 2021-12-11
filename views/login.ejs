@@ -13,13 +13,19 @@
 <body>
     <div class="reg-form">
         <form action="/login" method="post">
-            <p>Username</p>
+            <label for="username">Username</label>
             <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
-            <p>Password</p>
+            <label for="password">Password</label>
             <input type="password" autocomplete="off" placeholder="Password" name="password" id="password" required />
             <input type="submit" value="Register">
             <p id="no-account">Already have an account? <a href="/register">Log in!</a></p>
         </form>
+        <% if (message) { %>
+            <h1>
+                <%= message %>
+            </h1>
+            <% } %>
+            <a href="/">Go Back to Home Page!</a>
     </div>
     <script src="script.js"></script>
 </body>
