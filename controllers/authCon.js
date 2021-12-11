@@ -47,10 +47,30 @@ const register = async (req, res) => {
     });
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
     const { username, password } = req.body;
 
-    res.json({ message: "success" });
+    let sql = "SELECT password FROM users WHERE username = ?";
+
+    let query = await new Promise((resolve, reject) => {
+        conn.query(sql, username, (err, result) => {
+            if (err) reject(err);
+
+            resolve(result);
+        });
+    });
+
+    if (query.length === 0) {
+        return res.render("login", { message: "That user does not exist!" });
+    }
+
+    let checkPassword = await bcrypt.compare(password, query[0].password);
+
+    if (checkPassword) {
+        return res.render("login", { message: "Successfully Logged in!" });
+    } else {
+        return res.render("login", { message: "Invalid password!" });
+    }
 };
 
 const logout = (req, res) => {};
