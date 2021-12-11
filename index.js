@@ -1,6 +1,7 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const mysql2 = require("mysql2");
+const pages = require("./routes/pages");
+const path = require("path");
 // const fileUpload = require("express-fileupload");
 
 const port = 3000;
@@ -10,7 +11,7 @@ const conn = mysql2.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "test_db",
+    database: "test_db_home",
 });
 
 conn.connect((err) => {
@@ -18,21 +19,14 @@ conn.connect((err) => {
     console.log("MySQL WorkBench is Connected...!");
 });
 
-app.use(express.static("./public"));
-app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.set("view engine", "ejs");
+app.use("/", pages);
+
 // app.use(fileUpload());
 
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/home.html");
-});
-
-app.get("/register", (req, res) => {
-    res.sendFile(__dirname + "/public/register.html");
-});
-
-app.get("/login", (req, res) => {
-    res.sendFile(__dirname + "/public/login.html");
-});
 
 // ! Work in Progress
 
