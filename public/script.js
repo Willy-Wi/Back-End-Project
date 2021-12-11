@@ -43,45 +43,45 @@ date.insertAdjacentHTML("beforeend", time);
 
 // Create New Post
 
-let create_post = document.getElementById("create-post");
+// let create_post = document.getElementById("create-post");
 
-create_post.onclick = () => {
-    let card_list = document.getElementById("card-list");
-    let message = document.getElementById("textarea-create-post");
-    let invalid = document.getElementById("invalid-input");
-    let attach_file = document.getElementById("attach_file-post");
+// create_post.onclick = () => {
+//     let card_list = document.getElementById("card-list");
+//     let message = document.getElementById("textarea-create-post");
+//     let invalid = document.getElementById("invalid-input");
+//     let attach_file = document.getElementById("attach_file-post");
 
-    let ch_limit_msg = "Character Limit Cannot Exceed 128...";
-    let empty_msg = "Write something...";
+//     let ch_limit_msg = "Character Limit Cannot Exceed 128...";
+//     let empty_msg = "Write something...";
 
-    if (message.value.length > 128) return (invalid.innerHTML = ch_limit_msg);
-    if (message.value.length < 1) return (invalid.innerHTML = empty_msg);
+//     if (message.value.length > 128) return (invalid.innerHTML = ch_limit_msg);
+//     if (message.value.length < 1) return (invalid.innerHTML = empty_msg);
 
-    let new_post = `
-    <article class="card">
-        <div class="card-author">
-            <img src="" alt="" />
-            <h4>Willy Wijaya</h4>
-        </div>
-        <div class="card-comment">
-            <p>
-                ${message.value}
-            </p>
-            <img src="" alt="" />
-        </div>
-        <hr />
-        <div class="toolbar">
-            <button id="like">Like</button>
-            <button id="dislike">Disike</button>
-            <button id="comments">Comments</button>
-            <button id="reports">Reports</button>
-        </div>
-    </article>
-    `;
-    message.value = "";
-    invalid.innerHTML = "";
-    card_list.insertAdjacentHTML("beforeend", new_post);
-};
+//     let new_post = `
+//     <article class="card">
+//         <div class="card-author">
+//             <img src="" alt="" />
+//             <h4>Willy Wijaya</h4>
+//         </div>
+//         <div class="card-comment">
+//             <p>
+//                 ${message.value}
+//             </p>
+//             <img src="" alt="" />
+//         </div>
+//         <hr />
+//         <div class="toolbar">
+//             <button id="like">Like</button>
+//             <button id="dislike">Disike</button>
+//             <button id="comments">Comments</button>
+//             <button id="reports">Reports</button>
+//         </div>
+//     </article>
+//     `;
+//     message.value = "";
+//     invalid.innerHTML = "";
+//     card_list.insertAdjacentHTML("beforeend", new_post);
+// };
 
 // ? Aku gak tau kekmana buat nya wkwkwk
 
