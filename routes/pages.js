@@ -1,9 +1,9 @@
-const express = require('express')
-const bcrypt = require('bcrypt')
-const mysql2 = require('mysql2')
+const { Router } = require("express");
+const bcrypt = require("bcrypt");
+const mysql2 = require("mysql2");
 const { register, login, logout } = require("../controllers/authCon");
 
-const router = express.Router();
+const router = Router();
 
 const conn = mysql2.createConnection({
     host: "localhost",
@@ -26,6 +26,6 @@ router.get("/login", (req, res) => {
 
 router.post("/register", register);
 router.post("/login", login);
-router.post("/logout", logout)
+router.post("/logout", logout);
 
 module.exports = router;

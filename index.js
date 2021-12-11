@@ -27,7 +27,6 @@ app.use("/", pages);
 
 // app.use(fileUpload());
 
-
 // ! Work in Progress
 
 // app.post("/", (req, res) => {
