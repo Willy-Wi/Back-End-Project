@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="./font-awesome-link.js"></script>
+    </head>
+    <body>
+        <div class="reg-form">
+            <form action="/login" method="post">
+                <p>Username</p>
+                <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required/>
+                <p>Password</p>
+                <input type="password" autocomplete="off" placeholder="Password" name="password" id="password" required/>
+                <input type="submit" value="Register">
+                <p id="no-account">Already have an account? <a href="/register">Log in!</a></p>
+            </form>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
