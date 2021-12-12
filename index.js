@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql2 = require("mysql2");
 const pages = require("./routes/pages");
+const session = require("express-session");
 const path = require("path");
 // const fileUpload = require("express-fileupload");
 
@@ -13,6 +14,16 @@ const conn = mysql2.createConnection({
     password: "",
     database: "test_db_home",
 });
+
+app.use(
+    session({
+        secret: "key that will sign cookie",
+        path: "/",
+        cookie: { maxAge: 30000 },
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 
 conn.connect((err) => {
     if (err) throw err;
