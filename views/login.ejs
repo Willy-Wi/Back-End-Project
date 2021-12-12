@@ -17,15 +17,15 @@
             <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
             <label for="password">Password</label>
             <input type="password" autocomplete="off" placeholder="Password" name="password" id="password" required />
-            <input type="submit" value="Register">
+            <input type="submit" value="Login">
             <p id="no-account">Already have an account? <a href="/register">Log in!</a></p>
         </form>
-        <% if (message) { %>
+        <% if (typeof message=='string' && message ) {%>
             <h1>
                 <%= message %>
             </h1>
             <% } %>
-            <a href="/">Go Back to Home Page!</a>
+                <a href="/">Go Back to Home Page!</a>
     </div>
     <script src="script.js"></script>
 </body>

@@ -19,33 +19,40 @@
                 <li><a href="">Search</a></li>
                 <li><a href="">Settings</a></li>
                 <li><a href="">Profiles</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
+                <% if (login) { %>
+                    <li><a href="/logout">Logout</a></li>
+                    <% } else if (!login) { %>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                        <% } %>
             </ul>
         </nav>
         <main id="card-list">
-            <article class="card">
-                <div class="card-author">
-                    <img src="" alt="" />
-                    <h3>Willy Wijaya</h3>
-                </div>
-                <div class="card-comment">
-                    <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ratione quidem doloremque at quos facilis
-                        consequuntur iusto magnam, delectus commodi placeat.
-                    </p>
-                    <img src="" alt="" />
-                </div>
-                <hr />
-                <div class="toolbar">
-                    <button id="like">Like</button>
-                    <button id="dislike">Disike</button>
-                    <button id="comments">Comments</button>
-                    <button id="reports">Reports</button>
-                </div>
-            </article>
-            <article class="card">
+            <% result.forEach(item=> { %>
+                <article class="card">
+                    <div class="card-author">
+                        <img src="" alt="" />
+                        <h3>
+                            <%= item.username %>
+                        </h3>
+                    </div>
+                    <div class="card-comment">
+                        <p>
+                            <%= item.comments_text %>
+                        </p>
+                        <img src="" alt="" />
+                    </div>
+                    <hr />
+                    <div class="toolbar">
+                        <button id="like">Like</button>
+                        <button id="dislike">Disike</button>
+                        <button id="comments">Comments</button>
+                        <button id="reports">Reports</button>
+                    </div>
+                </article>
+                <% }) %>
+
+                    <!-- <article class="card">
                 <div class="card-author">
                     <img src="" alt="" />
                     <h3>Leonardi Randi Wijaya</h3>
@@ -92,14 +99,14 @@
                     <button id="comments">Comments</button>
                     <button id="reports">Reports</button>
                 </div>
-            </article>
+            </article> -->
         </main>
         <aside>
             <section>
                 <h3 id="date"></h3>
                 <p>Good Day Gamers. How's your day been going ay?</p>
             </section>
-            <div class="aside-panel">
+            <form class="aside-panel" method="post" action="/">
                 <textarea name="message" id="textarea-create-post" cols="30"
                     placeholder="What are you thinking?"></textarea>
                 <div class="create-post-toolbar">
@@ -108,7 +115,7 @@
                 </div>
                 <p id="invalid-input"></p>
                 <input type="submit" value="Create new post" id="create-post" />
-            </div>
+            </form>
         </aside>
     </div>
     <script src="script.js"></script>
