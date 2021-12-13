@@ -2,36 +2,37 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="font-awesome-link.js"></script>
+    <%- include('font-awesome') %>
 </head>
 
 <body>
-    <div class="reg-form">
+    <header class="header">
+        <h1><a href="/">Popsicel</a></h1>
+    </header>
+
+    <main class="users-form">
         <form action="/register" method="post">
             <label for="username">Username</label>
             <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
+            <label for="fullname">Full Name</label>
+            <input type="text" autocomplete="off" placeholder="Full Name" name="fullname" id="fullname" required />
             <label for="email">Email</label>
-            <input type="text" autocomplete="off" placeholder="email" name="email" id="email" required />
+            <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
             <label for="password">Password</label>
             <input type="password" autocomplete="off" placeholder="Password" name="password" id="password" required />
-            <label for="confirmPassword">confirmPassword</label>
-            <input type="password" autocomplete="off" placeholder="confirmPassword" name="confirmPassword"
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword"
                 id="confirmPassword" required />
             <input type="submit" value="Register">
-            <p id="no-account">Don't have an account? <a href="/login">Sign Up!</a></p>
+            <span id="no-account">Already have an account? <a href="/Login">Log in!</a></span>
         </form>
-        <% if (typeof message=='string' && message ) {%>
-            <h1>
-                <%= message %>
-            </h1>
-            <% } %>
-                <a href="/">Go Back to Home Page!</a>
-    </div>
+        <a class="go-back" href="/">Go Back to Home Page!</a>
+    </main>
     <script src="script.js"></script>
 </body>
 

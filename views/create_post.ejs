@@ -34,33 +34,7 @@
         </nav>
     </header>
     <main>
-        <article class="card-list">
-            <% result.forEach(user=> { %>
-                <div class="card">
-                    <header class="card-header">
-                        <img src="" alt="">
-                        <div class="user">
-                            <h3>
-                                <%= user.name %>
-                            </h3>
-                            <p>
-                                <%= user.username %>
-                            </p>
-                        </div>
-                    </header>
-                    <p>
-                        <%= user.post_content %>
-                    </p>
-                    <div class="interactions">
-                        <ul>
-                            <li><i class="fas fa-heart"></i></li>
-                            <li><i class="fas fa-flag"></i></li>
-                            <li><i class="fas fa-comment-dots"></i></li>
-                        </ul>
-                    </div>
-                </div>
-                <% }) %>
-        </article>
+
     </main>
     <script src="script.js"></script>
 </body>
