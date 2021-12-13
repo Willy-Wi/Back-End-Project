@@ -24,12 +24,12 @@ npm install express mysql2 express-fileupload ejs bcrypt
 -   [ ] Feedback
 -   [ ] Featured post
 -   [ ] Album
--   [ ] Chatting
+<!-- -   [ ] Chatting -->
 -   [ ] Follow/unfollow feature
--   [ ] Share post
+<!-- -   [ ] Share post -->
 -   [ ] Like/Unlike feature
 -   [ ] Report inappropriate content, user, etc.
 -   [ ] Add, edit, and delete post
--   [ ] Realtime notifications
+<!-- -   [ ] Realtime notifications -->
 -   [ ] Light/Dark mode
 -   [ ] Coming soon
