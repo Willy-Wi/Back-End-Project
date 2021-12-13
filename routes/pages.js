@@ -2,6 +2,7 @@ const { Router } = require("express");
 const bcrypt = require("bcrypt");
 const mysql2 = require("mysql2");
 const { register, login, main } = require("../controllers/authCon");
+const { check } = require("express-validator");
 
 const router = Router();
 
@@ -29,6 +30,13 @@ router.get("/", async (req, res) => {
     res.render("home", { result: query, login: true });
 });
 
+router.get("/create", (req, res) => {
+    if (!req.session.authenticated)
+        return res.render("create_post", { login: false });
+
+    res.render("create_post", { login: true });
+});
+
 router.get("/register", (req, res) => {
     res.render("register");
 });
@@ -45,8 +53,18 @@ router.get("/logout", (req, res) => {
     res.render("login", { message: "You are not logged in!" });
 });
 
+const validation = [
+    check("username")
+        .isLength({ min: 3 })
+        .withMessage("Username must be at least 3 characters"),
+    check("password")
+        .isLength({ min: 5 })
+        .withMessage("Password must be at least 5 characters"),
+    check("email").isEmail().withMessage("Email is not valid"),
+];
+
 router.post("/", main);
-router.post("/register", register);
+router.post("/register", validation, register);
 router.post("/login", login);
 
 module.exports = router;
