@@ -1,7 +1,7 @@
 document.addEventListener("click", (element) => {
-    let dropdown = document.getElementsByClassName("dropdown");
+    let nav__dropdown = document.getElementsByClassName("nav__dropdown");
 
-    let menu = dropdown[0].classList;
+    let menu = nav__dropdown[0].classList;
     let status = element.target.matches("[data-dropdown-toggle]");
 
     if (!status) {
