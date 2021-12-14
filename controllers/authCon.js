@@ -10,18 +10,25 @@ const conn = mysql2.createConnection({
     database: "test_db_home",
 });
 
-const main = (req, res) => {
-    const { message } = req.body;
-    const { user_id } = req.session.user;
+const create_post = (req, res) => {
+    const errors = validationResult(req);
 
-    if (!req.session.authenticated)
-        return res.render("login", { message: "You have not logged in!" });
+    if (!errors.isEmpty()) {
+        return res.render("create_post", { error: errors.array(), login: true });
+    }
+
+    const { post_message } = req.body;
+    const { user_id, username, name } = req.session.user;
+
+    if (!req.session.authenticated) return res.render("login");
 
     let sql = "INSERT INTO posts SET ?";
 
     let data = {
         user_id: user_id,
-        post_content: message,
+        username: username,
+        name: name,
+        post_content: post_message,
     };
 
     conn.query(sql, data, (err, result) => {
@@ -81,13 +88,13 @@ const register = async (req, res) => {
     conn.query(sql, data, (err, result) => {
         if (err) throw err;
     });
-    res.render("register", { message: "Successfully registered" });
+    res.render("login");
 };
 
 const login = async (req, res) => {
     const { username, password } = req.body;
 
-    let sql = "SELECT password, user_id FROM users WHERE username = ?";
+    let sql = "SELECT * FROM users WHERE BINARY username = ?";
 
     let query = await new Promise((resolve, reject) => {
         conn.query(sql, username, (err, result) => {
@@ -103,22 +110,26 @@ const login = async (req, res) => {
         });
     }
 
-    const queryPassword = query[0].password;
-    const queryUserID = query[0].user_id;
+    const qPassword = query[0].password;
+    const qUserID = query[0].user_id;
+    const qUserName = query[0].username;
+    const qFullName = query[0].name;
 
-    let checkPassword = await bcrypt.compare(password, queryPassword);
+    let checkPassword = await bcrypt.compare(password, qPassword);
 
     if (!checkPassword)
         return res.render("login", { invalidPassword: "Invalid Password!" });
 
     if (!req.session.authenticated) {
         req.session.authenticated = true;
-        req.session.user = { queryUserID };
-        console.log(req.session.user);
+        req.session.user = {
+            user_id: qUserID,
+            username: qUserName,
+            name: qFullName };
         return res.redirect("/");
     }
 
     res.render("login", { message: "You're already logged in!" });
 };
 
-module.exports = { register, login, main };
+module.exports = { register, login, create_post };
