@@ -14,11 +14,14 @@ const create_post = (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.render("create_post", { error: errors.array(), login: true });
+        return res.render("create_post", {
+            message: errors.array(),
+            login: true,
+        });
     }
 
     const { post_message } = req.body;
-    const { user_id, username, name } = req.session.user;
+    const { user_id } = req.session.user;
 
     if (!req.session.authenticated) return res.render("login");
 
@@ -26,9 +29,7 @@ const create_post = (req, res) => {
 
     let data = {
         user_id: user_id,
-        username: username,
-        name: name,
-        post_content: post_message,
+        post_text: post_message,
     };
 
     conn.query(sql, data, (err, result) => {
@@ -40,21 +41,12 @@ const create_post = (req, res) => {
 
 const register = async (req, res) => {
     const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.render("register", { error: errors.array() });
-    }
-
     const { username, fullname, email, password, confirmPassword } = req.body;
+    let sql = `SELECT email, username FROM users WHERE BINARY email = '${email}' OR username = '${username}'`;
 
-    if (password !== confirmPassword) {
-        return res.render("register", {
-            message: "Password does not match!",
-        });
-    }
+    let regex = /[^A-Za-z0-9_]/g;
 
-    let sql = `SELECT email, username FROM users WHERE email = '${email}' OR username = '${username}'`;
-
+    // Querying to see if the data already exists or not
     let query = await new Promise((resolve, reject) => {
         conn.query(sql, (err, result) => {
             if (err) reject(err);
@@ -63,23 +55,53 @@ const register = async (req, res) => {
         });
     });
 
-    if (query.length > 0) {
-        if (query[0].email) {
-            return res.render("register", {
-                message: "That email is already registered!",
-            });
-        } else if (query[0].password) {
-            return res.render("register", {
-                message: "That username already exist!",
-            });
+    // Validating Data
+    if (!errors.isEmpty() || query.length > 0) {
+        let error = errors.array();
+        let items = {};
+        let errorUsername, errorEmail, errorPassword, invalidPasswordMatch;
+
+        // Storing the Errors into an object
+        for (let item of error) {
+            items[item.param] = item.msg;
         }
+
+        if (items.username) {
+            errorUsername = items.username;
+        } else if (username.match(regex)) {
+            errorUsername = "Username can only have numbers, letters, and underscores";
+        }else if (query.length > 0 && query[0].username) {
+            errorUsername = "That username already exist!";
+        }
+
+        if (items.email) {
+            errorEmail = items.email;
+        } else if (query.length > 0 && query[0].email) {
+            errorEmail = "That email is already registered";
+        }
+
+        if (items.password) {
+            errorPassword = items.password;
+        }
+
+        // Checking if Password is equal to Confirm Password Field
+        if (password !== confirmPassword) {
+            invalidPasswordMatch = "Password does not match!";
+        }
+
+        return res.render("register", {
+            errorUsername,
+            errorEmail,
+            errorPassword,
+            invalidPasswordMatch,
+        });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); // Crypting Password
 
     sql = "INSERT INTO users SET ?";
     let data = {
-        username: username,
+        username: `@${username}`,
         name: fullname,
         email: email,
         password: hashedPassword,
@@ -94,7 +116,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
 
-    let sql = "SELECT * FROM users WHERE BINARY username = ?";
+    let sql = "SELECT password, user_id FROM users WHERE BINARY username = ?";
 
     let query = await new Promise((resolve, reject) => {
         conn.query(sql, username, (err, result) => {
@@ -106,14 +128,12 @@ const login = async (req, res) => {
 
     if (query.length < 1) {
         return res.render("login", {
-            invalidUser: "That user does not exist!",
+            invalidUsername: "That user does not exist!",
         });
     }
 
     const qPassword = query[0].password;
     const qUserID = query[0].user_id;
-    const qUserName = query[0].username;
-    const qFullName = query[0].name;
 
     let checkPassword = await bcrypt.compare(password, qPassword);
 
@@ -124,12 +144,9 @@ const login = async (req, res) => {
         req.session.authenticated = true;
         req.session.user = {
             user_id: qUserID,
-            username: qUserName,
-            name: qFullName };
+        };
         return res.redirect("/");
     }
-
-    res.render("login", { message: "You're already logged in!" });
 };
 
 module.exports = { register, login, create_post };
