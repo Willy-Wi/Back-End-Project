@@ -2,8 +2,9 @@
 :root {
   --light-gray: hsl(233, 10%, 89%);
   --white: hsl(220, 14%, 96%);
-  --purple: hsl(244, 65%, 50%);
-  --light-purple: hsl(256, 78%, 57%);
+  --purple: hsl(256, 78%, 57%);
+  --light-purple-gradient: hsl(256, 78%, 57%), hsl(275, 78%, 57%);
+  --light-purple: hsl(275, 78%, 57%);
   --box-shadow: 0 0 4px hsl(0, 0%, 0%, 0.2);
 }
 
@@ -23,7 +24,8 @@ body {
   font-family: "Readex Pro", sans-serif;
 }
 
-input {
+input,
+button {
   font-family: "Readex Pro", sans-serif;
 }
 
@@ -57,14 +59,21 @@ ul {
 }
 
 .header h1 a {
+  background-image: -webkit-gradient(linear, left top, right top, from(var(--light-purple-gradient)), color-stop(black), to(black));
+  background-image: linear-gradient(to right, var(--light-purple-gradient), black, black);
+  background-position: 100% 50%;
+  background-clip: text;
+  color: transparent;
   position: relative;
   -webkit-transition: 0.2s;
   transition: 0.2s;
+  background-size: 300%;
 }
 
 .header h1 a::before {
   content: "";
-  background: var(--light-purple);
+  background-image: -webkit-gradient(linear, left top, right top, from(var(--light-purple-gradient)));
+  background-image: linear-gradient(to right, var(--light-purple-gradient));
   position: absolute;
   bottom: -4px;
   left: 0;
@@ -79,7 +88,7 @@ ul {
 }
 
 .header h1 a:hover, .header h1 a:focus-visible {
-  color: var(--purple);
+  background-position: left;
 }
 
 .header h1 a:hover::before, .header h1 a:focus-visible::before {
@@ -97,24 +106,21 @@ ul {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 30%;
-  z-index: 1;
   -webkit-transition: 0.2s;
   transition: 0.2s;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  width: 35%;
 }
 
 .header__search-bar button {
   color: #595959;
-  border: none;
-  outline: none;
   font-size: 1.1rem;
-  background: transparent;
+  border: none;
+  background: none;
   cursor: pointer;
   -webkit-transition: 0.2s;
   transition: 0.2s;
-  z-index: 1;
 }
 
 .header__search-bar button:hover, .header__search-bar button:focus-visible {
@@ -126,7 +132,6 @@ ul {
 }
 
 .header__search-bar input {
-  outline: none;
   border: none;
   background: transparent;
   font-size: 1rem;
@@ -147,9 +152,6 @@ nav {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
   gap: 1.5rem;
 }
 
@@ -157,13 +159,17 @@ nav {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   font-size: 2rem;
-  color: #737373;
+  color: transparent;
+  background-image: -webkit-gradient(linear, right top, left top, from(var(--light-purple-gradient)), color-stop(#737373), to(#737373));
+  background-image: linear-gradient(to left, var(--light-purple-gradient), #737373, #737373);
+  background-size: 275%;
+  background-clip: text;
 }
 
 .nav__create-button:hover {
-  color: var(--light-purple);
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
+  background-position: right;
 }
 
 .nav__dropdown {
@@ -239,7 +245,7 @@ nav {
   width: 40%;
   display: -ms-grid;
   display: grid;
-  grid-row-gap: 2em;
+  grid-row-gap: 1em;
 }
 
 .card {
@@ -248,7 +254,7 @@ nav {
   padding: 2em;
   display: -ms-grid;
   display: grid;
-  grid-row-gap: 1.5em;
+  grid-row-gap: 1.5rem;
   -webkit-box-shadow: var(--box-shadow);
           box-shadow: var(--box-shadow);
 }
@@ -263,13 +269,12 @@ nav {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 100%;
+  width: 20%;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 
 main {
@@ -292,11 +297,18 @@ main {
   -webkit-transition: 0.2s;
   transition: 0.2s;
   position: relative;
+  color: transparent;
+  background-image: -webkit-gradient(linear, left top, right top, from(var(--light-purple-gradient)), color-stop(black), to(black));
+  background-image: linear-gradient(to right, var(--light-purple-gradient), black, black);
+  background-size: 250%;
+  background-position: 100% 50%;
+  background-clip: text;
 }
 
 .users-form a::before {
   content: "";
-  background: var(--light-purple);
+  background-image: -webkit-gradient(linear, left top, right top, from(var(--light-purple-gradient)));
+  background-image: linear-gradient(to right, var(--light-purple-gradient));
   position: absolute;
   bottom: -3px;
   left: 0;
@@ -311,7 +323,7 @@ main {
 }
 
 .users-form a:hover, .users-form a:focus-visible {
-  color: var(--light-purple);
+  background-position: left;
 }
 
 .users-form a:hover::before, .users-form a:focus-visible::before {
@@ -361,9 +373,8 @@ main {
   color: var(--light-purple);
 }
 
-.users-form__form input[type="submit"] {
+.users-form__form button[type="submit"] {
   background: var(--light-purple);
-  border: 2px solid var(--light-purple);
   color: white;
   font-size: 1.1rem;
   margin: 1.5rem 0 0.6rem 0;
@@ -375,11 +386,13 @@ main {
   font-weight: bold;
   letter-spacing: 1.1px;
   padding: 0.6em 1em;
+  border-radius: 25px;
+  border: 2px solid var(--light-purple);
 }
 
-.users-form__form input[type="submit"]:hover, .users-form__form input[type="submit"]:focus-visible {
-  background: var(--white);
+.users-form__form button[type="submit"]:hover, .users-form__form button[type="submit"]:focus-visible {
   color: var(--light-purple);
+  background: transparent;
 }
 
 .users-form__form span {
@@ -388,7 +401,10 @@ main {
 }
 
 .users-form__form span a {
-  color: var(--light-purple);
+  background-image: -webkit-gradient(linear, left top, right top, from(var(--light-purple-gradient)), color-stop(black), to(black));
+  background-image: linear-gradient(to right, var(--light-purple-gradient), black, black);
+  background-size: 250%;
+  background-clip: text;
 }
 
 .users-form__form textarea {
@@ -403,7 +419,7 @@ main {
   scrollbar-width: thin;
 }
 
-.users-form__form input#users-form__submit {
+.users-form__form button#users-form__submit {
   margin: 0 0 0.6rem 0;
   border-radius: 0 0 25px 25px;
 }
