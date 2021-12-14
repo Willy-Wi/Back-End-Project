@@ -47,6 +47,9 @@ ul {
   padding: 1.3rem 15rem;
   -webkit-box-shadow: var(--box-shadow);
           box-shadow: var(--box-shadow);
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .header h1 {
@@ -84,10 +87,9 @@ ul {
           transform: scaleX(1);
 }
 
-.search-bar {
+.header__search-bar {
   background: var(--light-gray);
   padding: 1em 1.5em;
-  margin: 0 auto;
   border-radius: 25px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -103,7 +105,7 @@ ul {
           box-sizing: border-box;
 }
 
-.search-bar button {
+.header__search-bar button {
   color: #595959;
   border: none;
   outline: none;
@@ -115,15 +117,15 @@ ul {
   z-index: 1;
 }
 
-.search-bar button:hover, .search-bar button:focus-visible {
+.header__search-bar button:hover, .header__search-bar button:focus-visible {
   color: var(--purple);
 }
 
-.search-bar:focus-within button {
+.header__search-bar:focus-within button {
   color: var(--purple);
 }
 
-.search-bar input {
+.header__search-bar input {
   outline: none;
   border: none;
   background: transparent;
@@ -134,7 +136,7 @@ ul {
   transition: 0.2s;
 }
 
-.search-bar input:focus-visible {
+.header__search-bar input:focus-visible {
   color: var(--purple);
 }
 
@@ -151,34 +153,34 @@ nav {
   gap: 1.5rem;
 }
 
-nav .create {
+.nav__create-button {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   font-size: 2rem;
   color: #737373;
 }
 
-nav .create:hover {
+.nav__create-button:hover {
   color: var(--light-purple);
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
 
-.dropdown {
+.nav__dropdown {
   position: relative;
   display: -ms-grid;
   display: grid;
   place-items: center;
 }
 
-.dropdown.active .dropdown-menu {
+.nav__dropdown.active .nav__dropdown__menu {
   -webkit-transform: translateY(0);
           transform: translateY(0);
   pointer-events: auto;
   opacity: 1;
 }
 
-.dropdown button {
+.nav__dropdown button {
   border-radius: 25px;
   width: 50px;
   height: 50px;
@@ -189,11 +191,11 @@ nav .create:hover {
   cursor: pointer;
 }
 
-.dropdown button:hover, .dropdown button:focus-visible {
+.nav__dropdown button:hover, .nav__dropdown button:focus-visible {
   background: #8c8c8c;
 }
 
-.dropdown-menu {
+.nav__dropdown__menu {
   position: absolute;
   top: calc(100% + 2rem);
   background: var(--white);
@@ -209,7 +211,7 @@ nav .create:hover {
   pointer-events: none;
 }
 
-.dropdown-menu a {
+.nav__dropdown__menu a {
   color: #595959;
   padding: 0.8em 1em;
   -webkit-transition: 0.2s;
@@ -218,30 +220,26 @@ nav .create:hover {
   width: 100%;
 }
 
-.dropdown-menu a:first-child {
+.nav__dropdown__menu a:first-child {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
 
-.dropdown-menu a:last-child {
+.nav__dropdown__menu a:last-child {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
-.dropdown-menu a:hover, .dropdown-menu a:focus-visible {
+.nav__dropdown__menu a:hover, .nav__dropdown__menu a:focus-visible {
   background: #a6a6a6;
   color: white;
 }
 
-main {
-  padding: 1.3rem 8rem;
+.card__list {
+  width: 40%;
   display: -ms-grid;
   display: grid;
-  place-items: center;
-}
-
-.card-list {
-  width: 40%;
+  grid-row-gap: 2em;
 }
 
 .card {
@@ -251,15 +249,17 @@ main {
   display: -ms-grid;
   display: grid;
   grid-row-gap: 1.5em;
+  -webkit-box-shadow: var(--box-shadow);
+          box-shadow: var(--box-shadow);
 }
 
-.card-header {
+.card__header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.interactions ul {
+.card__interact ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -272,8 +272,20 @@ main {
           justify-content: space-evenly;
 }
 
+main {
+  display: -ms-grid;
+  display: grid;
+  padding: 2rem;
+  place-items: center;
+  min-height: 80vh;
+}
+
 .users-form {
-  min-height: 90vh;
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  grid-row-gap: 2rem;
+  width: 100%;
 }
 
 .users-form a {
@@ -307,64 +319,54 @@ main {
           transform: scaleX(1);
 }
 
-.users-form form {
+.users-form__form {
   background: var(--white);
-  padding: 2em;
+  padding: 2em 2em 1.5em 2em;
   border-radius: 25px;
   display: -ms-grid;
   display: grid;
-  grid-row-gap: 0.2rem;
   -webkit-box-shadow: var(--box-shadow);
           box-shadow: var(--box-shadow);
   width: clamp(100px, 90%, 425px);
 }
 
-.users-form form p,
-.users-form form label {
+.users-form__form label {
+  font-size: 1.1rem;
   margin-left: 0.5rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
 }
 
-.users-form form p {
-  color: #e83030;
-  font-size: 0.9rem;
-}
-
-.users-form form label {
-  font-size: 1.2rem;
-}
-
-.users-form form label:not(:first-child) {
+.users-form__form label:not(:first-child) {
   margin-top: 1rem;
 }
 
-.users-form form input {
+.users-form__form input {
   border-radius: 25px;
   border: none;
-  padding: 0.7em 1em;
   font-size: 1rem;
 }
 
-.users-form form input[type="text"],
-.users-form form input[type="password"] {
+.users-form__form input[type="text"],
+.users-form__form input[type="password"] {
   margin-bottom: 0.5rem;
   -webkit-box-shadow: var(--box-shadow);
           box-shadow: var(--box-shadow);
+  padding: 0.7em 1em;
   -webkit-transition: 0.2s;
   transition: 0.2s;
 }
 
-.users-form form input[type="text"]:focus-visible,
-.users-form form input[type="password"]:focus-visible {
+.users-form__form input[type="text"]:focus-visible,
+.users-form__form input[type="password"]:focus-visible {
   color: var(--light-purple);
 }
 
-.users-form form input[type="submit"] {
+.users-form__form input[type="submit"] {
   background: var(--light-purple);
   border: 2px solid var(--light-purple);
   color: white;
   font-size: 1.1rem;
-  margin: 1.5rem 0 0.5rem 0;
+  margin: 1.5rem 0 0.6rem 0;
   -webkit-transition: 0.2s;
   transition: 0.2s;
   cursor: pointer;
@@ -372,19 +374,47 @@ main {
           box-sizing: border-box;
   font-weight: bold;
   letter-spacing: 1.1px;
+  padding: 0.6em 1em;
 }
 
-.users-form form input[type="submit"]:hover, .users-form form input[type="submit"]:focus-visible {
+.users-form__form input[type="submit"]:hover, .users-form__form input[type="submit"]:focus-visible {
   background: var(--white);
   color: var(--light-purple);
 }
 
-.users-form form span {
+.users-form__form span {
   margin: 0 auto;
   margin-top: 0.3rem;
 }
 
-.users-form form span a {
+.users-form__form span a {
   color: var(--light-purple);
+}
+
+.users-form__form textarea {
+  resize: none;
+  font-family: "Readex Pro", sans-serif;
+  -webkit-box-shadow: var(--box-shadow);
+          box-shadow: var(--box-shadow);
+  border-radius: 25px 25px 0 0;
+  border: none;
+  padding: 1em;
+  font-size: 1rem;
+  scrollbar-width: thin;
+}
+
+.users-form__form input#users-form__submit {
+  margin: 0 0 0.6rem 0;
+  border-radius: 0 0 25px 25px;
+}
+
+.users-form__error {
+  color: #ed5e5e;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.users-form__form--wide {
+  width: clamp(100px, 90%, 575px);
 }
 /*# sourceMappingURL=style.css.map */

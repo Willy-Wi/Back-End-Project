@@ -13,15 +13,15 @@
 <body>
     <header class="header">
         <h1><a href="/">Popsicel</a></h1>
-        <form action="/" method="get" class="search-bar">
+        <form action="/" method="get" class="header__search-bar">
             <button type="submit"><i class="fas fa-search"></i></button>
             <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
         </form>
         <nav>
-            <a class="create" href="/create"><i class="fas fa-plus-circle"></i></a>
-            <div class="dropdown">
+            <a class="nav__create-button" href="/create"><i class="fas fa-plus-circle"></i></a>
+            <div class="nav__dropdown">
                 <button data-dropdown-toggle><img src="" alt=""></button>
-                <div class="dropdown-menu">
+                <div class="nav__dropdown__menu">
                     <% if (login) { %>
                         <a href="">Profile</a>
                         <a href="/logout">Logout</a>
@@ -34,24 +34,24 @@
         </nav>
     </header>
     <main>
-        <article class="card-list">
+        <article class="card__list">
             <% result.forEach(user=> { %>
                 <div class="card">
-                    <header class="card-header">
+                    <header class="card__header">
                         <img src="" alt="">
-                        <div class="user">
+                        <div class="card__user">
                             <h3>
                                 <%= user.name %>
                             </h3>
                             <p>
-                                <%= user.username %>
+                                @<%= user.username %>
                             </p>
                         </div>
                     </header>
                     <p>
                         <%= user.post_content %>
                     </p>
-                    <div class="interactions">
+                    <div class="card__interact">
                         <ul>
                             <li><i class="fas fa-heart"></i></li>
                             <li><i class="fas fa-flag"></i></li>

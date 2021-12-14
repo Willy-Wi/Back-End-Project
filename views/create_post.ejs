@@ -13,15 +13,15 @@
 <body>
     <header class="header">
         <h1><a href="/">Popsicel</a></h1>
-        <form action="/" method="get" class="search-bar">
+        <form action="/" method="get" class="header__search-bar">
             <button type="submit"><i class="fas fa-search"></i></button>
             <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
         </form>
         <nav>
-            <a class="create" href="/create"><i class="fas fa-plus-circle"></i></a>
-            <div class="dropdown">
+            <a class="nav__create-button" href="/create"><i class="fas fa-plus-circle"></i></a>
+            <div class="nav__dropdown">
                 <button data-dropdown-toggle><img src="" alt=""></button>
-                <div class="dropdown-menu">
+                <div class="nav__dropdown__menu">
                     <% if (login) { %>
                         <a href="">Profile</a>
                         <a href="/logout">Logout</a>
@@ -34,7 +34,18 @@
         </nav>
     </header>
     <main>
-
+        <div class="users-form">
+            <form action="/create" method="post" class="users-form__form users-form__form--wide">
+                <textarea name="post_message" cols="30" rows="20" placeholder="What is on your mind?"></textarea>
+                <input id="users-form__submit" type="submit" value="Create Post">
+                <% if (typeof error=='object' && error) { %>
+                    <p class="users-form__error">
+                        <%= error[0].msg %> 
+                    </p>
+                    <% } %>
+            </form>
+            <a href="/">Go Back to Home Page!</a>
+        </div>
     </main>
     <script src="script.js"></script>
 </body>
