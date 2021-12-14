@@ -15,12 +15,12 @@
         <h1><a href="/">Popsicel</a></h1>
         <form action="/" method="get" class="header__search-bar">
             <button type="submit"><i class="fas fa-search"></i></button>
-            <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
+            <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects..." />
         </form>
         <nav>
             <a class="nav__create-button" href="/create"><i class="fas fa-plus-circle"></i></a>
             <div class="nav__dropdown">
-                <button data-dropdown-toggle><img src="" alt=""></button>
+                <button data-dropdown-toggle><img src="" alt="" /></button>
                 <div class="nav__dropdown__menu">
                     <a href="/login">Login</a>
                     <a href="/register">Register</a>
@@ -34,17 +34,45 @@
             <form action="/register" method="post" class="users-form__form">
                 <label for="username">Username</label>
                 <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
+
+                <% if (typeof errorUsername=='string' && errorUsername) { %>
+                <p class="users-form__error"><%= errorUsername %> </p>
+                <% } %>
+
+                <% if (typeof invalidUsername=='string' && invalidUsername ) {%>
+                <p class="users-form__error"><%= invalidUsername %></p>
+                <% } %>
+
                 <label for="fullname">Full Name</label>
                 <input type="text" autocomplete="off" placeholder="Full Name" name="fullname" id="fullname" required />
                 <label for="email">Email</label>
                 <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
+
+                <% if (typeof errorEmail=='string' && errorEmail) { %>
+                <p class="users-form__error"><%= errorEmail %> </p>
+                <% } %>
+
+                <% if (typeof invalidEmail=='string' && invalidEmail ) {%>
+                <p class="users-form__error"><%= invalidEmail %></p>
+                <% } %>
+
                 <label for="password">Password</label>
                 <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
                     required />
+
+                <% if (typeof errorPassword =='string' && errorPassword ) { %>
+                <p class="users-form__error"><%= errorPassword  %> </p>
+                <% } %>
+
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword"
                     id="confirmPassword" required />
-                <input type="submit" value="Register">
+
+                <% if (typeof invalidPasswordMatch=='string' && invalidPasswordMatch ) {%>
+                <p class="users-form__error"><%= invalidPasswordMatch %></p>
+                <% } %>
+
+                <button type="submit">Register</button>
                 <span id="no-account">Already have an account? <a href="/Login">Log in!</a></span>
             </form>
             <a class="go-back" href="/">Go Back to Home Page!</a>

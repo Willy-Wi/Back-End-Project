@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("font-awesome") %>
-        <link rel="stylesheet" href="style.css">
-        <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Home</title>
 </head>
 
 <body>
@@ -23,12 +23,12 @@
                 <button data-dropdown-toggle><img src="" alt=""></button>
                 <div class="nav__dropdown__menu">
                     <% if (login) { %>
-                        <a href="">Profile</a>
-                        <a href="/logout">Logout</a>
-                        <% } else if (!login) { %>
-                            <a href="/login">Login</a>
-                            <a href="/register">Register</a>
-                            <% } %>
+                    <a href="">Profile</a>
+                    <a href="/logout">Logout</a>
+                    <% } else if (!login) { %>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    <% } %>
                 </div>
             </div>
         </nav>
@@ -37,12 +37,12 @@
         <div class="users-form">
             <form action="/create" method="post" class="users-form__form users-form__form--wide">
                 <textarea name="post_message" cols="30" rows="20" placeholder="What is on your mind?"></textarea>
-                <input id="users-form__submit" type="submit" value="Create Post">
-                <% if (typeof error=='object' && error) { %>
-                    <p class="users-form__error">
-                        <%= error[0].msg %> 
-                    </p>
-                    <% } %>
+                <button id="users-form__submit" type="submit">Create Post</button>
+                <% if (typeof message=='object' && message) { %>
+                <p class="users-form__error">
+                    <%= message[0].msg %>
+                </p>
+                <% } %>
             </form>
             <a href="/">Go Back to Home Page!</a>
         </div>

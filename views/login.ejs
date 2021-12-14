@@ -34,21 +34,21 @@
             <form action="/login" method="post" class="users-form__form">
                 <label for="username">Username</label>
                 <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
-                <% if (typeof invalidUser=='string' && invalidUser ) {%>
-                    <p class="users-form__error">
-                        <%= invalidUser %>
-                    </p>
-                    <% } %>
-                        <label for="password">Password</label>
-                        <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
-                            required />
-                        <% if (typeof invalidPassword=='string' && invalidPassword) { %>
-                            <p class="users-form__error">
-                                <%= invalidPassword %>
-                            </p>
-                            <% } %>
-                                <input type="submit" value="Login">
-                                <span>Don't have an account? <a href="/register">Register!</a></span>
+                <% if (typeof invalidUsername=='string' && invalidUsername ) {%>
+                <p class="users-form__error">
+                    <%= invalidUsername %>
+                </p>
+                <% } %>
+                <label for="password">Password</label>
+                <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
+                    required />
+                <% if (typeof invalidPassword=='string' && invalidPassword) { %>
+                <p class="users-form__error">
+                    <%= invalidPassword %>
+                </p>
+                <% } %>
+                <button type="submit">Login</button>
+                <span>Don't have an account? <a href="/register">Register!</a></span>
             </form>
             <a href="/">Go Back to Home Page!</a>
         </div>

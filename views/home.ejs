@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("font-awesome") %>
-        <link rel="stylesheet" href="style.css">
-        <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Home</title>
 </head>
 
 <body>
     <header class="header">
         <h1><a href="/">Popsicel</a></h1>
-        <form action="/" method="get" class="header__search-bar">
+        <form action="/search" method="get" class="header__search-bar">
             <button type="submit"><i class="fas fa-search"></i></button>
             <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
         </form>
@@ -23,12 +23,12 @@
                 <button data-dropdown-toggle><img src="" alt=""></button>
                 <div class="nav__dropdown__menu">
                     <% if (login) { %>
-                        <a href="">Profile</a>
-                        <a href="/logout">Logout</a>
-                        <% } else if (!login) { %>
-                            <a href="/login">Login</a>
-                            <a href="/register">Register</a>
-                            <% } %>
+                    <a href="">Profile</a>
+                    <a href="/logout">Logout</a>
+                    <% } else if (!login) { %>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    <% } %>
                 </div>
             </div>
         </nav>
@@ -36,30 +36,24 @@
     <main>
         <article class="card__list">
             <% result.forEach(user=> { %>
-                <div class="card">
-                    <header class="card__header">
-                        <img src="" alt="">
-                        <div class="card__user">
-                            <h3>
-                                <%= user.name %>
-                            </h3>
-                            <p>
-                                @<%= user.username %>
-                            </p>
-                        </div>
-                    </header>
-                    <p>
-                        <%= user.post_content %>
-                    </p>
-                    <div class="card__interact">
-                        <ul>
-                            <li><i class="fas fa-heart"></i></li>
-                            <li><i class="fas fa-flag"></i></li>
-                            <li><i class="fas fa-comment-dots"></i></li>
-                        </ul>
+            <div class="card">
+                <header class="card__header">
+                    <img src="" alt="">
+                    <div class="card__user">
+                        <h3><%= user.name %></h3>
+                        <p><%= user.username %></p>
                     </div>
+                </header>
+                <p><%= user.post_text %></p>
+                <div class="card__interact">
+                    <ul>
+                        <li><i class="fas fa-heart"></i></li>
+                        <li><i class="fas fa-flag"></i></li>
+                        <li><i class="fas fa-comment-dots"></i></li>
+                    </ul>
                 </div>
-                <% }) %>
+            </div>
+            <% }) %>
         </article>
     </main>
     <script src="script.js"></script>
