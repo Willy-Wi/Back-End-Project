@@ -1,14 +1,16 @@
-const mysql2 = require("mysql2");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
+const { conn } = require("../routes/database_conn");
 // const isEligibleRequest = require("express-fileupload/lib/isEligibleRequest");
 
-const conn = mysql2.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test_db_home",
-});
+function query(sql, data) {
+    return new Promise((resolve, reject) => {
+        conn.query(sql, data, (err, res) => {
+            if (err) reject(err);
+            resolve(res);
+        });
+    });
+}
 
 const create_post = (req, res) => {
     const errors = validationResult(req);
@@ -32,11 +34,13 @@ const create_post = (req, res) => {
         post_text: post_message,
     };
 
-    conn.query(sql, data, (err, result) => {
-        if (err) throw err;
+    query(sql, data).then(() => res.redirect("/"));
 
-        res.redirect("/");
-    });
+    //     conn.query(sql, data, (err, result) => {
+    //         if (err) throw err;
+
+    //         res.redirect("/");
+    //     });
 };
 
 const register = async (req, res) => {
@@ -69,8 +73,9 @@ const register = async (req, res) => {
         if (items.username) {
             errorUsername = items.username;
         } else if (username.match(regex)) {
-            errorUsername = "Username can only have numbers, letters, and underscores";
-        }else if (query.length > 0 && query[0].username) {
+            errorUsername =
+                "Username can only have numbers, letters, and underscores";
+        } else if (query.length > 0 && query[0].username) {
             errorUsername = "That username already exist!";
         }
 
@@ -114,12 +119,12 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    let sql = "SELECT password, user_id FROM users WHERE BINARY username = ?";
+    let sql = "SELECT password, user_id FROM users WHERE BINARY email = ?";
 
     let query = await new Promise((resolve, reject) => {
-        conn.query(sql, username, (err, result) => {
+        conn.query(sql, email, (err, result) => {
             if (err) reject(err);
 
             resolve(result);
@@ -128,7 +133,7 @@ const login = async (req, res) => {
 
     if (query.length < 1) {
         return res.render("login", {
-            invalidUsername: "That user does not exist!",
+            invalidEmail: "That user does not exist!",
         });
     }
 
