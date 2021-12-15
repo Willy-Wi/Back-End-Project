@@ -1,84 +1,70 @@
 const { Router } = require("express");
-const bcrypt = require("bcrypt");
-const mysql2 = require("mysql2");
 const { register, login, create_post } = require("../controllers/authCon");
 const { check } = require("express-validator");
+const { conn } = require("./database_conn");
 
 const router = Router();
 
-const conn = mysql2.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test_db_home",
-});
-
-router.get("/search", async (req, res) => {
-    const filter = req.query.search
-    if (filter < 1) return res.redirect("/");
-
-    let sql = `
-        SELECT Users.username, Users.name, Posts.post_text
-        FROM Users INNER JOIN Posts ON Users.user_id = Posts.user_id
-        WHERE Users.username LIKE '%${filter}%' OR
-        Users.name LIKE '%${filter}%' OR
-        Posts.post_text LIKE '%${filter}%'
-    `;
-
-    let query = await new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) reject(err) ;
-            resolve(result);
+function query(sql) {
+    return new Promise((resolve, reject) => {
+        conn.query(sql, (err, res) => {
+            if (err) reject(err);
+            resolve(res);
         });
     });
+};
+
+router.get("/search", async (req, res) => {
+    const filter = req.query.search;
+    if (filter < 1) return res.redirect("/");
+
+    let sql = `SELECT Users.username, Users.name, Posts.post_text
+    FROM Users INNER JOIN Posts ON Users.user_id = Posts.user_id
+    WHERE Users.username LIKE '%${filter}%' OR
+    Users.name LIKE '%${filter}%' OR
+    Posts.post_text LIKE '%${filter}%'`;
+
+    let result = await query(sql);
 
     if (!req.session.authenticated) {
-        return res.render("home", { login: false, result: query });
+        return res.render("home", { login: false, result: result });
     }
 
-    res.render("home", { result: query, login: true });
+    res.render("home", { result:  result, login: true });
 });
 
 router.get("/", async (req, res) => {
-    let sql =
-        "SELECT Users.username, Users.name, Posts.post_text FROM Posts INNER JOIN Users ON Users.user_id = Posts.user_id";
+    let sql = `SELECT Users.username, Users.name, Posts.post_text
+    FROM Posts INNER JOIN Users 
+    ON Users.user_id = Posts.user_id`;
 
-    let query = await new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-        });
-    });
-
+    let result = await query(sql);
+    
     if (!req.session.authenticated) {
-        return res.render("home", { login: false, result: query });
+        return res.render("home", { login: false, result:  result });
     }
-
-    res.render("home", { result: query, login: true });
+    res.render("home", { result:  result, login: true });
 });
 
 router.get("/create", (req, res) => {
     if (!req.session.authenticated) {
         return res.render("login", { message: "You have not logged in!" });
     }
-
     res.render("create_post", { login: true });
 });
 
 router.get("/register", (req, res) => {
-    if (req.session.authenticated) {
-        return res.redirect("/");
+    if (!req.session.authenticated) {
+        return res.render("register");
     }
-
-    res.render("register");
+    return res.redirect("/");
 });
 
 router.get("/login", (req, res) => {
-    if (req.session.authenticated) {
-        return res.redirect("/");
+    if (!req.session.authenticated) {
+        return res.render("login");
     }
-
-    res.render("login");
+    return res.redirect("/");
 });
 
 router.get("/logout", (req, res) => {
@@ -86,7 +72,6 @@ router.get("/logout", (req, res) => {
         req.session.authenticated = false;
         return res.redirect("/");
     }
-
     res.render("login", { message: "You are not logged in!" });
 });
 
