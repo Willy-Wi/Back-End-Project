@@ -1,19 +1,13 @@
 const express = require("express");
-const mysql2 = require("mysql2");
 const pages = require("./routes/pages");
 const session = require("express-session");
+const { conn } = require("./routes/database_conn");
 const path = require("path");
 // const fileUpload = require("express-fileupload");
 
 const port = 3000;
 
 const app = express();
-const conn = mysql2.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test_db_home",
-});
 
 app.set("view engine", "ejs");
 
