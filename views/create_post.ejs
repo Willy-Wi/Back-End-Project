@@ -11,28 +11,7 @@
 </head>
 
 <body>
-    <header class="header">
-        <h1><a href="/">Popsicel</a></h1>
-        <form action="/" method="get" class="header__search-bar">
-            <button type="submit"><i class="fas fa-search"></i></button>
-            <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
-        </form>
-        <nav>
-            <a class="nav__create-button" href="/create"><i class="fas fa-plus-circle"></i></a>
-            <div class="nav__dropdown">
-                <button data-dropdown-toggle><img src="" alt=""></button>
-                <div class="nav__dropdown__menu">
-                    <% if (login) { %>
-                    <a href="">Profile</a>
-                    <a href="/logout">Logout</a>
-                    <% } else if (!login) { %>
-                    <a href="/login">Login</a>
-                    <a href="/register">Register</a>
-                    <% } %>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <%- include("header") %> 
     <main>
         <div class="users-form">
             <form action="/create" method="post" class="users-form__form users-form__form--wide">

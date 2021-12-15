@@ -5,38 +5,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css" />
     <%- include('font-awesome') %>
+    <link rel="stylesheet" href="style.css" />
+    <title>Login</title>
 </head>
 
 <body>
-    <header class="header">
-        <h1><a href="/">Popsicel</a></h1>
-        <form action="/" method="get" class="header__search-bar">
-            <button type="submit"><i class="fas fa-search"></i></button>
-            <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
-        </form>
-        <nav>
-            <a class="nav__create-button" href="/create"><i class="fas fa-plus-circle"></i></a>
-            <div class="nav__dropdown">
-                <button data-dropdown-toggle><img src="" alt=""></button>
-                <div class="nav__dropdown__menu">
-                    <a href="/login">Login</a>
-                    <a href="/register">Register</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+    <%- include("header") %> 
     <main>
         <div class="users-form">
             <form action="/login" method="post" class="users-form__form">
-                <label for="username">Username</label>
-                <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
-                <% if (typeof invalidUsername=='string' && invalidUsername ) {%>
+                <label for="email">Email</label>
+                <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
+                <% if (typeof invalidEmail=='string' && invalidEmail ) {%>
                 <p class="users-form__error">
-                    <%= invalidUsername %>
+                    <%= invalidEmail %>
                 </p>
                 <% } %>
                 <label for="password">Password</label>
