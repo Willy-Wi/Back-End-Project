@@ -36,11 +36,6 @@ const create_post = (req, res) => {
 
     query(sql, data).then(() => res.redirect("/"));
 
-    //     conn.query(sql, data, (err, result) => {
-    //         if (err) throw err;
-
-    //         res.redirect("/");
-    //     });
 };
 
 const register = async (req, res) => {
@@ -62,13 +57,12 @@ const register = async (req, res) => {
     // Validating Data
     if (!errors.isEmpty() || query.length > 0) {
         let error = errors.array();
-        let items = {};
         let errorUsername, errorEmail, errorPassword, invalidPasswordMatch;
+        items = {}
 
-        // Storing the Errors into an object
-        for (let item of error) {
-            items[item.param] = item.msg;
-        }
+        for (let i of error) {
+            items[i.param] = i.msg;
+        };
 
         if (items.username) {
             errorUsername = items.username;
