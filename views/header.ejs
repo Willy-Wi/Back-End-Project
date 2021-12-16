@@ -9,10 +9,10 @@
         <div class="nav__dropdown">
             <button data-dropdown-toggle><img src="" alt=""></button>
             <div class="nav__dropdown__menu">
-                <% if (login) { %>
+                <% if (typeof loggedIn=='boolean' && loggedIn) { %>
                 <a href="">Profile</a>
                 <a href="/logout">Logout</a>
-                <% } else if (!login) { %>
+                <% } else { %>
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
                 <% } %>
