@@ -6,36 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("font-awesome") %>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
     <title>Home</title>
 </head>
 
 <body>
-    <%- include("header") %> 
+    <%- include("header", loggedIn) %>
     <main>
         <article class="card__list">
-            <% result.forEach(user=> { %>
+            <% result.forEach(item=> { %>
             <div class="card">
                 <header class="card__header">
                     <img src="" alt="">
                     <div class="card__user">
-                        <h3><%= user.name %></h3>
-                        <p><%= user.username %></p>
+                        <h3><%= item.name %></h3>
+                        <p><%= item.username %></p>
                     </div>
                 </header>
-                <p><%= user.post_text %></p>
+                <p><%= item.post_text %></p>
+                <br>
                 <div class="card__interact">
-                    <ul>
-                        <li><i class="fas fa-heart"></i></li>
-                        <li><i class="fas fa-flag"></i></li>
-                        <li><i class="fas fa-comment-dots"></i></li>
-                    </ul>
+                    <button onclick="actOnPost(event)" data-post-id="<%= item.post_id %> ">
+                        <% if (typeof likeStatus == 'object' && likeStatus) { %>
+                        <% let filtered = likeStatus.filter(v => {return v.post_id === item.post_id}) %>
+                        <% if (filtered.length > 0) { %>
+                        <%= "Dislike" %>
+                        <% } else { %>
+                        <%= "Like"  %>
+                        <%  } %>
+                        <% } else { %>
+                        <%= "Like" %>
+                        <% } %>
+                    </button>
+                    <span id="likes-count-<%= item.post_id %>"><%= item.likes %></span>
+                    <button><i class="fas fa-flag"></i></button>
+                    <button><i class="fas fa-comment-dots"></i></button>
                 </div>
             </div>
             <% }) %>
         </article>
     </main>
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./actOnPost.js"></script>
 </body>
 
 </html>
