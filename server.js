@@ -1,7 +1,7 @@
 const express = require("express");
 const pages = require("./routes/pages");
 const session = require("express-session");
-const { conn } = require("./routes/database_conn");
+const { conn } = require("./routes/dbFunctions");
 const path = require("path");
 // const fileUpload = require("express-fileupload");
 
@@ -31,10 +31,8 @@ conn.connect((err) => {
 
 app.use("/", pages);
 
-// app.use(fileUpload());
-
 // ! Work in Progress
-
+// app.use(fileUpload());
 // app.post("/", (req, res) => {
 //     if (!req.files) return; // res.status(400).sendFile(__dirname + "/public/home.html");
 
