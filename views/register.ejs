@@ -18,12 +18,8 @@
                 <label for="username">Username</label>
                 <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
 
-                <% if (typeof errorUsername=='string' && errorUsername) { %>
-                <p class="users-form__error"><%= errorUsername %> </p>
-                <% } %>
-
-                <% if (typeof invalidUsername=='string' && invalidUsername ) {%>
-                <p class="users-form__error"><%= invalidUsername %></p>
+                <% if (typeof errUser=='string' && errUser) { %>
+                <p class="users-form__error"><%= errUser %> </p>
                 <% } %>
 
                 <label for="fullname">Full Name</label>
@@ -31,28 +27,24 @@
                 <label for="email">Email</label>
                 <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
 
-                <% if (typeof errorEmail=='string' && errorEmail) { %>
-                <p class="users-form__error"><%= errorEmail %> </p>
-                <% } %>
-
-                <% if (typeof invalidEmail=='string' && invalidEmail ) {%>
-                <p class="users-form__error"><%= invalidEmail %></p>
+                <% if (typeof errEmail=='string' && errEmail) { %>
+                <p class="users-form__error"><%= errEmail %> </p>
                 <% } %>
 
                 <label for="password">Password</label>
                 <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
                     required />
 
-                <% if (typeof errorPassword =='string' && errorPassword ) { %>
-                <p class="users-form__error"><%= errorPassword  %> </p>
+                <% if (typeof errPass =='string' && errPass ) { %>
+                <p class="users-form__error"><%= errPass  %> </p>
                 <% } %>
 
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword"
                     id="confirmPassword" required />
 
-                <% if (typeof invalidPasswordMatch=='string' && invalidPasswordMatch ) {%>
-                <p class="users-form__error"><%= invalidPasswordMatch %></p>
+                <% if (typeof errPassMatch=='string' && errPassMatch ) {%>
+                <p class="users-form__error"><%= errPassMatch %></p>
                 <% } %>
 
                 <button type="submit">Register</button>
