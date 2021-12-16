@@ -1,80 +1,45 @@
 const { Router } = require("express");
-const { register, login, create_post } = require("../controllers/authCon");
 const { check } = require("express-validator");
-const { conn } = require("./database_conn");
+const { mainPage } = require("./mainPage");
+const { register, login } = require("../controllers/authCon");
+const { searchData } = require("../controllers/searchCon");
+const { postCreate, postLike } = require("../controllers/postCon");
 
 const router = Router();
 
-function query(sql) {
-    return new Promise((resolve, reject) => {
-        conn.query(sql, (err, res) => {
-            if (err) reject(err);
-            resolve(res);
-        });
-    });
-};
-
-router.get("/search", async (req, res) => {
-    const filter = req.query.search;
-    if (filter < 1) return res.redirect("/");
-
-    let sql = `SELECT Users.username, Users.name, Posts.post_text
-    FROM Users INNER JOIN Posts ON Users.user_id = Posts.user_id
-    WHERE Users.username LIKE '%${filter}%' OR
-    Users.name LIKE '%${filter}%' OR
-    Posts.post_text LIKE '%${filter}%'`;
-
-    let result = await query(sql);
-
-    if (!req.session.authenticated) {
-        return res.render("home", { login: false, result: result });
-    }
-
-    res.render("home", { result:  result, login: true });
-});
-
-router.get("/", async (req, res) => {
-    let sql = `SELECT Users.username, Users.name, Posts.post_text
-    FROM Posts INNER JOIN Users 
-    ON Users.user_id = Posts.user_id`;
-
-    let result = await query(sql);
-    
-    if (!req.session.authenticated) {
-        return res.render("home", { login: false, result:  result });
-    }
-    res.render("home", { result:  result, login: true });
-});
+// * Renders
+router.get("/", mainPage);
 
 router.get("/create", (req, res) => {
-    if (!req.session.authenticated) {
-        return res.render("login", { message: "You have not logged in!" });
+    if (!req.session.loggedIn) {
+        return res.redirect("/login");
     }
-    res.render("create_post", { login: true });
+    res.render("create_post", { loggedIn: req.session.loggedIn });
 });
 
 router.get("/register", (req, res) => {
-    if (!req.session.authenticated) {
+    if (!req.session.loggedIn) {
         return res.render("register");
     }
     return res.redirect("/");
 });
 
 router.get("/login", (req, res) => {
-    if (!req.session.authenticated) {
+    if (!req.session.loggedIn) {
         return res.render("login");
     }
     return res.redirect("/");
 });
 
 router.get("/logout", (req, res) => {
-    if (req.session.authenticated) {
-        req.session.authenticated = false;
+    if (req.session.loggedIn) {
+        req.session.loggedIn = false;
         return res.redirect("/");
     }
-    res.render("login", { message: "You are not logged in!" });
+    res.redirect("/login");
 });
 
+// * Validation Functions
 const validationRegister = [
     check("username")
         .isLength({ min: 3 })
@@ -93,8 +58,11 @@ const validatePost = [
         ),
 ];
 
-router.post("/create", validatePost, create_post);
+// * Controller Files
+router.get("/search", searchData); // Search Data = User OR Post
+router.post("/create", validatePost, postCreate);
 router.post("/register", validationRegister, register);
 router.post("/login", login);
+router.post("/posts/:id/act", postLike);
 
 module.exports = router;
