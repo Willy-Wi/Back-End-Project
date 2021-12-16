@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <%- include("header") %> 
+    <%- include("header", loggedIn) %>
     <main>
         <div class="users-form">
             <form action="/create" method="post" class="users-form__form users-form__form--wide">
