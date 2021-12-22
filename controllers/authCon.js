@@ -1,55 +1,35 @@
+const { query } = require("../controllers/dbCon");
 const bcrypt = require("bcrypt");
-const { validationResult } = require("express-validator");
-const { query } = require("../routes/dbFunctions");
-// const isEligibleRequest = require("express-fileupload/lib/isEligibleRequest");
 
-// * Register HTTP Post
 const register = async (req, res) => {
-    const errors = validationResult(req);
-    const { username, fullname, email, password, confirmPassword } = req.body;
+    const { username, name, email, password, confirmPassword } = req.body;
+    const regex = /[^A-Za-z0-9_]/g;
+    let errUser, errEmail, errPass;
     let sql = `SELECT email, username FROM users WHERE BINARY email = '${email}' OR username = '@${username}'`;
+    const result = await query(sql);
 
-    let errUser, errEmail;
-    let regex = /[^A-Za-z0-9_]/g;
-    let result = await query(sql);
-    let resultValue = result.length > 0;
-    let items = {};
+    if (username.match(regex)) {
+        errUser = "Username can only contain numbers, letters, and underscores";
+    } else if (username.length < 5) {
+        errUser = "Username must be at least 5 characters long";
+    } else if (result.length > 0 && result[0].username) {
+        errUser = "That username already exists";
+    }
 
-    // Validating Data
-    if (!errors.isEmpty() || resultValue) {
-        for (let i of errors.array()) {
-            items[i.param] = i.msg;
-        }
+    if (email.length < 5) {
+        errEmail = "Username must be at least 5 characters long";
+    } else if (result.length > 0 && result[0].email) {
+        errEmail = "That email is already registered";
+    }
 
-        const {
-            username: invalidUser,
-            email: invalidEmail,
-            password: invalidPass,
-        } = items;
+    if (password.length < 5) {
+        errPass = "Password must be at least 5 characters long";
+    }
 
-        if (invalidUser) {
-            errUser = invalidUser;
-        } else if (username.match(regex)) {
-            errUser =
-                "Username can only contain numbers, letters, and underscores";
-        } else if (resultValue && result[0].username) {
-            errUser = "That username already exist!";
-        }
+    const errPassMatch =
+        password !== confirmPassword ? "Password does not match" : null;
 
-        console.log(errUser);
-
-        if (invalidEmail) {
-            errEmail = invalidEmail;
-        } else if (resultValue && result[0].email) {
-            errEmail = "That email is already registered";
-        }
-
-        let errPass = invalidPass ? invalidPass : null;
-
-        // Checking if Password is equal to Confirm Password Field
-        let errPassMatch =
-            password !== confirmPassword ? "Password does not match!" : null;
-
+    if (errUser || errEmail || errPass || errPassMatch) {
         return res.render("register", {
             errUser,
             errEmail,
@@ -58,47 +38,36 @@ const register = async (req, res) => {
         });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Crypting Password
-
-    sql = "INSERT INTO users SET ?";
+    const hashedPassword = await bcrypt.hash(password, 10);
+    sql = `INSERT INTO users SET ?`;
     let data = {
         username: `@${username}`,
-        name: fullname,
+        name: name,
         email: email,
         password: hashedPassword,
     };
 
-    await query(sql, data);
-
+    query(sql, data);
     res.redirect("/login");
 };
 
-// * Login HTTP Post
 const login = async (req, res) => {
     const { email, password } = req.body;
-
-    let sql = "SELECT password, user_id FROM users WHERE BINARY email = ?";
-
-    let result = await query(sql, email);
-
+    let sql = `SELECT password, user_id FROM users WHERE BINARY email = '${email}'`;
+    let result = await query(sql);
+    let invalidEmail = "That user does not exist";
+    let invalidPassword = "Invalid Password";
     if (result.length < 1) {
-        return res.render("login", {
-            invalidEmail: "That user does not exist!",
-        });
+        return res.render("login", { invalidEmail });
+    }
+    let checkPass = await bcrypt.compare(password, result[0].password);
+    if (!checkPass) {
+        return res.render("login", { invalidPassword });
     }
 
-    let checkPassword = await bcrypt.compare(password, result[0].password);
-
-    if (!checkPassword)
-        return res.render("login", { invalidPassword: "Invalid Password!" });
-
-    if (!req.session.loggedIn) {
-        req.session.loggedIn = true;
-        req.session.user = {
-            user_id: result[0].user_id,
-        };
-        return res.redirect("/");
-    }
+    req.session.isLoggedIn = true;
+    req.session.user_id = result[0].user_id;
+    res.redirect("/");
 };
 
-module.exports = { register, login };
+module.exports = { login, register };
