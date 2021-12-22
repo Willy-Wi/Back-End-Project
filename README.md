@@ -16,20 +16,22 @@ npm install express mysql2 express-fileupload ejs bcrypt
 
 ## Task List
 
--   [ ] Register
--   [ ] Login
+-   [X] Register
+-   [X] Login
+-   [X] Profile
+-   [X] Search (user, post, group, etc)
+-   [X] Like/Unlike feature
+-   [X] Add Post
 -   [ ] Forgot password
--   [ ] Profile
--   [ ] Search (user, post, group, etc)
--   [ ] Feedback
 -   [ ] Featured post
+-   [ ] Feedback
 -   [ ] Album
-<!-- -   [ ] Chatting -->
--   [ ] Follow/unfollow feature
-<!-- -   [ ] Share post -->
--   [ ] Like/Unlike feature
+-   [ ] Follow/un-follow feature
 -   [ ] Report inappropriate content, user, etc.
--   [ ] Add, edit, and delete post
-<!-- -   [ ] Realtime notifications -->
--   [ ] Light/Dark mode
+-   [ ] Edit Post
+-   [ ] Delete Post
+-   [ ] Light / Dark mode
 -   [ ] Coming soon
+<!-- -   [ ] Share post -->
+<!-- -   [ ] Realtime notifications -->
+<!-- -   [ ] Chatting -->
