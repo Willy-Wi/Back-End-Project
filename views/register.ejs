@@ -2,58 +2,53 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include('font-awesome') %>
-    <link rel="stylesheet" href="style.css" />
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Login</title>
 </head>
 
 <body>
-    <%- include("header") %> 
+    <%- include("../components/header") %>
     <main>
-        <div class="users-form">
-            <form action="/register" method="post" class="users-form__form">
-                <label for="username">Username</label>
-                <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
+        <%- include("../components/nav") %>
+        <form action="/register" method="post" class="users-form register__form">
+            <h2>Register</h2>
+            <label for="username">Username</label>
+            <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required />
 
-                <% if (typeof errUser=='string' && errUser) { %>
-                <p class="users-form__error"><%= errUser %> </p>
-                <% } %>
+            <% if (typeof errUser=='string' && errUser) { %>
+            <p class="users-form__error"><%= errUser %> </p>
+            <% } %>
 
-                <label for="fullname">Full Name</label>
-                <input type="text" autocomplete="off" placeholder="Full Name" name="fullname" id="fullname" required />
-                <label for="email">Email</label>
-                <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
+            <label for="name">Full Name</label>
+            <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required />
+            <label for="email">Email</label>
+            <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
 
-                <% if (typeof errEmail=='string' && errEmail) { %>
-                <p class="users-form__error"><%= errEmail %> </p>
-                <% } %>
+            <% if (typeof errEmail=='string' && errEmail) { %>
+            <p class="users-form__error"><%= errEmail %> </p>
+            <% } %>
 
-                <label for="password">Password</label>
-                <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
-                    required />
+            <label for="password">Password</label>
+            <input type="password" autocomplete="off" placeholder="Password" name="password" id="password" required />
 
-                <% if (typeof errPass =='string' && errPass ) { %>
-                <p class="users-form__error"><%= errPass  %> </p>
-                <% } %>
+            <% if (typeof errPass =='string' && errPass ) { %>
+            <p class="users-form__error"><%= errPass  %> </p>
+            <% } %>
 
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword"
-                    id="confirmPassword" required />
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword"
+                id="confirmPassword" required />
 
-                <% if (typeof errPassMatch=='string' && errPassMatch ) {%>
-                <p class="users-form__error"><%= errPassMatch %></p>
-                <% } %>
+            <% if (typeof errPassMatch=='string' && errPassMatch ) {%>
+            <p class="users-form__error"><%= errPassMatch %></p>
+            <% } %>
 
-                <button type="submit">Register</button>
-                <span id="no-account">Already have an account? <a href="/Login">Log in!</a></span>
-            </form>
-            <a class="go-back" href="/">Go Back to Home Page!</a>
-        </div>
+            <button type="submit">Register</button>
+        </form>
     </main>
-    <script src="script.js"></script>
 </body>
 
 </html>

@@ -2,41 +2,40 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include('font-awesome') %>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Login</title>
 </head>
 
 <body>
-    <%- include("header") %> 
+    <%- include("../components/header") %>
     <main>
-        <div class="users-form">
-            <form action="/login" method="post" class="users-form__form">
-                <label for="email">Email</label>
-                <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required />
-                <% if (typeof invalidEmail=='string' && invalidEmail ) {%>
-                <p class="users-form__error">
-                    <%= invalidEmail %>
-                </p>
-                <% } %>
-                <label for="password">Password</label>
-                <input type="password" autocomplete="off" placeholder="Password" name="password" id="password"
-                    required />
-                <% if (typeof invalidPassword=='string' && invalidPassword) { %>
-                <p class="users-form__error">
-                    <%= invalidPassword %>
-                </p>
-                <% } %>
-                <button type="submit">Login</button>
-                <span>Don't have an account? <a href="/register">Register!</a></span>
-            </form>
-            <a href="/">Go Back to Home Page!</a>
-        </div>
+        <%- include("../components/nav") %>
+        <form method="post" action="/login" class="users-form">
+            <h2>Login</h2>
+            <label for="email">Email</label>
+            <input type="email" placeholder="Email" name="email" id="email" required />
+
+            <% if (typeof invalidEmail == 'string' && invalidEmail) { %>
+            <p class="users-form__error">
+                <%= invalidEmail %>
+            </p>
+            <% } %>
+
+            <label for="password">Password</label>
+            <input type="password" placeholder="Password" name="password" id="password" required />
+
+            <% if (typeof invalidPassword == 'string' && invalidPassword) { %>
+            <p class="users-form__error">
+                <%= invalidPassword %>
+            </p>
+            <% } %>
+
+            <button type="submit">Login</button>
+        </form>
     </main>
-    <script src="script.js"></script>
 </body>
 
 </html>

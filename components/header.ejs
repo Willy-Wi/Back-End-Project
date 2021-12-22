@@ -1,0 +1,20 @@
+<header class="header">
+    <h2><a href="/">Pop<span>sicle</span></a></h2>
+    <form action="/search" class="header__search">
+        <button type="submit"><i class="fas fa-search"></i></button>
+        <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
+    </form>
+    <div class="header__dropdown">
+        <img src="" alt="" width="52" height="52" data-dropdown-toggle>
+        <div class="header__menu">
+            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+            <a href="/users/<%= user_id %>">Profile</a>
+            <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            <% } %>
+        </div>
+    </div>
+</header>
+<script src="./js/dropdownMenu.js"></script>
