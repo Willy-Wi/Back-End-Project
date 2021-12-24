@@ -1,6 +1,5 @@
 const express = require("express");
 const pages = require("./routes/pages");
-const authCon = require("./controllers/authCon");
 const session = require("express-session");
 const { conn } = require("./controllers/dbCon");
 const path = require("path");
