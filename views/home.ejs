@@ -52,12 +52,11 @@
                         <h3><%= item.post_title %> </h3>
                         <i class="far fa-trash-alt" role="button"></i>
                     </div>
-                    <p><%= item.post_text %> </p>
+                    <p><%= item.post_content %> </p>
                     <hr>
                     <div class="card__info">
                         <img src="" alt="" width="35" height="35">
-                        <p>Posted By <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
-                        <p></p>
+                        <p>Posted by <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
                         <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
                     </div>
                 </div>
