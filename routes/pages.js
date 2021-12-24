@@ -3,7 +3,7 @@ const { query } = require("../controllers/dbCon");
 const router = Router();
 const { register, login } = require("../controllers/authCon");
 const { likes } = require("../controllers/postCon");
-const { createPost } = require("../controllers/createPost");
+const { createPost, createComment } = require("../controllers/createPost");
 
 const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
@@ -14,7 +14,7 @@ const loginRequired = async (req, res, next) => {
 };
 
 router.get("/", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_text, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -31,16 +31,19 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     let sql = `SELECT name, username FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_text, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
 
-    sql = `SELECT Users.user_id, COUNT(Likes.like_id) AS 'Likes' , COUNT(Posts.post_id) AS 'Posts' FROM Users INNER JOIN Posts ON Users.user_id = Posts.user_id
-    INNER JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
+    sql = `SELECT Users.user_id, COUNT(following.following_id) AS 'Followers', COUNT(Likes.like_id) AS 'Likes' , COUNT(Posts.post_id) AS 'Posts'
+    FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
+    LEFT JOIN Posts ON Users.user_id = Posts.user_id
+    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
+    WHERE Users.user_id = '1' GROUP BY Users.user_id`;
 
     let stats = await query(sql);
-
+    
     res.render("profile", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
@@ -55,10 +58,10 @@ router.get("/posts/:id", async (req, res) => {
     const postId = req.params.id;
 
     let sql =
-    `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_text, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id;`;
+    WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
 
     let post = await query(sql);
 
@@ -71,9 +74,13 @@ router.get("/posts/:id", async (req, res) => {
     res.render("comments", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
+        post: post[0],
+        likes: req.currentUser,
+        comments: comments
     });
 })
 
+// For Register & Login
 const isNotLoggedIn = (req, res, next) => {
     if (req.session.isLoggedIn) {
         return res.redirect("/");
@@ -81,6 +88,7 @@ const isNotLoggedIn = (req, res, next) => {
     next();
 };
 
+// Any Authentication Required Page
 const isLoggedIn = (req, res, next) => {
     if (!req.session.isLoggedIn) {
         return res.redirect("/login");
@@ -104,8 +112,7 @@ router.get("/login", isNotLoggedIn, (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-    req.session.isLoggedIn = false;
-    req.session.user_id = null;
+    req.session.destroy();
     res.redirect("/");
 });
 
@@ -113,5 +120,6 @@ router.post("/register", isNotLoggedIn, register);
 router.post("/login", isNotLoggedIn, login);
 router.post("/posts/:id/act", isLoggedIn, likes);
 router.post("/createpost", isLoggedIn, createPost);
+router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 
 module.exports = router;
