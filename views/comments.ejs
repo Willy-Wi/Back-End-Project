@@ -14,10 +14,8 @@
     <main>
         <%- include("../components/nav") %>
         <div class="card__list">
-            <% posts.forEach(item => { %>
-
             <% if (typeof likes == 'object' && likes) { %>
-            <% let filtered = likes.filter((v) => { return v.post_id === item.post_id }) %>
+            <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
 
             <% if (filtered.length > 0) { %>
             <% status = "Unlike" %>
@@ -32,11 +30,12 @@
                 <div class="card__like">
 
                     <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+
                     <% if (status === "Unlike") { %>
-                    <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
+                    <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
                         data-post-status="<%= status %>"></i>
                     <% } else { %>
-                    <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
+                    <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
                         data-post-status="<%= status %>"></i>
                     <% } %>
 
@@ -44,35 +43,35 @@
                     <a href="/login"><i class="far fa-heart"></i></a>
                     <% } %>
 
-                    <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
+                    <p id="likes-count-<%= post.post_id %>"><%= post.likes %></p>
                 </div>
 
                 <div class="card__content">
                     <div class="card__header">
-                        <h3><%= item.post_title %> </h3>
+                        <h3><%= post.post_title %> </h3>
                         <i class="far fa-trash-alt" role="button"></i>
                     </div>
-                    <p><%= item.post_text %> </p>
+                    <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
                         <img src="" alt="" width="35" height="35">
-                        <p>Posted By <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
-                        <p></p>
-                        <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
+                        <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
-                <div class="card__content">
-                    <div class="card__header">
-                        <h3><%= item.post_title %> </h3>
-                        <i class="far fa-trash-alt" role="button"></i>
-                    </div>
-                    <p><%= item.post_text %> </p>
-                    <hr>
-                    <div class="card__info">
-                        <img src="" alt="" width="35" height="35">
-                        <p>Posted By <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
-                        <p></p>
-                        <i class="far fa-comment-alt"></i>
+            </div>
+            <form class="card card--none" action="/posts/<%= post.post_id %>/create_comment" method="post">
+                <textarea name="comment" id="comment" rows="1" placeholder="Reply..." required></textarea>
+                <button type="submit">Reply</button>
+            </form>
+            <% comments.forEach((comment) => { %>
+            <div class="card card--none">
+                <div class="card__content card__content--small">
+                    <p><%= comment.comment_text %></p>
+                    <div>
+                        <hr>
+                        <div class="card__info card__info--small">
+                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                        </div>
                     </div>
                 </div>
             </div>
