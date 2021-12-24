@@ -40,7 +40,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
     LEFT JOIN Posts ON Users.user_id = Posts.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Users.user_id = '1' GROUP BY Users.user_id`;
+    WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
 
     let stats = await query(sql);
     
