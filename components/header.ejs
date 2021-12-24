@@ -5,7 +5,7 @@
         <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
     </form>
     <div class="header__dropdown">
-        <img src="" alt="" width="52" height="52" data-dropdown-toggle>
+        <button data-dropdown-toggle><img src="" alt="" width="52" height="52" data-dropdown-toggle></button>
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
@@ -17,4 +17,4 @@
         </div>
     </div>
 </header>
-<script src="./js/dropdownMenu.js"></script>
+<script src="../js/dropdownMenu.js"></script>
