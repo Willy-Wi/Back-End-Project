@@ -26,6 +26,23 @@ a {
     color: black;
 }
 
+button {
+    border: 2px solid var(--purple);
+    background-color: var(--purple);
+    font-family: var(--font);
+    font-weight: 500;
+    cursor: pointer;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    color: white;
+}
+
+button:hover,
+button:focus-visible {
+    background: transparent;
+    color: var(--purple);
+}
+
 body {
     background-color: var(--light-gray);
     font-family: var(--font);
@@ -247,49 +264,43 @@ hr {
 .card {
     display: -ms-grid;
     display: grid;
-    -ms-grid-columns: 10% 90%;
-    grid-template-columns: 10% 90%;
-    grid-column-gap: 0.5rem;
     background-color: var(--white);
     -webkit-box-shadow: var(--shadow);
     box-shadow: var(--shadow);
-    padding: 2em 4rem 2rem 1rem;
     border-radius: 5px;
+    padding: 1.1rem 1.4rem;
+    grid-row-gap: 0.5rem;
 }
 
-.card--none {
+.card__post {
+    padding: 2em 4rem 2rem 1rem;
+    -ms-grid-columns: 10% 90%;
+    grid-template-columns: 10% 90%;
+    grid-column-gap: 0.5rem;
+}
+
+.card__reply-form form {
     display: flex;
-    padding: 1rem;
-    gap: 0;
 }
 
-.card--none textarea {
+.card__reply-form p {
+    color: #ed5e5e;
+    font-size: 0.6rem;
+}
+
+.card__reply-form textarea {
     width: 100%;
     border-radius: 5px 0 0 5px;
     padding: 0.5rem 0.7rem;
     font-size: 0.9rem;
 }
 
-.card--none button {
-    border-radius: 0 5px 5px 0;
-    border: 2px solid var(--purple);
-    background-color: var(--purple);
+.card__reply-form button {
     letter-spacing: 1px;
-    font-family: var(--font);
-    font-weight: 500;
-    color: white;
+    border-radius: 0 5px 5px 0;
     padding: 0.4rem 0.6rem;
     -webkit-box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
     box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
-    cursor: pointer;
-    -webkit-transition: 0.2s;
-    transition: 0.2s;
-}
-
-.card--none button:hover,
-.card--none button:focus-visible {
-    background: transparent;
-    color: var(--purple);
 }
 
 .card__like {
@@ -304,6 +315,7 @@ hr {
     -ms-flex-align: center;
     align-items: center;
     gap: 5px;
+    color: #8c8c8c;
 }
 
 .card i {
@@ -355,7 +367,6 @@ hr {
 .card__content h3 {
     color: #333333;
     font-weight: 600;
-    font-size: 1.3rem;
 }
 
 .card__content p {
@@ -378,7 +389,6 @@ hr {
     font-size: 0.8rem;
     margin-top: 0.5rem;
 }
-
 
 .card__content--small {
     font-size: 0.9rem;
@@ -490,26 +500,13 @@ textarea::placeholder {
 
 .users-form button {
     border-radius: 5px;
-    border: 2px solid var(--purple);
-    background-color: var(--purple);
     letter-spacing: 1px;
-    font-family: var(--font);
     font-weight: 600;
     font-size: 1.1rem;
-    color: white;
     padding: 0.6rem;
     -webkit-box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
     box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
     margin-top: 1.5rem;
-    cursor: pointer;
-    -webkit-transition: 0.2s;
-    transition: 0.2s;
-}
-
-.users-form button:hover,
-.users-form button:focus-visible {
-    background: transparent;
-    color: var(--purple);
 }
 
 .users-form p {
@@ -549,10 +546,6 @@ textarea::placeholder {
     margin-top: 0;
 }
 
-/* .form__create textarea {
-  resize: none;
-} */
-
 .card__profile {
     width: 100%;
     background: var(--white);
@@ -560,17 +553,40 @@ textarea::placeholder {
     box-shadow: var(--shadow);
     border-radius: 5px;
     margin: 0 auto;
-    padding: 3rem 5rem;
-    display: -ms-grid;
+    padding: 3rem 4rem 2rem 4rem;
     display: grid;
-    grid-row-gap: 1rem;
+    grid-row-gap: 1.5rem;
 }
 
 .profile__header {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
+    align-items: center;
     gap: 1rem;
+}
+
+.profile__header a {
+    border: 2px solid var(--purple);
+    border-radius: 5px;
+    color: var(--purple);
+    margin-left: auto;
+    padding: 0.5rem 0.9rem;
+    transition: 0.2s;
+}
+
+.profile__follow {
+    margin-left: auto;
+    border-radius: 5px;
+    color: var(--purple);
+    background: transparent;
+    padding: 0.5rem 0.9rem;
+}
+.profile__header a:hover,
+.profile__header a:focus-visible,
+.profile__follow:hover,
+.profile__follow:focus-visible,
+.profile__follow--active {
+    background: var(--purple);
+    color: white;
 }
 
 .profile__stats {
@@ -581,7 +597,12 @@ textarea::placeholder {
     justify-content: space-around;
 }
 
-.profile__stats h1 {
+.profile__details p {
+    font-size: 0.9rem;
+    color: #8c8c8c;
+}
+
+.profile__stats h2 {
     font-weight: 500;
     text-align: center;
 }
