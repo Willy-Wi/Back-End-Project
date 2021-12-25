@@ -22,7 +22,7 @@ let toggleButtonText = {
     },
 };
 
-let actOnPost = function (event) {
+function actOnPost (event) {
     let postId = event.target.dataset.postId;
     let action = event.target.dataset.postStatus;
 
