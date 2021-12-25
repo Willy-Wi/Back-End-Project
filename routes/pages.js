@@ -3,6 +3,7 @@ const { query } = require("../controllers/dbCon");
 const router = Router();
 const { register, login } = require("../controllers/authCon");
 const { likes } = require("../controllers/postCon");
+const { follow } = require("../controllers/followCon");
 const { createPost, createComment } = require("../controllers/createPost");
 
 const loginRequired = async (req, res, next) => {
@@ -28,7 +29,7 @@ router.get("/", loginRequired, async (req, res) => {
 });
 
 router.get("/users/:id", loginRequired, async (req, res) => {
-    let sql = `SELECT name, username FROM users WHERE user_id = '${req.params.id}'`;
+    let sql = `SELECT name, username, user_id FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
     sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
@@ -41,8 +42,10 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     LEFT JOIN Posts ON Users.user_id = Posts.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
-
     let stats = await query(sql);
+
+    sql = `SELECT * FROM following WHERE following_id = '${req.session.user_id}'`;
+    let follow = await query(sql);
     
     res.render("profile", {
         isLoggedIn: req.session.isLoggedIn,
@@ -51,34 +54,44 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         posts: posts,
         stats: stats[0],
         likes: req.currentUser,
+        follow,
     });
 });
 
-router.get("/posts/:id", async (req, res) => {
+router.get("/posts/:id/", async (req, res) => {
     const postId = req.params.id;
 
-    let sql =
-    `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
 
     let post = await query(sql);
 
-    sql =
-    `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
 
     let comments = await query(sql);
+
+    if (req.query.error) {
+        return res.render("comments", {
+            isLoggedIn: req.session.isLoggedIn,
+            user_id: req.session.user_id,
+            post: post[0],
+            likes: req.currentUser,
+            comments: comments,
+            error: req.query.error,
+        });
+    }
 
     res.render("comments", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
         post: post[0],
         likes: req.currentUser,
-        comments: comments
+        comments: comments,
     });
-})
+});
 
 // For Register & Login
 const isNotLoggedIn = (req, res, next) => {
@@ -119,6 +132,7 @@ router.get("/logout", (req, res) => {
 router.post("/register", isNotLoggedIn, register);
 router.post("/login", isNotLoggedIn, login);
 router.post("/posts/:id/act", isLoggedIn, likes);
+router.post("/users/:id/act", isLoggedIn, follow);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 
