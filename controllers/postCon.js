@@ -1,4 +1,4 @@
-const { query } = require("../controllers/dbCon");
+const { query } = require("./dbCon");
 
 const updatePostStats = {
     Like: function (postId, userId) {
