@@ -19,12 +19,12 @@
                     <header class="profile__header">
                         <img src="" alt="" width="50" height="50">
                         <div class="profile__details">
-                            <h4><%= user.name %></h4>
-                            <p><%= user.username %></p>
+                            <h4><%= stats.name %></h4>
+                            <p><%= stats.username %></p>
                         </div>
 
                         <% if (typeof follow == 'object' && follow) { %>
-                        <% let filteredFollow = follow.filter((v) => { return v.user_id === user.user_id }) %>
+                        <% let filteredFollow = follow.filter((v) => { return v.user_id === stats.user_id }) %>
                         <% if (filteredFollow.length > 0) { %>
                         <% followStatus = "Unfollow" %>
                         <% } else { %>
@@ -35,11 +35,11 @@
                         <% } %>
                         <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
                         <% if (followStatus === "Unfollow") { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= stats.user_id %>"
                             onclick="follow(event)"
                             class="profile__follow profile__follow--active"><%= followStatus %></button>
                         <% } else { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= stats.user_id %>"
                             onclick="follow(event)" class="profile__follow"><%= followStatus %></button>
                         <% } %>
                         <% } else { %>
