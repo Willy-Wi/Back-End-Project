@@ -6,9 +6,7 @@ const edituser = async (req, res) => {
         "', name ='" + name + 
         "', email ='" + email +
         "' WHERE user_id=" + req.params.id;
-    query(sql, (err) => {
-        if(err) throw err;
-    });
+    await query(sql);
     res.redirect("/");
 };
 
