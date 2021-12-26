@@ -11,7 +11,7 @@ const createPost = (req, res) => {
         errDesc = "Description length must be between 5 and 1000 characters";
     }
 
-    if (errMsg || errDesc) {
+    if (errTitle || errDesc) {
         res.render("createPost", {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
@@ -53,7 +53,7 @@ const createComment = (req, res) => {
         comment_text: comment,
     };
     query(sql, data);
-    res.redirect("/");
+    res.redirect("/posts/" + postId);
 };
 
 module.exports = { createPost, createComment };
