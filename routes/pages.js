@@ -15,7 +15,7 @@ const loginRequired = async (req, res, next) => {
 };
 
 router.get("/", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -29,19 +29,16 @@ router.get("/", loginRequired, async (req, res) => {
 });
 
 router.get("/users/:id", loginRequired, async (req, res) => {
-    let sql = `SELECT name, username, user_id FROM users WHERE user_id = '${req.params.id}'`;
-    let user = await query(sql);
-
-    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
 
-    sql = `SELECT Users.user_id, COUNT(following.following_id) AS 'Followers', COUNT(Likes.like_id) AS 'Likes' , COUNT(Posts.post_id) AS 'Posts'
-    FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
-    LEFT JOIN Posts ON Users.user_id = Posts.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
+    sql = `SELECT U.username, U.name, U.user_id, COUNT(DISTINCT F.following_id) AS 'Followers', COUNT(DISTINCT P.post_id) AS 'Posts', COUNT(DISTINCT L.like_id) AS 'Likes'
+    FROM Following F RIGHT JOIN Users U  ON F.user_id = U.user_id
+    LEFT JOIN Posts P ON U.user_id = P.user_id
+    LEFT JOIN Likes L ON P.post_id = L.post_id
+    WHERE U.user_id = '${req.params.id}' GROUP BY U.user_id`;
     let stats = await query(sql);
 
     sql = `SELECT * FROM following WHERE following_id = '${req.session.user_id}'`;
@@ -50,18 +47,17 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     res.render("profile", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
-        user: user[0],
-        posts: posts,
         stats: stats[0],
         likes: req.currentUser,
+        posts,
         follow,
     });
 });
 
-router.get("/posts/:id/", async (req, res) => {
+router.get("/posts/:id/", loginRequired, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
