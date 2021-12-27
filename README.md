@@ -26,7 +26,7 @@ npm install express mysql2 express-fileupload ejs bcrypt express-session
 -   [X] Follow/un-follow feature
 -   [ ] Edit Comments
 -   [ ] Delete Comments
--   [ ] Forgot password
+-   [X] Forgot password
 -   [ ] Featured post
 -   [ ] Feedback
 -   [ ] Album
