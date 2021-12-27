@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/../css/style.css">
+    <title>Posts Comments</title>
+</head>
+
+<body>
+    <%- include("../components/header", isLoggedIn, user_id) %>
+    <main>
+        <%- include("../components/nav") %>
+        <div class="card__list">
+            <% if (typeof likes == 'object' && likes) { %>
+            <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
+
+            <% if (filtered.length > 0) { %>
+            <% status = "Unlike" %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
+
+            <div class="card card__post">
+                <div class="card__like">
+
+                    <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+
+                    <% if (status === "Unlike") { %>
+                    <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
+                        data-post-status="<%= status %>"></i>
+                    <% } else { %>
+                    <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
+                        data-post-status="<%= status %>"></i>
+                    <% } %>
+
+                    <% } else { %>
+                    <a href="/login"><i class="far fa-heart"></i></a>
+                    <% } %>
+
+                    <p id="likes-count-<%= post.post_id %>"><%= post.likes %></p>
+                </div>
+
+                <div class="card__content">
+                    <div class="card__header">
+                        <h3><%= post.post_title %> </h3>
+                        <i class="far fa-trash-alt" role="button"></i>
+                    </div>
+                    <p><%= post.post_content %> </p>
+                    <hr>
+                    <div class="card__info">
+                        <img src="" alt="" width="35" height="35">
+                        <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card__reply-form">
+                <form action="/posts/<%= post.post_id %>/create_comment" method="post">
+                    <textarea name="comment" id="comment" rows="1" placeholder="Reply..." required></textarea>
+                    <button type="submit">Reply</button>
+                </form>
+                <% if (typeof error == 'string' && error) { %>
+                <p><%= error %> </p>
+                <% } %>
+            </div>
+            <% comments.forEach((comment) => { %>
+            <div class="card">
+                <div class="card__content card__content--small">
+                    <p><%= comment.comment_text %></p>
+                    <div>
+                        <hr>
+                        <div class="card__info card__info--small">
+                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </main>
+    <%- include("../components/scripts_links.ejs") %>
+</body>
+
+</html>
