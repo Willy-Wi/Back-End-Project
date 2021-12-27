@@ -3,7 +3,10 @@ node_modules/
 *.log
 *.logs
 .env
-package.json
 package-lock.json
 style.scss
 style.css.map
+uploads/
+tes.js
+drawSQL-mysql-export-2021-12-14(1).sql
+SQL/

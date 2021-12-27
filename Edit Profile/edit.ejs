@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <%- include("../components/header", isLoggedIn, user_id) %> 
+    <main>
+        <%- include("../components/nav") %>
+        <article>
+            <article class="card__list">
+                <div>
+                    <section id="bagian-edit">
+                    <form action="/users/edit/<%= user.user_id %>"  method="post" class="users-form card__profile">
+                        <h2>Edit Profile</h2>
+                        <label for="username">Username</label>
+                        <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required value = "<%= user.username %> "/>
+                        
+                        <% if (typeof errUser=='string' && errUser) { %>
+                            <p class="users-form__error"><%= errUser %> </p>
+                        <% } %>
+            
+                        <label for="name">Full Name</label>
+                        <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required value = "<%= user.name %> "/>
+                        <label for="email">Email</label>
+                        <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required value = "<%= user.email %> "/>
+                        
+                        <% if (typeof errEmail=='string' && errEmail) { %>
+                        <p class="users-form__error"><%= errEmail %> </p>
+                        <% } %>
+            
+                        <button type="submit">Update</button>
+                    </form>
+                    </section>
+                </div>
+            </article>
+        </article>
+    </main>
+    <%- include("../components/scripts_links") %>
+</body>
+</html>
