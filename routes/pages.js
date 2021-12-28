@@ -22,6 +22,8 @@ router.get("/", loginRequired, async (req, res) => {
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
     let posts = await query(sql);
+    let dataposts = posts[0];
+    console.log(dataposts.profile);
 
     res.render("home", {
         posts,
@@ -29,6 +31,7 @@ router.get("/", loginRequired, async (req, res) => {
         likes: req.currentUser,
         user_id: req.session.user_id,
         image: req.session.profile_url,
+        dataposts: posts[0],
     });
 });
 
@@ -59,8 +62,8 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
-        dataposts: posts[0],
         image: req.session.profile_url,
+        dataposts: posts[0],
         id: req.params.id,
     });
 
@@ -93,8 +96,8 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
-        dataposts: posts[0],
         image: req.session.profile_url,
+        dataposts: posts[0],
         id: req.params.id,
     });
     
@@ -124,6 +127,8 @@ router.get("/posts/:id/", async (req, res) => {
             comments: comments,
             error: req.query.error,
             image: req.session.profile_url,
+            dataposts: posts[0],
+            id: req.params.id,
         });
     }
 
@@ -134,6 +139,8 @@ router.get("/posts/:id/", async (req, res) => {
         likes: req.currentUser,
         comments: comments,
         image: req.session.profile_url,
+        dataposts: posts[0],
+        id: req.params.id,
     });
 });
 
