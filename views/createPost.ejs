@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,25 +7,16 @@
     <link rel="stylesheet" href="../css/style.css">
     <title>Document</title>
 </head>
-
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %>
+    <%- include("../components/header", isLoggedIn, user_id, image) %> 
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../components/nav") %> 
         <form action="/createpost" method="post" class="users-form form__create">
             <textarea name="title" id="title" rows="1" placeholder="Title" required></textarea>
-            <% if (typeof errTitle == 'string' && errTitle) { %>
-            <p><%= errTitle %> </p>
-            <% } %>
-            <textarea placeholder="Description" name="description" id="description" cols="30" rows="15"
-                required></textarea>
-            <% if (typeof errDesc == 'string' && errDesc) { %>
-            <p><%= errDesc %> </p>
-            <% } %>
+            <textarea placeholder="Description" name="description" id="description" cols="30" rows="15" required></textarea>
             <button type="submit">Create Post</button>
         </form>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../components/scripts_links.ejs") %> 
 </body>
-
 </html>

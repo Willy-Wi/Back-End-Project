@@ -54,7 +54,11 @@
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
-                        <img src="" alt="" width="35" height="35">
+                        <% if (post.profile == '') { %>
+                            <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                        <% } else { %>
+                            <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
+                        <% } %>
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
