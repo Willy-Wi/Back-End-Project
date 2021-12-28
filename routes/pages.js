@@ -70,7 +70,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
     let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
@@ -93,6 +93,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
+        dataposts: posts[0],
         image: req.session.profile_url,
         id: req.params.id,
     });

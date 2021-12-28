@@ -24,10 +24,6 @@
                                 <img src="/images/Unknown_person.jpg" alt="" width="50" height="50">
                             <% } %>
                         <% } %>
-                        <form action="/addProfile/<%= user_id %> " method = "POST" role="form" enctype = "multipart/form-data">
-                            <input type="file" name = "profile" accept = "image/*" type = "file" id="profile">
-                            <button type = "submit" class = "profile__edit">Upload</button>
-                        </form>
                         <div class="profile__details">
                             <h4><%= user.name %></h4>
                             <p><%= user.username %></p>
