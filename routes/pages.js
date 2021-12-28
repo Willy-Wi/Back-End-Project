@@ -22,8 +22,6 @@ router.get("/", loginRequired, async (req, res) => {
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
     let posts = await query(sql);
-    let dataposts = posts[0];
-    console.log(dataposts.profile);
 
     res.render("home", {
         posts,

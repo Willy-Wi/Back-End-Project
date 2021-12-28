@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %> 
+    <%- include("../components/header", isLoggedIn, user_id, image) %> 
     <main>
         <%- include("../components/nav") %> 
         <form action="/createpost" method="post" class="users-form form__create">
