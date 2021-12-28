@@ -17,13 +17,13 @@
             <article class="card__list">
                 <div class="card__profile">
                     <header class="profile__header">
-                        <% posts.forEach(item => { %>
-                            <% if (item.profile == '') { %>
-                                <img src="/images/Unknown_person.jpg" alt="" width="50" height="50">
+                        <% if (dataposts.user_id == id) { %>
+                            <% if (dataposts.profile != '') { %>
+                                <img src="/images/<%= dataposts.profile %>" alt="" width="50" height="50">
                             <% } else { %>
-                                <img src="/images/<%= item.profile %>" alt="" width="50" height="50">
+                                <img src="/images/Unknown_person.jpg" alt="" width="50" height="50">
                             <% } %>
-                        <% }) %>
+                        <% } %>
                         <form action="/addProfile/<%= user_id %> " method = "POST" role="form" enctype = "multipart/form-data">
                             <input type="file" name = "profile" accept = "image/*" type = "file" id="profile">
                             <button type = "submit" class = "profile__edit">Upload</button>

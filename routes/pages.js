@@ -59,7 +59,9 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
+        dataposts: posts[0],
         image: req.session.profile_url,
+        id: req.params.id,
     });
 
 });
@@ -92,6 +94,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
         likes: req.currentUser,
         follow,
         image: req.session.profile_url,
+        id: req.params.id,
     });
     
 });
