@@ -6,6 +6,7 @@ const { likes } = require("../controllers/postCon");
 const { follow } = require("../controllers/followCon");
 const { edituser } = require("../controllers/editCon");
 const { createPost, createComment } = require("../controllers/createPost");
+const { addprofile } = require("../controllers/uploadCon");
 
 const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
@@ -16,16 +17,18 @@ const loginRequired = async (req, res, next) => {
 };
 
 router.get("/", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
     let posts = await query(sql);
+
     res.render("home", {
         posts,
         isLoggedIn: req.session.isLoggedIn,
         likes: req.currentUser,
         user_id: req.session.user_id,
+        image: req.session.profile_url,
     });
 });
 
@@ -33,7 +36,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     let sql = `SELECT name, username, user_id FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
@@ -47,7 +50,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
 
     sql = `SELECT * FROM following WHERE following_id = '${req.session.user_id}'`;
     let follow = await query(sql);
-    
+
     res.render("profile", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
@@ -56,7 +59,9 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
+        image: req.session.profile_url,
     });
+
 });
 
 router.get("/users/edit/:id", loginRequired, async(req, res) => {
@@ -86,6 +91,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
         stats: stats[0],
         likes: req.currentUser,
         follow,
+        image: req.session.profile_url,
     });
     
 });
@@ -93,7 +99,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
 router.get("/posts/:id/", async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
@@ -113,6 +119,7 @@ router.get("/posts/:id/", async (req, res) => {
             likes: req.currentUser,
             comments: comments,
             error: req.query.error,
+            image: req.session.profile_url,
         });
     }
 
@@ -122,6 +129,7 @@ router.get("/posts/:id/", async (req, res) => {
         post: post[0],
         likes: req.currentUser,
         comments: comments,
+        image: req.session.profile_url,
     });
 });
 
@@ -145,6 +153,7 @@ router.get("/createpost", isLoggedIn, (req, res) => {
     res.render("createPost", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
+        image: req.session.profile_url,
     });
 });
 
@@ -175,5 +184,6 @@ router.post("/users/:id/act", isLoggedIn, follow);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/users/edit/:id", isLoggedIn, edituser);
+router.post("/addProfile/:id", isLoggedIn, addprofile);
 
 module.exports = router;
