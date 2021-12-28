@@ -53,7 +53,7 @@ const createComment = (req, res) => {
         comment_text: comment,
     };
     query(sql, data);
-    res.redirect("/posts/" + postId);
+    res.redirect("/");
 };
 
 module.exports = { createPost, createComment };

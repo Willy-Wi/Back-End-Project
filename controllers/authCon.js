@@ -55,8 +55,13 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     let sql = `SELECT password, user_id FROM users WHERE email = '${email}'`;
     let result = await query(sql);
+    sql = `SELECT profile FROM users WHERE user_id = '${result[0].user_id}'`;
+    let result2 = await query(sql);
     let invalidEmail = "That user does not exist";
     let invalidPassword = "Invalid Password";
+    // console.log(email);
+    // console.log(sql);
+    // console.log(result);
     if (result.length < 1) {
         return res.render("login", { invalidEmail });
     }
@@ -67,6 +72,7 @@ const login = async (req, res) => {
 
     req.session.isLoggedIn = true;
     req.session.user_id = result[0].user_id;
+    req.session.profile_url = result2[0].profile;
     res.redirect("/");
 };
 
