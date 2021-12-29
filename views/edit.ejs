@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %> 
+    <%- include("../components/header", isLoggedIn, user_id, image) %> 
     <main>
         <%- include("../components/nav") %>
         <article>
@@ -39,13 +39,15 @@
                     </form>
                     <form action="/addProfile/<%= user_id %> " method = "POST" class="users-form card__profile" role="form" enctype = "multipart/form-data" style = "margin-top: 50px;">
                         <h2>Edit Profile Picture</h2>
-                        <% if (dataposts.user_id == id) { %>
-                            <% if (dataposts.profile != '') { %>
-                                <img src="/images/<%= dataposts.profile %>" alt="" width="250" height="250">
-                            <% } else { %>
-                                <img src="/images/Unknown_person.jpg" alt="" width="250" height="250">
+                        <% users.forEach(item => { %>
+                            <% if (item.user_id == id) { %>
+                                <% if (item.profile != '') { %>
+                                    <img src="/images/<%= item.profile %>" alt="" width="250" height="250">
+                                <% } else { %>
+                                    <img src="/images/Unknown_person.jpg" alt="" width="250" height="250">
+                                <% } %>
                             <% } %>
-                        <% } %>
+                        <% }) %>
                         <input type="file" name = "profile" accept = "image/*" type = "file" id="profile">
                         <button type = "submit">Upload</button>
                     </form>

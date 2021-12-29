@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
     <main>
         <%- include("../components/nav") %>
         <div class="card__list">
@@ -49,7 +49,8 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <i class="far fa-trash-alt" role="button"></i>
+                        <a href = "/editpost/<%= post.post_id %>" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
+                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
@@ -88,6 +89,17 @@
         </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
+    <script>
+        let del = (id) => {
+            alert('DELETE POST WHERE POST = ' + id)
+            axios.delete('/posts/' + id)
+            .then((result) => {
+                location.href = '/';
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        };
+    </script>
 </body>
 
 </html>
