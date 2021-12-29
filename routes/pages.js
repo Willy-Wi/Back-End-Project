@@ -7,6 +7,8 @@ const { follow } = require("../controllers/followCon");
 const { edituser } = require("../controllers/editCon");
 const { createPost, createComment } = require("../controllers/createPost");
 const { addprofile } = require("../controllers/uploadCon");
+const { updatepost } = require("../controllers/updatePost");
+const { deletepost } = require("../controllers/deletePost");
 
 const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
@@ -34,7 +36,7 @@ router.get("/", loginRequired, async (req, res) => {
 });
 
 router.get("/users/:id", loginRequired, async (req, res) => {
-    let sql = `SELECT name, username, user_id FROM users WHERE user_id = '${req.params.id}'`;
+    let sql = `SELECT name, username, user_id, profile FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
     sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
@@ -57,18 +59,18 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         user_id: req.session.user_id,
         user: user[0],
         posts: posts,
+        users: user,
         stats: stats[0],
         likes: req.currentUser,
         follow,
         image: req.session.profile_url,
-        dataposts: posts[0],
         id: req.params.id,
     });
 
 });
 
 router.get("/users/edit/:id", loginRequired, async(req, res) => {
-    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
+    let sql = `SELECT name, username, user_id, email, profile FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
     sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
@@ -95,7 +97,7 @@ router.get("/users/edit/:id", loginRequired, async(req, res) => {
         likes: req.currentUser,
         follow,
         image: req.session.profile_url,
-        dataposts: posts[0],
+        users: user,
         id: req.params.id,
     });
     
@@ -125,7 +127,7 @@ router.get("/posts/:id/", async (req, res) => {
             comments: comments,
             error: req.query.error,
             image: req.session.profile_url,
-            dataposts: posts[0],
+            dataposts: post[0],
             id: req.params.id,
         });
     }
@@ -137,7 +139,7 @@ router.get("/posts/:id/", async (req, res) => {
         likes: req.currentUser,
         comments: comments,
         image: req.session.profile_url,
-        dataposts: posts[0],
+        dataposts: post[0],
         id: req.params.id,
     });
 });
@@ -166,6 +168,27 @@ router.get("/createpost", isLoggedIn, (req, res) => {
     });
 });
 
+router.get("/editpost/:id", isLoggedIn, async (req, res) => {
+    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
+    LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
+
+    let posts = await query(sql);
+
+    sql = `SELECT post_id, post_title, post_content FROM posts WHERE post_id=` + req.params.id;
+    let result = await query(sql);
+
+    res.render("editPost", {
+        posts,
+        res: res,
+        data: result[0],
+        isLoggedIn: req.session.isLoggedIn,
+        user_id: req.session.user_id,
+        image: req.session.profile_url,
+    });
+});
+
+
 router.get("/register", isNotLoggedIn, (req, res) => {
     res.render("register");
 });
@@ -173,7 +196,6 @@ router.get("/register", isNotLoggedIn, (req, res) => {
 router.get("/login", isNotLoggedIn, (req, res) => {
     res.render("login");
 });
-
 
 router.get("/forgot-password", isNotLoggedIn, (req, res) => {
     res.render("forgot-password");
@@ -194,5 +216,6 @@ router.post("/createpost", isLoggedIn, createPost);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/users/edit/:id", isLoggedIn, edituser);
 router.post("/addProfile/:id", isLoggedIn, addprofile);
-
+router.put("/api/post/:id", isLoggedIn, updatepost);
+router.delete("/api/post/:id", deletepost);
 module.exports = router;
