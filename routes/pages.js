@@ -127,7 +127,6 @@ router.get("/posts/:id/", async (req, res) => {
             comments: comments,
             error: req.query.error,
             image: req.session.profile_url,
-            dataposts: post[0],
             id: req.params.id,
         });
     }
@@ -139,7 +138,6 @@ router.get("/posts/:id/", async (req, res) => {
         likes: req.currentUser,
         comments: comments,
         image: req.session.profile_url,
-        dataposts: post[0],
         id: req.params.id,
     });
 });
