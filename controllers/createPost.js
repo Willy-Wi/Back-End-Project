@@ -15,20 +15,21 @@ const createPost = (req, res) => {
         res.render("createPost", {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
+            image: req.session.profile_url,
             errTitle,
             errDesc,
         });
+    }else{
+        let sql = `INSERT INTO posts SET ?`;
+        let data = {
+            user_id: req.session.user_id,
+            post_title: title,
+            post_content: description,
+        };
+        query(sql, data);
+
+        res.redirect("/");
     }
-
-    let sql = `INSERT INTO posts SET ?`;
-    let data = {
-        user_id: req.session.user_id,
-        post_title: title,
-        post_content: description,
-    };
-    query(sql, data);
-
-    res.redirect("/");
 };
 
 const createComment = (req, res) => {
@@ -40,20 +41,18 @@ const createComment = (req, res) => {
         errReply = encodeURIComponent(
             "Comment length must be between 5 and 1000 characters"
         );
-    }
-
-    if (errReply) {
+    } else if (errReply) {
         return res.redirect("/posts/" + postId + "/?error=" + errReply);
+    } else {
+        let sql = "INSERT INTO comments SET ?";
+        let data = {
+            user_id: req.session.user_id,
+            post_id: postId,
+            comment_text: comment,
+        };
+        query(sql, data);
+        res.redirect("/posts/" + postId);
     }
-
-    let sql = "INSERT INTO comments SET ?";
-    let data = {
-        user_id: req.session.user_id,
-        post_id: postId,
-        comment_text: comment,
-    };
-    query(sql, data);
-    res.redirect("/");
 };
 
 module.exports = { createPost, createComment };

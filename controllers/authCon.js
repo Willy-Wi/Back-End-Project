@@ -59,9 +59,6 @@ const login = async (req, res) => {
     let result2 = await query(sql);
     let invalidEmail = "That user does not exist";
     let invalidPassword = "Invalid Password";
-    // console.log(email);
-    // console.log(sql);
-    // console.log(result);
     if (result.length < 1) {
         return res.render("login", { invalidEmail });
     }
