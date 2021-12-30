@@ -30,7 +30,7 @@ npm install express mysql2 express-fileupload ejs bcrypt express-session multer
 -   [ ] Featured post
 -   [ ] Feedback (Pending)
 -   [ ] Album (In Progress)
--   [ ] Report inappropriate content, user, etc. (In Progress)
+-   [X] Report inappropriate content, user, etc. (In Progress)
 -   [X] Edit Post
 -   [X] Delete Post 
 -   [ ] Light / Dark mode
