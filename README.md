@@ -28,8 +28,8 @@ npm install express mysql2 express-fileupload ejs bcrypt express-session multer
 -   [ ] Delete Comments
 -   [X] Forgot password
 -   [ ] Featured post
--   [ ] Feedback (In Progress)
--   [ ] Album
+-   [ ] Feedback (Pending)
+-   [ ] Album (In Progress)
 -   [ ] Report inappropriate content, user, etc. (In Progress)
 -   [X] Edit Post
 -   [X] Delete Post 
