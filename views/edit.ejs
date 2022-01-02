@@ -20,16 +20,16 @@
                     <form action="/users/edit/<%= user.user_id %>"  method="post" class="users-form card__profile">
                         <h2>Edit Profile</h2>
                         <label for="username">Username</label>
-                        <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required value = "<%= user.username %> "/>
+                        <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required value = "<%= user.username.slice(1).trim() %>"/>
                         
                         <% if (typeof errUser=='string' && errUser) { %>
                             <p class="users-form__error"><%= errUser %> </p>
                         <% } %>
             
                         <label for="name">Full Name</label>
-                        <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required value = "<%= user.name %> "/>
+                        <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required value = "<%= user.name.trim() %>"/>
                         <label for="email">Email</label>
-                        <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required value = "<%= user.email %> "/>
+                        <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required value = "<%= user.email.trim() %>"/>
                         
                         <% if (typeof errEmail=='string' && errEmail) { %>
                         <p class="users-form__error"><%= errEmail %> </p>

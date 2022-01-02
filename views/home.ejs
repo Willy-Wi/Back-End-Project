@@ -50,6 +50,7 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= item.post_title %> </h3>
+                        <a href = "/report/post/<%= item.post_id %>"><i class="fas fa-flag post__flag" role = "button"></i></a>
                         <a href = "/editpost/<%= item.post_id %>" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
                         <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
                     </div>
@@ -65,13 +66,15 @@
                         <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
                     </div>
                 </div>
+                
             </div>
             <% }) %>
+
         </div>
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
     <%- include("../components/scripts_links.ejs") %> 
-    <script>
+    <script>    
         let del = (id) => {
             axios.delete('/api/post/' + id)
             .then((result) => {

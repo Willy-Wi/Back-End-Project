@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.4.0-beta.0/css/lightgallery-bundle.min.css" />
+    <title><%= user.username.slice(1) %>'s Album</title>
+</head>
+
+<body>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <main> 
+        <%- include("../components/nav") %>
+            <div class="card-photos">
+            <h1>Recent Picture / Videos of <%= album.album_name %> </h1>
+            <div class="showpictures" >
+            <% files.forEach(item => { %>
+                <% if (item.file_type.match(/(png|jpeg|jpg)/)) { %>
+                    <div class="showbox" data-src="/images/<%= item.file_url %>">
+                        <img src="/images/<%= item.file_url %> " alt="">
+                    </div>   
+                <% } else if (item.file_type.match(/(mp4|mkv)/)) { %>
+                    <a
+                        data-lg-size="1280-720"
+                        data-video='{"source": [{"src":"/images/<%= item.file_url %>", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+                        data-poster="/images/<%= item.thumb_url %>"
+                    >
+                    <div class="showbox">
+                        <img
+                            class="img-responsive"
+                            src="/images/<%= item.thumb_url %>"
+                        />
+                    </div>
+                    </a>
+                <% } else if(item.file_type.match(/(mpeg)/)) { %>
+                    <a
+                    data-lg-size="1280-720"
+                    data-video='{"source": [{"src":"/images/<%= item.file_url %> ", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+                    data-poster="/images/music.jpg"
+                    >
+                    <div class="showbox">
+                        <img
+                            class="img-responsive"
+                            src="/images/music.jpg"
+                        />
+                    </div>
+                    </a>
+                <% } %>
+            <% }) %>
+            </div>
+            <form action="/file/<%= albumid %>"  method="POST" enctype="multipart/form-data" role="form">
+                <label for = "file-upload" class="file-upload"><i class="fas fa-image icon-image"></i>&nbsp;&nbsp;Add Photos/ Videos</label>
+                <input id = "file-upload" type="file" name = "file-upload" class = "insertfile"  onchange = "submitForm();" multiple/>
+            </form>
+            <div class="progress">
+                <p id = "status-progress"></p>
+                <div class="bar">
+                    <div class="bar-fill"></div>
+                </div>
+                <div class="percent">0%</div >
+            </div>
+            <div id="status"></div>
+            </div>
+    </main>
+    <%- include("../components/scripts_links.ejs") %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="https://malsup.github.io/jquery.form.js"></script> 
+    <script>
+        const form = document.querySelector("form");
+        
+        $(document).ready(function(){
+            $("form").on('submit',function(){
+                let fileUpload = document.getElementById("file-upload").files;
+                let check = true;
+                for (let index = 0; index < fileUpload.length; index++) {
+                    if (!fileUpload[index].name.match(/\.(png|jpeg|jpg|mp4|mp3|mkv|MPEG-4)$/)) { 
+                        alert(`${fileUpload[index].name} not supported. Only support these media formats: PNG, JPEG, JPG, MP4, MP3, MKV, MPEG-4`);
+                        location.reload();
+                        check = false;
+                    }
+                }
+                if(check){
+                    $(".progress").show();
+                    document.getElementById("status-progress").innerHTML = "Uploading....";
+                }
+            });
+        });
+
+        lightGallery(document.querySelector('.showpictures'), {
+            thumbnail: true,
+            plugins: [lgZoom, lgThumbnail, lgThumbnail, lgAutoplay, lgComment, lgFullscreen, lgRotate, lgHash, lgVideo],
+            mode: 'lg-fade',
+        });
+
+        $(function() {
+            let progress = $('.bar');
+            let bar = $('.bar-fill');
+            let percent = $('.percent');
+            let status = $('#status');
+            $('form').ajaxForm({
+                beforeSend: function() {
+                    status.empty();
+                    let percentVal = '0%';
+                    percent.html(percentVal);
+                    bar.width(percentVal);
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    let percentVal = percentComplete + '%';
+                    bar.width(percentVal);
+                    percent.html(percentVal);
+                },
+                complete: function(xhr) {
+                    let percentVal = "100%";
+                    bar.width("100%");
+                    percent.html("100%");
+                    if(percentVal == "100%" && xhr.status == 200){
+                        document.getElementById("status-progress").innerHTML = "";
+                        document.getElementById("status-progress").innerHTML = `Your file has been successfully uploaded`;
+                    }
+                    if(xhr.status == 200){
+                        location.reload(); 
+                    }
+                }
+            });
+        }); 
+
+        function submitForm(){
+            $('form').submit();
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Report Post</title>
+</head>
+
+<body>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <main>
+        <%- include("../components/nav") %>
+            <div class="reportShow2" id = "reportget">
+                <div class="reportdata2">
+                    <div class="report-header">
+                        <h2 style = "text-align: center; margin-bottom: 10px;">Report This Post</h2>
+                        <p>Help us understand the problem. What issue with this post are you reporting?</p>
+                    </div>
+                    <div class="report-body">
+                        <% posts.forEach(item => { %>
+                            <% if (item.post_id == id) { %>
+                                <div class="card__content" style =  "padding: 20px; margin: 20px 0 10px 0; box-shadow: 0 4px 20px 0 rgba(0,0,0,0.2);">
+                                    <div class="card__header" style = "justify-content: flex-start;">
+                                        <h3><%= item.post_title %> </h3>
+                                    </div>
+                                    <p><%= item.post_content %> </p>
+                                    <hr>
+                                    <div class="card__info">
+                                        <% if (item.profile == '') { %>
+                                            <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                                        <% } else { %>
+                                            <img src="/images/<%= item.profile %>" alt="" width="35" height="35">
+                                        <% } %>
+                                        <p>Posted by <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
+                                    </div>
+                                </div>
+                            <% } %> 
+                        <% }) %>
+                        <form action="/report/post/<%= post.post_id %> " method = "POST">
+                            <p id = "reporterr"></p>
+                            <input type="hidden" name = "user_id" id = "user_id" value = '<%= post.user_id %> ' autocomplete="off">
+                            <input type="hidden" name = "post_id" id = "post_id" value = "<%= post.post_id %>" autocomplete = "off">
+                            <br>
+                            <input type="radio" id = "info1" name = "description" autocomplete="off" value = "Sexual Content" required>
+                            <label for="info1">Sexual content</label><br><br>
+                            <input type="radio" id = "info2" name = "description" autocomplete="off" value = "Visual or repulsive content">
+                            <label for="info2">Visual or repulsive content</label><br><br>
+                            <input type="radio" id = "info3" name = "description" autocomplete="off" value = "Hateful or abusive content">
+                            <label for="info3">Hateful or abusive content</label><br><br>
+                            <input type="radio" id = "info4" name = "description" autocomplete="off" value = "Harmful dangerous acts">
+                            <label for="info4">Harmful dangerous acts</label><br><br>
+                            <input type="radio" id = "info5" name = "description" autocomplete="off" value = "Child abuse">
+                            <label for="info5">Child abuse</label><br><br>
+                            <input type="radio" id = "info6" name = "description" autocomplete="off" value = "Infringes my rights">
+                            <label for="info6">Infringes my rights</label><br><br>
+                            <input type="radio" id = "info6" name = "description" autocomplete="off" value = "Promotes terrorism">
+                            <label for="info6">Promotes terrorism</label><br><br>
+                            <input type="radio" id = "info6" name = "description" autocomplete="off" value = "Spam or misleading">
+                            <label for="info6">Spam or misleading</label><br>
+                            <div class="report-button">
+                            <button type = 'submit' id = 'submit' class = 'btnreport'>Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </main>
+    <%- include("../components/scripts_links.ejs") %> 
+    <script>
+        const error = 'please select one of the following options';
+        const errTitle = document.getElementById('reporterr');
+        let hear = document.getElementsByName('description');
+        let is_checked = false;
+
+        let button = document.getElementById('submit');
+        button.onclick = function() {
+            for (let i = 0; i < hear.length; i++) {
+                if(hear[i].checked){
+                    is_checked = true;
+                    break;
+                };
+            };
+            if(!is_checked){
+                errTitle.innerHTML = error;
+            };
+        };
+        
+        let content = document.getElementById('reportget');
+
+        let icon = document.getElementById('report');
+
+        let stop = document.getElementsByClassName('close-report')[0];
+
+        icon.onclick = function() {
+            content.style.display = 'block';
+        };
+
+        stop.onclick = function(){
+            content.style.display = 'none';
+        };
+
+        window.addEventListener('click', function(e){
+            if(e.target == content){
+                content.style.display = 'none';
+            }
+        });
+            
+    </script>
+</body>
+</html>
