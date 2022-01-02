@@ -55,4 +55,31 @@ const createComment = (req, res) => {
     }
 };
 
-module.exports = { createPost, createComment };
+const createReport = (req, res) => {
+    const { user_id, post_id, description } = req.body;
+    console.log(user_id);
+    console.log(description);
+    if(post_id == ''){
+        let sql = "INSERT INTO reports SET ?";
+        let data =  {
+            user_id: user_id,
+            post_id: post_id,
+            type: 'report_user',
+            description: description,
+        };
+        query(sql, data);
+        res.redirect("/");
+    }else{
+        let sql = "INSERT INTO reports SET ?";
+        let data =  {
+            user_id: user_id,
+            post_id: post_id,
+            type: 'report_post',
+            description: description,
+        };
+        query(sql, data);
+        res.redirect("/");
+    }
+};
+
+module.exports = { createPost, createComment, createReport };
