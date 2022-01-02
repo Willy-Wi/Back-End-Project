@@ -5,24 +5,24 @@ CREATE TABLE `comments` (
   `comment_text` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
-) 
+);
 
 CREATE TABLE `comment_likes` (
   `comment_likes_id` int UNSIGNED NOT NULL,
   `user_id` int NOT NULL,
   `comment_id` int NOT NULL
-) 
+);
 
 CREATE TABLE `following` (
   `following_id` int NOT NULL,
   `user_id` int NOT NULL
-)
+);
 
 CREATE TABLE `likes` (
   `like_id` int UNSIGNED NOT NULL,
   `user_id` int NOT NULL,
   `post_id` int NOT NULL
-) 
+);
 
 CREATE TABLE `posts` (
   `post_id` int NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `posts` (
   `post_content` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
-) 
+);
 
 CREATE TABLE `users` (
   `user_id` int NOT NULL,
@@ -42,7 +42,8 @@ CREATE TABLE `users` (
   `profile` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
-)
+);
+
 
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`),
@@ -70,20 +71,21 @@ ALTER TABLE `posts`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
 
+
 ALTER TABLE `comments`
-  MODIFY `comment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `comment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `comment_likes`
   MODIFY `comment_likes_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `likes`
-  MODIFY `like_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `like_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 ALTER TABLE `posts`
-  MODIFY `post_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `post_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 
 ALTER TABLE `comments`
@@ -104,4 +106,3 @@ ALTER TABLE `likes`
 
 ALTER TABLE `posts`
   ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-COMMIT;
