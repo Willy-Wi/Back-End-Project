@@ -4,12 +4,14 @@ const session = require("express-session");
 const { conn } = require("./controllers/dbCon");
 const path = require("path");
 const app = express();
+const cors = require("cors");
 const PORT = 3000;
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 app.use(
     session({
         secret: "Secret Key",
