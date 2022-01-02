@@ -74,15 +74,5 @@
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
     <%- include("../components/scripts_links.ejs") %> 
-    <script>    
-        let del = (id) => {
-            axios.delete('/api/post/' + id)
-            .then((result) => {
-                location.reload();
-            }).catch((err) => {
-                alert('error ' + err)
-            });
-        };
-    </script>
 </body>
 </html>
