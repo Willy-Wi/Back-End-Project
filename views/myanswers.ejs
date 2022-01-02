@@ -30,17 +30,6 @@
         </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
-    <script>
-        let del = (id) => {
-            alert('DELETE POST WHERE POST = ' + id)
-            axios.delete('/posts/' + id)
-            .then((result) => {
-                location.href = '/';
-            }).catch((err) => {
-                alert('error ' + err)
-            });
-        };
-    </script>
 </body>
 
 </html>
