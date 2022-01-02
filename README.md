@@ -11,8 +11,8 @@ To run the `index.js` file. You need to install a couple of dependencies.
 ```bash
 npm init
 
-npm install express mysql2 express-fileupload ejs bcrypt express-session multer
-```
+npm install express mysql2 express-fileupload ejs bcrypt express-session multer cors fluent-ffmpeg lightgallery 
+``
 
 ## Task List
 
