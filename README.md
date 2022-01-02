@@ -13,7 +13,6 @@ npm init
 
 npm install express mysql2 express-fileupload ejs bcrypt express-session multer cors 
 fluent-ffmpeg lightgallery 
-``
 
 ## Task List
 
