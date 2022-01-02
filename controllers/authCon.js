@@ -133,7 +133,6 @@ const change = async (req, res) => {
 
     await query(sql);
 
-    console.log("Password baru telah menggantikan password lama!");
     res.redirect("/login");
 
 };
