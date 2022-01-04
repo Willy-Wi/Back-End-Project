@@ -5,10 +5,17 @@
         <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
     </form>
     <div class="header__dropdown">
-        <button data-dropdown-toggle><img src="" alt="" width="52" height="52" data-dropdown-toggle></button>
+        <button data-dropdown-toggle>
+            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn && image.length != 0) { %>
+                <img src="/images/<%= image %>" alt="" width="50" height="50" data-dropdown-toggle>
+            <% } else { %>
+                <img src="/images/Unknown_person.jpg" alt="" width="50" height="50" data-dropdown-toggle>
+            <% } %>
+        </button>
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
+            <a href = "/users/edit/<%= user_id  %>">Settings</a>
             <a href="/logout">Logout</a>
             <% } else { %>
                 <a href="/login">Login</a>
@@ -17,4 +24,4 @@
         </div>
     </div>
 </header>
-<script src="../js/dropdownMenu.js"></script>
+<script src="/../js/dropdownMenu.js"></script>

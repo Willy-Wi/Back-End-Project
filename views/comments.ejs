@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
     <main>
         <%- include("../components/nav") %>
         <div class="card__list">
@@ -49,12 +49,17 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <i class="far fa-trash-alt" role="button"></i>
+                        <a href = "/editpost/<%= post.post_id %>" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
+                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
-                        <img src="" alt="" width="35" height="35">
+                        <% if (post.profile == '') { %>
+                            <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                        <% } else { %>
+                            <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
+                        <% } %>
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
@@ -69,21 +74,42 @@
                 <% } %>
             </div>
             <% comments.forEach((comment) => { %>
-            <div class="card">
-                <div class="card__content card__content--small">
-                    <p><%= comment.comment_text %></p>
-                    <div>
-                        <hr>
-                        <div class="card__info card__info--small">
-                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                <div class="card">
+                    <div class="card__content card__content--small">
+                        <div class="card__header">
+                            <p><%= comment.comment_text %></p>
+                            <i class="far fa-trash-alt" role="button" onclick= <%='del_comment(' +comment.comment_id+')' %> ></i>
+                        </div>
+                        <div>
+                            <hr>
+                            <div class="card__info card__info--small">
+                                <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.comment_id %></a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <% }) %>
+                <% }) %>
         </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
+    <script>
+        let del = (id) => {
+            alert('DELETE POST WHERE POST = ' + id)
+            axios.delete('/posts/' + id)
+            .then((result) => {
+                location.href = '/';
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        };
+        let del_comment = (id) => {
+            axios.delete('http://localhost:3000/comment/' + id).then((result) => {
+                alert("Hello")
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        }
+    </script>
 </body>
 
 </html>

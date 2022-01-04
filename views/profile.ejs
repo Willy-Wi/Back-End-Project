@@ -10,21 +10,29 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
     <main>
         <%- include("../components/nav") %>
         <article>
             <article class="card__list">
                 <div class="card__profile">
                     <header class="profile__header">
-                        <img src="" alt="" width="50" height="50">
+                        <% users.forEach(item => { %>
+                            <% if (item.user_id == id) { %>
+                                <% if (item.profile != '') { %>
+                                    <img src="/images/<%= item.profile %>" alt="" width="50" height="50">
+                                <% } else { %>
+                                    <img src="/images/Unknown_person.jpg" alt="" width="50" height="50">
+                                <% } %>
+                            <% } %>
+                        <% }) %>
                         <div class="profile__details">
-                            <h4><%= stats.name %></h4>
-                            <p><%= stats.username %></p>
+                            <h4><%= user.name %></h4>
+                            <p><%= user.username %></p>
                         </div>
 
                         <% if (typeof follow == 'object' && follow) { %>
-                        <% let filteredFollow = follow.filter((v) => { return v.user_id === stats.user_id }) %>
+                        <% let filteredFollow = follow.filter((v) => { return v.user_id === user.user_id }) %>
                         <% if (filteredFollow.length > 0) { %>
                         <% followStatus = "Unfollow" %>
                         <% } else { %>
@@ -35,11 +43,11 @@
                         <% } %>
                         <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
                         <% if (followStatus === "Unfollow") { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= stats.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
                             onclick="follow(event)"
                             class="profile__follow profile__follow--active"><%= followStatus %></button>
                         <% } else { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= stats.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
                             onclick="follow(event)" class="profile__follow"><%= followStatus %></button>
                         <% } %>
                         <% } else { %>
@@ -65,10 +73,8 @@
                     <p>My Posts</p>
                 </div>
                 <% posts.forEach(item => { %>
-
                 <% if (typeof likes == 'object' && likes) { %>
                 <% let filtered = likes.filter((v) => { return v.post_id === item.post_id }) %>
-
                 <% if (filtered.length > 0) { %>
                 <% status = "Unlike" %>
                 <% } else { %>
@@ -77,12 +83,9 @@
                 <% } else { %>
                 <% status = "Like" %>
                 <% } %>
-
                 <div class="card card__post">
                     <div class="card__like">
-
                         <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
-
                         <% if (status === "Unlike") { %>
                         <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
@@ -90,23 +93,25 @@
                         <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
                         <% } %>
-
                         <% } else { %>
                         <a href="/login"><i class="far fa-heart"></i></a>
                         <% } %>
-
                         <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
                     </div>
-
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
-                            <i class="far fa-trash-alt" role="button"></i>
+                           <a href = "/editpost/<%= item.post_id %>" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
+                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
                         </div>
                         <p><%= item.post_content %> </p>
                         <hr>
                         <div class="card__info">
-                            <img src="" alt="" width="35" height="35">
+                            <% if (item.profile == '') { %>
+                                <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                            <% } else { %>
+                                <img src="/images/<%= item.profile %>" alt="" width="35" height="35">
+                            <% } %>
                             <p>Posted By <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
                             <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
                         </div>
@@ -118,6 +123,16 @@
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
     <%- include("../components/scripts_links") %>
+    <script>
+        let del = (id) => {
+            axios.delete('/api/post/' + id)
+            .then((result) => {
+                location.reload();
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        };
+    </script>
 </body>
 
 </html>
