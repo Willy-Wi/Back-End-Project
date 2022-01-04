@@ -6,6 +6,7 @@ const { likes } = require("../controllers/postCon");
 const { createPost, createComment } = require("../controllers/createPost");
 const { follow, editUser } = require("../controllers/userCon");
 
+// Additional query only if the user is logged in and approved
 const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
         let sql = `SELECT * FROM likes WHERE user_id = '${req.session.user_id}'`;
@@ -100,7 +101,24 @@ router.get("/users/:id/edit", loginRequired, async (req, res) => {
     });
 });
 
-// For Register & Login
+router.get("/search", loginRequired, async (req, res) => {
+    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
+    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
+    WHERE Users.username LIKE '%${req.query.search}%' OR Posts.post_title LIKE '%${req.query.search}%' OR Posts.post_content LIKE '%${req.query.search}%'
+    GROUP BY Posts.post_id`;
+
+    let posts = await query(sql);
+
+    res.render("home", {
+        posts,
+        isLoggedIn: req.session.isLoggedIn,
+        likes: req.currentUser,
+        user_id: req.session.user_id,
+    });
+})
+
+// Used For Register & Login
 const isNotLoggedIn = (req, res, next) => {
     if (req.session.isLoggedIn) {
         return res.redirect("/");
@@ -108,7 +126,7 @@ const isNotLoggedIn = (req, res, next) => {
     next();
 };
 
-// Any Authentication Required Page
+// Used For Any Authentication Required Page
 const isLoggedIn = (req, res, next) => {
     if (!req.session.isLoggedIn) {
         return res.redirect("/login");
