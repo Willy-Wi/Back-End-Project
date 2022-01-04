@@ -1,29 +1,29 @@
 {
-  "name": "back-end-project",
-  "version": "1.0.0",
-  "description": "> [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ \"Awesome Link\")",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Willy-Wi/Back-End-Project.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Willy-Wi/Back-End-Project/issues"
-  },
-  "homepage": "https://github.com/Willy-Wi/Back-End-Project#readme",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.2",
-    "express-session": "^1.17.2",
-    "mysql2": "^2.3.3"
-  }
+    "name": "back-end-project",
+    "version": "1.0.0",
+    "description": "> [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ \"Awesome Link\")",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Willy-Wi/Back-End-Project.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Willy-Wi/Back-End-Project/issues"
+    },
+    "homepage": "https://github.com/Willy-Wi/Back-End-Project#readme",
+    "dependencies": {
+        "bcrypt": "^5.0.1",
+        "dotenv": "^10.0.0",
+        "ejs": "^3.1.6",
+        "express": "^4.17.2",
+        "express-session": "^1.17.2",
+        "mysql2": "^2.3.3"
+    }
 }
