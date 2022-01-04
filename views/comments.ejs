@@ -103,7 +103,7 @@
             });
         };
         let del_comment = (id) => {
-            axios.delete('http://localhost:3000/comment/' + id).then((result) => {
+            axios.delete('/comment/' + id).then((result) => {
                 alert("Hello")
             }).catch((err) => {
                 alert('error ' + err)

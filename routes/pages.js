@@ -113,7 +113,7 @@ router.get("/posts/:id/", async (req, res) => {
 
     let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_id, Comments.comment_id, Comments.comment_text FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
 
     let comments = await query(sql);
@@ -216,4 +216,5 @@ router.post("/users/edit/:id", isLoggedIn, edituser);
 router.post("/addProfile/:id", isLoggedIn, addprofile);
 router.put("/api/post/:id", isLoggedIn, updatepost);
 router.delete("/api/post/:id", deletepost);
+router.delete("/comment/:id", deleteComment);
 module.exports = router;
