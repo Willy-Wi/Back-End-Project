@@ -2,10 +2,12 @@ let updateStat = {
     Follow: function (button) {
         button.dataset.followStatus = "Unfollow";
         button.classList.toggle("profile__follow--active");
+        button.textContent = "Unfollow";
     },
     Unfollow: function (button) {
         button.dataset.followStatus = "Follow";
         button.classList.toggle("profile__follow--active");
+        button.textContent = "Follow";
     },
 };
 
