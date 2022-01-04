@@ -22,6 +22,7 @@
                             <h4><%= stats.name %></h4>
                             <p><%= stats.username %></p>
                         </div>
+                        <a href="/users/<%= stats.user_id %>/edit"><i class="far fa-edit"></i></a>
 
                         <% if (typeof follow == 'object' && follow) { %>
                         <% let filteredFollow = follow.filter((v) => { return v.user_id === stats.user_id }) %>
@@ -43,7 +44,7 @@
                             onclick="follow(event)" class="profile__follow"><%= followStatus %></button>
                         <% } %>
                         <% } else { %>
-                        <a href="/login">Follow</a>
+                        <a class="login" href="/login">Follow</a>
                         <% } %>
                     </header>
                     <div class="profile__stats">
