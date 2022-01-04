@@ -5,7 +5,10 @@
         <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
     </form>
     <div class="header__dropdown">
-        <button data-dropdown-toggle><img src="" alt="" width="52" height="52" data-dropdown-toggle></button>
+        <div class="image">
+            <img src="../images/defaultProfile.jpg" alt="" width=50>
+            <div class="overlay" data-dropdown-toggle></div>
+        </div>
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
