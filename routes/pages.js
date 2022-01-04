@@ -3,8 +3,8 @@ const { query } = require("../controllers/dbCon");
 const router = Router();
 const { register, login } = require("../controllers/authCon");
 const { likes } = require("../controllers/postCon");
-const { follow } = require("../controllers/followCon");
 const { createPost, createComment } = require("../controllers/createPost");
+const { follow, editUser } = require("../controllers/userCon");
 
 const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
@@ -43,7 +43,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
 
     sql = `SELECT * FROM following WHERE following_id = '${req.session.user_id}'`;
     let follow = await query(sql);
-    
+
     res.render("profile", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
@@ -89,6 +89,17 @@ router.get("/posts/:id/", loginRequired, async (req, res) => {
     });
 });
 
+router.get("/users/:id/edit", loginRequired, async (req, res) => {
+    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
+    let user = await query(sql);
+
+    res.render("edit", {
+        isLoggedIn: req.session.isLoggedIn,
+        user_id: req.session.user_id,
+        user: user[0],
+    });
+});
+
 // For Register & Login
 const isNotLoggedIn = (req, res, next) => {
     if (req.session.isLoggedIn) {
@@ -129,6 +140,7 @@ router.post("/register", isNotLoggedIn, register);
 router.post("/login", isNotLoggedIn, login);
 router.post("/posts/:id/act", isLoggedIn, likes);
 router.post("/users/:id/act", isLoggedIn, follow);
+router.post("/users/edit/:id", isLoggedIn, editUser);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 
