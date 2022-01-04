@@ -509,7 +509,7 @@ textarea::placeholder {
 
 .users-form label {
     margin-left: 0.7rem;
-    margin-top: 1rem;
+    margin-top: 0.8rem;
     font-weight: 500;
     font-size: 1.1rem;
     color: #595959;
@@ -523,13 +523,13 @@ textarea::placeholder {
     padding: 0.6rem;
     -webkit-box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
     box-shadow: 0 4px 5px rgba(118, 97, 255, 0.3);
-    margin-top: 1.5rem;
+    margin-top: 0.7rem;
 }
 
 .users-form p {
     color: #ed5e5e;
     font-size: 0.8rem;
-    margin: 0.3rem 0 0 0.7rem;
+    margin: 0 0 0 0.7rem;
 }
 
 .register__form {
