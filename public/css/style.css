@@ -564,13 +564,21 @@ textarea::placeholder {
     gap: 1rem;
 }
 
-.profile__header a {
+.profile__header a.login {
     border: 2px solid var(--purple);
     border-radius: 5px;
-    color: var(--purple);
     margin-left: auto;
-    padding: 0.5rem 0.9rem;
+    color: var(--purple);
+}
+
+.profile__header a {
     transition: 0.2s;
+    padding: 0.5rem 0.9rem;
+}
+
+.profile__header a:hover,
+.profile__header a:focus-visible {
+    color: var(--purple);
 }
 
 .profile__follow {
@@ -580,8 +588,9 @@ textarea::placeholder {
     background: transparent;
     padding: 0.5rem 0.9rem;
 }
-.profile__header a:hover,
-.profile__header a:focus-visible,
+
+.profile__header a.login:hover,
+.profile__header a.login:focus-visible,
 .profile__follow:hover,
 .profile__follow:focus-visible,
 .profile__follow--active {
