@@ -530,10 +530,6 @@ textarea::placeholder {
     margin: 0 0 0 0.7rem;
 }
 
-.register__form {
-    /* margin-top: 2%; */
-}
-
 .createpost {
     background: var(--purple);
     color: white;
