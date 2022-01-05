@@ -34,7 +34,7 @@
 
                 <button type="submit">Update</button>
             </form>
-            <form action="/addProfile/<%= user_id %> " method = "POST" class="users-form card__profile" role="form" enctype = "multipart/form-data" style = "margin-top: 50px">
+            <form action="/addProfile/<%= user_id %> " method = "POST" class="users-form card__profile" role="form" enctype = "multipart/form-data" style = "margin-top: 50px;">
                 <h2>Edit Profile Picture</h2>
                 <% users.forEach(item => { %>
                     <% if (item.user_id == id) { %>
