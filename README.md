@@ -21,7 +21,7 @@ npm install express mysql2 ejs bcrypt express-session dotenv
 -   [X] Register
 -   [X] Login
 -   [X] Profile
--   [X] Search (user, post, group, etc)
+-   [X] Search (user and related posts)
 -   [X] Like/Unlike feature
 -   [X] Add Post
 -   [X] Add Comments
