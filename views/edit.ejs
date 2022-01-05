@@ -10,34 +10,49 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id) %>
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main>
         <%- include("../components/nav") %>
-        <form action="/users/edit/<%= user.user_id %>" method="post" class="users-form">
-            <h2>Edit Profile</h2>
-            <label for="username">Username</label>
-            <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required
-                value="<%= user.username %>" />
-
-            <% if (typeof errUser=='string' && errUser) { %>
-            <p class="users-form__error"><%= errUser %> </p>
-            <% } %>
-
-            <label for="name">Full Name</label>
-            <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required
-                value="<%= user.name %>" />
-            <label for="email">Email</label>
-            <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required
-                value="<%= user.email %>" />
-
-            <% if (typeof errEmail=='string' && errEmail) { %>
-            <p class="users-form__error"><%= errEmail %> </p>
-            <% } %>
-
-            <button type="submit">Update</button>
-        </form>
+        <div class="center">
+            <form action="/users/edit/<%= user.user_id %>" method="post" class="users-form"
+                enctype="multipart/form-data">
+                <h2>Edit Profile</h2>
+                <label for="username">Username</label>
+                <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required
+                    value="<%= user.username %>" />
+                <% if (typeof errUser=='string' && errUser) { %>
+                <p class="users-form__error"><%= errUser %> </p>
+                <% } %>
+                <label for="name">Full Name</label>
+                <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required
+                    value="<%= user.name %>" />
+                <label for="email">Email</label>
+                <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required
+                    value="<%= user.email %>">
+                <% if (typeof errEmail=='string' && errEmail) { %>
+                <p class="users-form__error"><%= errEmail %> </p>
+                <% } %>
+                <input type="file" name="myImage" id="myImage" hidden/>
+                <div class="upload__button">
+                    <label for="myImage">Choose a Photo</label>
+                    <span id="custom-text">No file chosen, yet.</span>
+                </div>
+                <button type="submit">Update</button>
+            </form>
+        </div>
     </main>
     <%- include("../components/scripts_links") %>
+    <script>
+        const fileUpload = document.getElementById("myImage");
+        const customTxt = document.getElementById("custom-text");
+        fileUpload.addEventListener("change", () => {
+            if (fileUpload.value) {
+                customTxt.textContent = fileUpload.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+            } else {
+                customTxt.textContent = "No file chosen, yet.";
+            }
+        })
+    </script>
 </body>
 
 </html>
