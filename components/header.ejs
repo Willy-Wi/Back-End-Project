@@ -6,7 +6,11 @@
     </form>
     <div class="header__dropdown">
         <div class="image">
-            <img src="../images/defaultProfile.jpg" alt="" width=50>
+            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+            <img src="/../images/<%= profile_image %>.png" alt="" width=50>
+            <% } else { %>
+            <img src="/../images/0.png" alt="" width=50>
+            <% } %>
             <div class="overlay" data-dropdown-toggle></div>
         </div>
         <div class="header__menu">
@@ -14,10 +18,10 @@
             <a href="/users/<%= user_id %>">Profile</a>
             <a href="/logout">Logout</a>
             <% } else { %>
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
             <% } %>
         </div>
     </div>
 </header>
-<script src="../js/dropdownMenu.js"></script>
+<script src="/../js/dropdownMenu.js"></script>

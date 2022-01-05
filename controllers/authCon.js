@@ -45,6 +45,7 @@ const register = async (req, res) => {
         name: name,
         email: email,
         password: hashedPassword,
+        profile_image: 0
     };
 
     query(sql, data);
@@ -53,7 +54,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    let sql = `SELECT password, user_id FROM users WHERE BINARY email = '${email}'`;
+    let sql = `SELECT password, user_id, profile_image FROM users WHERE BINARY email = '${email}'`;
     let result = await query(sql);
     let invalidEmail = "That user does not exist";
     let invalidPassword = "Invalid Password";
@@ -67,6 +68,7 @@ const login = async (req, res) => {
 
     req.session.isLoggedIn = true;
     req.session.user_id = result[0].user_id;
+    req.session.pfp = result[0].profile_image;
     res.redirect("/");
 };
 

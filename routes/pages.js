@@ -16,7 +16,7 @@ const loginRequired = async (req, res, next) => {
 };
 
 router.get("/", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -24,18 +24,19 @@ router.get("/", loginRequired, async (req, res) => {
     res.render("home", {
         posts,
         isLoggedIn: req.session.isLoggedIn,
+        profile_image: req.session.pfp,
         likes: req.currentUser,
         user_id: req.session.user_id,
     });
 });
 
 router.get("/users/:id", loginRequired, async (req, res) => {
-    sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
 
-    sql = `SELECT U.username, U.name, U.user_id, COUNT(DISTINCT F.following_id) AS 'Followers', COUNT(DISTINCT P.post_id) AS 'Posts', COUNT(DISTINCT L.like_id) AS 'Likes'
+    sql = `SELECT U.username, U.name, U.user_id, U.profile_image, COUNT(DISTINCT F.following_id) AS 'Followers', COUNT(DISTINCT P.post_id) AS 'Posts', COUNT(DISTINCT L.like_id) AS 'Likes'
     FROM Following F RIGHT JOIN Users U  ON F.user_id = U.user_id
     LEFT JOIN Posts P ON U.user_id = P.user_id
     LEFT JOIN Likes L ON P.post_id = L.post_id
@@ -49,6 +50,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
         stats: stats[0],
+        profile_image: req.session.pfp,
         likes: req.currentUser,
         posts,
         follow,
@@ -58,14 +60,14 @@ router.get("/users/:id", loginRequired, async (req, res) => {
 router.get("/posts/:id/", loginRequired, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
 
     let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
 
     let comments = await query(sql);
@@ -75,6 +77,7 @@ router.get("/posts/:id/", loginRequired, async (req, res) => {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
             post: post[0],
+            profile_image: req.session.pfp,
             likes: req.currentUser,
             comments: comments,
             error: req.query.error,
@@ -86,18 +89,8 @@ router.get("/posts/:id/", loginRequired, async (req, res) => {
         user_id: req.session.user_id,
         post: post[0],
         likes: req.currentUser,
+        profile_image: req.session.pfp,
         comments: comments,
-    });
-});
-
-router.get("/users/:id/edit", loginRequired, async (req, res) => {
-    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
-    let user = await query(sql);
-
-    res.render("edit", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        user: user[0],
     });
 });
 
@@ -113,10 +106,11 @@ router.get("/search", loginRequired, async (req, res) => {
     res.render("home", {
         posts,
         isLoggedIn: req.session.isLoggedIn,
+        profile_image: req.session.pfp,
         likes: req.currentUser,
         user_id: req.session.user_id,
     });
-})
+});
 
 // Used For Register & Login
 const isNotLoggedIn = (req, res, next) => {
@@ -134,9 +128,22 @@ const isLoggedIn = (req, res, next) => {
     next();
 };
 
+router.get("/users/:id/edit", isLoggedIn, async (req, res) => {
+    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
+    let user = await query(sql);
+
+    res.render("edit", {
+        isLoggedIn: req.session.isLoggedIn,
+        profile_image: req.session.pfp,
+        user_id: req.session.user_id,
+        user: user[0],
+    });
+});
+
 router.get("/createpost", isLoggedIn, (req, res) => {
     res.render("createPost", {
         isLoggedIn: req.session.isLoggedIn,
+        profile_image: req.session.pfp,
         user_id: req.session.user_id,
     });
 });
