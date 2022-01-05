@@ -1,15 +1,19 @@
 const express = require("express");
-const pages = require("./routes/pages");
 const session = require("express-session");
+const pages = require("./routes/pages");
 const { conn } = require("./controllers/dbCon");
+const upload = require("express-fileupload");
 const path = require("path");
 const app = express();
 const PORT = 3000;
 
+conn.connect((err) => {
+    if (err) throw err;
+    console.log("MySQL WorkBench is connected");
+});
+
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+
 app.use(
     session({
         secret: "Secret Key",
@@ -19,11 +23,10 @@ app.use(
         saveUninitialized: false,
     })
 );
-
-conn.connect((err) => {
-    if (err) throw err;
-    console.log("MySQL WorkBench is connected");
-});
+app.use(upload());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", pages);
 
