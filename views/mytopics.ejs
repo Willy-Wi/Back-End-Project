@@ -16,18 +16,6 @@
         <div class="card__list">
             <% posts.forEach(item => { %>
 
-            <% if (typeof likes == 'object' && likes) { %>
-            <% let filtered = likes.filter((v) => { return v.post_id === item.post_id }) %>
-
-            <% if (filtered.length > 0) { %>
-            <% status = "Unlike" %>
-            <% } else { %>
-            <% status = "Like" %>
-            <% } %>
-            <% } else { %>
-            <% status = "Like" %>
-            <% } %>
-
             <div class="card card__post">
                 <div class="card__like">
 
@@ -74,5 +62,15 @@
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
     <%- include("../components/scripts_links.ejs") %> 
+    <script>    
+        let del = (id) => {
+            axios.delete('/api/post/' + id)
+            .then((result) => {
+                location.reload();
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        };
+    </script>
 </body>
 </html>
