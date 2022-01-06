@@ -50,7 +50,7 @@ const createComment = (req, res) => {
     let data = {
         user_id: req.session.user_id,
         post_id: postId,
-        comment_text: comment,
+        comment_content: comment,
     };
     query(sql, data);
     res.redirect("/posts/" + postId);

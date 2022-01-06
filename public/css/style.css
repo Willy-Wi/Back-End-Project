@@ -92,6 +92,40 @@ hr {
   background: #8c8c8c;
 }
 
+textarea {
+  -webkit-box-shadow: var(--shadow);
+          box-shadow: var(--shadow);
+  border: none;
+  outline: none;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  color: #8c8c8c;
+  font-family: var(--font);
+  font-size: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  resize: none;
+}
+
+textarea::-webkit-input-placeholder {
+  color: #8c8c8c;
+  font-weight: 400;
+}
+
+textarea:-ms-input-placeholder {
+  color: #8c8c8c;
+  font-weight: 400;
+}
+
+textarea::-ms-input-placeholder {
+  color: #8c8c8c;
+  font-weight: 400;
+}
+
+textarea::placeholder {
+  color: #8c8c8c;
+  font-weight: 400;
+}
+
 body {
   background-color: var(--light-gray);
   font-family: var(--font);
@@ -258,6 +292,12 @@ main {
   grid-column-gap: 6rem;
 }
 
+.nav__active {
+  border-left: 8px solid var(--purple);
+  background-color: rgba(118, 97, 255, 0.1);
+  color: var(--purple);
+}
+
 .card__list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -277,6 +317,10 @@ main {
           box-shadow: var(--shadow);
   border-radius: 5px;
   grid-row-gap: 0.5rem;
+}
+
+.card__comment {
+  padding: 1.2rem 1rem;
 }
 
 .card i {
@@ -367,7 +411,7 @@ main {
 
 .card__content--small {
   font-size: 0.9rem;
-  grid-row-gap: 0.6rem;
+  grid-row-gap: 0;
 }
 
 .card__header {
@@ -460,8 +504,7 @@ main {
   content: "";
 }
 
-.users-form input,
-.users-form textarea {
+.users-form input {
   -webkit-box-shadow: var(--shadow);
           box-shadow: var(--shadow);
   border: none;
@@ -475,26 +518,22 @@ main {
   resize: none;
 }
 
-.users-form input::-webkit-input-placeholder,
-.users-form textarea::-webkit-input-placeholder {
+.users-form input::-webkit-input-placeholder {
   color: #8c8c8c;
   font-weight: 400;
 }
 
-.users-form input:-ms-input-placeholder,
-.users-form textarea:-ms-input-placeholder {
+.users-form input:-ms-input-placeholder {
   color: #8c8c8c;
   font-weight: 400;
 }
 
-.users-form input::-ms-input-placeholder,
-.users-form textarea::-ms-input-placeholder {
+.users-form input::-ms-input-placeholder {
   color: #8c8c8c;
   font-weight: 400;
 }
 
-.users-form input::placeholder,
-.users-form textarea::placeholder {
+.users-form input::placeholder {
   color: #8c8c8c;
   font-weight: 400;
 }
