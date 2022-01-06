@@ -30,6 +30,47 @@
                             <h4><%= user.name %></h4>
                             <p><%= user.username %></p>
                         </div>
+                        <i class="fas fa-flag profile__flag" id = "report"></i>
+
+                        <div class="reportShow" id = "reportget">
+                            <div class="reportdata">
+                                <div class="report-header">
+                                    <span class="close-report">&times;</span>
+                                    <h1>Report This User</h1>
+                                    <p>Help us understand the problem. What issue with <a href="/users/<%= user.user_id %>"><%= user.username %></a></p> are you reporting?</p>
+                                  </div>
+                                  <div class="report-body">
+                                      <% if (user_id == user.user_id) { %>
+                                        <form action="/createreport" method = "POST">
+                                         <p id = "reporterr">you can't report yourself</p>
+                                         <div id = "submit" style = "margin: 20px auto;"></div>
+                                        </form>
+                                      <% } else { %>
+                                            <form action="/createreport" method = "POST">
+                                                <p id = "reporterr"></p>
+                                                <input type="hidden" name="user_id" id="user_id" value = <%= user.user_id %>>
+                                                <input type="hidden" name = "post_id" id = "post_id" value = '' autocomplete="off">
+                                                <br>
+                                                <input type="radio" id = "info1" name = "description" autocomplete="off" value = "I'm not interested in this account" required>
+                                                <label for="info1">I'm not interested in this account</label><br><br>
+                                                <input type="radio" id = "info2" name = "description" autocomplete="off" value = "This user is a popsicle spammer">
+                                                <label for="info2">This user is a popsicle spammer</label><br><br>
+                                                <input type="radio" id = "info3" name = "description" autocomplete="off" value = "It appears their account is hacked">
+                                                <label for="info3">It appears their account is hacked</label><br><br>
+                                                <input type="radio" id = "info4" name = "description" autocomplete="off" value = "They're pretending to be me or someone else">
+                                                <label for="info4">They're pretending to be me or someone else</label><br><br>
+                                                <input type="radio" id = "info5" name = "description" autocomplete="off" value = "Their posts are abusive or hateful">
+                                                <label for="info5">Their posts are abusive or hateful</label><br><br>
+                                                <input type="radio" id = "info6" name = "description" autocomplete="off" value = "Their profile images include abusive or hateful content">
+                                                <label for="info6">Their profile images include abusive or hateful content</label><br>
+                                                <div class="report-button">
+                                                <button type = 'submit' id = 'submit' class = 'btnreport'>Submit</button>
+                                            </div>
+                                        </form>
+                                      <% } %>
+                                  </div>
+                            </div>
+                        </div>
 
                         <% if (typeof follow == 'object' && follow) { %>
                         <% let filteredFollow = follow.filter((v) => { return v.user_id === user.user_id }) %>
@@ -61,12 +102,34 @@
                         </div>
                         <div>
                             <h2><%= stats.Likes %></h2>
-                            <p>Likes</p>
+                            <p>Likes</line-height cssp>
                         </div>
                         <div>
                             <h2><%= stats.Posts %></h2>
                             <p>Post Created</p>
                         </div>
+                    </div>
+                </div>
+                <div>
+                    <p>My Albums</p>
+                </div>
+                <div class="album__card">
+                    <% albums.forEach(item => { %>
+                        <div class="item">
+                            <a href="/album/<%= item.album_id %>">
+                                <div class="img-album">
+                                    <img src="/images/<%= item.album_cover %> " alt="" width = "100%" height="200px">
+                                </div>
+                                <div class="album-content">
+                                    <h1><%= item.album_name %> </h1>
+                                    <p><%= item.album_description %> </p>
+                                </div>
+                            </a>
+                        </div>
+                    <% }) %>
+
+                    <div class="item-select">
+                        <a href="/createalbum"><p>+ Add New Album</p></a>
                     </div>
                 </div>
                 <div>
@@ -101,6 +164,7 @@
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
+                            <a href = "/report/post/<%= item.post_id %>"><i class="fas fa-flag post__flag" role = "button"></i></a>
                            <a href = "/editpost/<%= item.post_id %>" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
                         <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
                         </div>
@@ -124,6 +188,44 @@
     </main>
     <%- include("../components/scripts_links") %>
     <script>
+        const error = 'please select one of the following options';
+        const errTitle = document.getElementById('reporterr');
+        let hear = document.getElementsByName('description');
+        let is_checked = false;
+
+        let button = document.getElementById('submit');
+        button.onclick = function() {
+            for (let i = 0; i < hear.length; i++) {
+                if(hear[i].checked){
+                    is_checked = true;
+                    break;
+                };
+                if(!is_checked){
+                    errTitle.innerHTML = error;
+                };
+            };
+        };
+
+        let content = document.getElementById('reportget');
+
+        let icon = document.getElementById('report');
+
+        let stop = document.getElementsByClassName('close-report')[0];
+
+        icon.onclick = function() {
+            content.style.display = 'block';
+        };
+
+        stop.onclick = function(){
+            content.style.display = 'none';
+        };
+
+        window.addEventListener('click', function(e){
+            if(e.target == content){
+                content.style.display = 'none';
+            }
+        });
+        
         let del = (id) => {
             axios.delete('/api/post/' + id)
             .then((result) => {

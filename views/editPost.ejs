@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/../css/style.css">
     <title>Edit Post</title>
 </head>
 
@@ -13,7 +13,7 @@
     <%- include("../components/header", isLoggedIn, user_id, image) %>
     <main>
         <%- include("../components/nav") %>
-        <div action="/api/post/<%= data.post_id %> " method="post" class="users-form form__create">
+        <div action="/api/comment/<%= data.comment_id %> " method="post" class="users-form form__create">
             <textarea name="title" id="title" rows="1" placeholder="Title" required><%= data.post_title %> </textarea>
             <p id = "errTitle"></p>
             <% if (typeof errTitle == 'string' && errTitle) { %>
@@ -38,7 +38,7 @@
                     description: document.getElementById('description').value
                 }
             })
-            .then((result) => {;
+            .then((result) => {
                 let errTitle = "Title length must be between 5 and 255 characters";
                 let errDesc = "Description length must be between 5 and 1000 characters";
 

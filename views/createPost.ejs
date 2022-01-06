@@ -11,7 +11,7 @@
 
 <body>
     <%- include("../components/header", isLoggedIn, user_id, image) %>
-    <main>
+    <main> 
         <%- include("../components/nav") %>
         <form action="/createpost" method="post" class="users-form form__create">
             <textarea name="title" id="title" rows="1" placeholder="Title" required></textarea>

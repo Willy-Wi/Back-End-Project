@@ -55,12 +55,29 @@ const createComment = (req, res) => {
     }
 };
 
-//Delete Comment
-const deleteComment = (req, res) => {
-    const deleteId = req.params.id
-    let sql = `delete from comments where comment_id = `+deleteId;
-    query(sql);
-    res.end(); 
-}
+const createReport = (req, res) => {
+    const { user_id, post_id, description } = req.body;
+    if(post_id == ''){
+        let sql = "INSERT INTO reports SET ?";
+        let data =  {
+            user_id: user_id,
+            post_id: post_id,
+            type: 'report_user',
+            description: description,
+        };
+        query(sql, data);
+        res.redirect("/");
+    }else{
+        let sql = "INSERT INTO reports SET ?";
+        let data =  {
+            user_id: user_id,
+            post_id: post_id,
+            type: 'report_post',
+            description: description,
+        };
+        query(sql, data);
+        res.redirect("/");
+    }
+};
 
-module.exports = { createPost, createComment, deleteComment };
+module.exports = { createPost, createComment, createReport };
