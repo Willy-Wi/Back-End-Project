@@ -80,4 +80,19 @@ const createReport = (req, res) => {
     }
 };
 
-module.exports = { createPost, createComment, createReport };
+const createFeedback = (req, res) => {
+    const { subject, user_id, name, contact, email, message } = req.body;
+    let sql = "INSERT INTO feedback SET ?";
+    let data = {
+        subject: subject,
+        user_id: user_id,
+        message: message,
+        name: name,
+        contact: contact,
+        email: email,
+    };
+    query(sql, data);
+    res.redirect("/");
+};
+
+module.exports = { createPost, createComment, createReport, createFeedback };
