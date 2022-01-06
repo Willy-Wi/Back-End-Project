@@ -38,6 +38,6 @@ fluent-ffmpeg lightgallery
 -   [ ] Light / Dark mode
 -   [ ] Permission 
 -   [ ] Coming soon
--   [ ] Share post (In Progress)
+-   [ ] Share post in Album (In Progress)
 <!-- -   [ ] Realtime notifications -->
 <!-- -   [ ] Chatting -->
