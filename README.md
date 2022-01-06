@@ -25,11 +25,12 @@ fluent-ffmpeg lightgallery
 -   [X] Add Post
 -   [X] Add Comments
 -   [X] Follow/un-follow feature
--   [ ] Edit Comments (In progress)
--   [ ] Delete Comments (In progress)
+-   [X] Add Comments
+-   [X] Edit Comments 
+-   [X] Delete Comments 
 -   [X] Forgot password
--   [ ] Featured post
--   [ ] Feedback (Pending)
+-   [ ] Featured post (In Progress)
+-   [ ] Feedback (In Progress)
 -   [X] Album
 -   [X] Report inappropriate content, user, etc.
 -   [X] Edit Post
