@@ -1,4 +1,4 @@
-# Back-End Project
+ # Back-End Project
 
 ## Links
 
@@ -9,11 +9,11 @@
 To run the `index.js` file. You need to install a couple of dependencies.
 
 ```bash
-npm init
+npm install
 ```
-For the modules
+Or you can do this instead
 ```bash
-npm install express mysql2 ejs bcrypt express-session dotenv
+npm install express mysql2 ejs bcrypt express-session dotenv express-fileupload
 ```
 
 ## Task List
