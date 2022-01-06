@@ -908,6 +908,16 @@ textarea::placeholder {
     transition: width 500ms ease-in-out;
 }
 
+.fa-ellipsis-v{
+    margin-left: auto;
+}
+
+.featuring{
+    margin: 20px 0;
+    color: goldenrod;
+    text-shadow: 0 4px 5px rgba(118, 97, 255, 0.2);
+}
+
 @media(max-width: 1300px){
     .album__card{
         flex-direction: column;
