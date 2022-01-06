@@ -2,7 +2,7 @@
 
 ## Links
 
-> [Awesome Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Awesome Link")
+> [Classified Content](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Classified Content")
 
 ## Code Blocks
 
@@ -39,6 +39,3 @@ npm install express mysql2 ejs bcrypt express-session dotenv express-fileupload
 -   [ ] Delete Post
 -   [ ] Light / Dark mode
 -   [ ] Coming soon
-<!-- -   [ ] Share post -->
-<!-- -   [ ] Realtime notifications -->
-<!-- -   [ ] Chatting -->
