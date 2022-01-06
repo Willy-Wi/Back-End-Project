@@ -6,7 +6,7 @@ const { register, login , forgot, change } = require("../controllers/authCon");
 const { likes } = require("../controllers/postCon");
 const { follow } = require("../controllers/followCon");
 const { edituser } = require("../controllers/editCon");
-const { createPost, createComment, createReport } = require("../controllers/createPost");
+const { createPost, createComment, createReport, createFeedback } = require("../controllers/createPost");
 const { createAlbum } = require("../controllers/createAlbum");
 const { addprofile } = require("../controllers/uploadCon");
 const { uploadFiles , timeUpload } = require("../controllers/filesCon");
@@ -259,7 +259,7 @@ router.get('/myanswers', isLoggedIn, async (req, res) => {
     let post = await query(sql);
 
     sql = `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
-    Users.user_id = Comments.user_id WHERE Users.user_id = '${req.session.user_id}'`;
+    Users.user_id = Comments.user_id WHERE Users.user_id = '${req.session.user_id}' ORDER BY Comments.created_at DESC`;
 
     let comments = await query(sql);
 
@@ -284,6 +284,22 @@ router.get('/myanswers', isLoggedIn, async (req, res) => {
         comments: comments,
         image: req.session.profile_url,
         id: req.params.id,
+    });
+});
+
+router.get("/feedback", isLoggedIn, async (req, res) => {
+
+    sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.session.user_id}'`;
+
+    let user = await query(sql);
+
+    res.render("feedback", {
+        user: user[0],
+        isLoggedIn: req.session.isLoggedIn,
+        user_id: req.session.user_id,
+        likes: req.currentUser,
+        image: req.session.profile_url,
+        id: req.params.id
     });
 });
 
@@ -399,13 +415,14 @@ router.post("/users/:id/act", isLoggedIn, follow);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/createalbum", isLoggedIn, createAlbum);
 router.post("/createreport", isLoggedIn, createReport);
-router.post("/report/post/:id", isLoggedIn, createReport);
+router.post("/report/:id", isLoggedIn, createReport);
+router.post("/feedback", isLoggedIn, createFeedback);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
-router.post("/users/edit/:id", isLoggedIn, edituser);
+router.post("/users/edit/:id/", isLoggedIn, edituser);
 router.post("/addProfile/:id", isLoggedIn, addprofile);
 router.post("/file/:id", uploadFiles);
 router.put("/api/post/:id", isLoggedIn, updatepost);
 router.put("/api/comment/:id", isLoggedIn, editComment);
-router.delete("/api/post/:id", deletepost);
+router.delete("/api/:id", deletepost);
 router.delete("/comment/:id", deleteComment);
 module.exports = router;
