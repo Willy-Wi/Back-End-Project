@@ -16,7 +16,7 @@ npm install express mysql2 express-fileupload ejs bcrypt express-session multer 
 fluent-ffmpeg lightgallery 
 
 ## Task List
-(Mohon deadlinenya jangan besok ^^)
+Tinggal Permission
 -   [X] Register
 -   [X] Login
 -   [X] Profile
@@ -30,14 +30,14 @@ fluent-ffmpeg lightgallery
 -   [X] Delete Comments 
 -   [X] Forgot password
 -   [X] Featured post
--   [ ] Feedback (In Progress)
+-   [X] Feedback
 -   [X] Album
 -   [X] Report inappropriate content, user, etc.
 -   [X] Edit Post
 -   [X] Delete Post 
--   [ ] Light / Dark mode
+-   [X] Light / Dark mode
 -   [ ] Permission 
 -   [ ] Coming soon
--   [ ] Share post in Album (In Progress)
+-   [X] Share post in Album 
 <!-- -   [ ] Realtime notifications -->
 <!-- -   [ ] Chatting -->
