@@ -56,11 +56,13 @@ const createComment = (req, res) => {
 };
 
 const createReport = (req, res) => {
-    const { post_id, description } = req.body;
+    const user_id = req.params.id || null;
+    const post_id = req.params.id2 || null;
+    const { description } = req.body;
     if(post_id == ''){
         let sql = "INSERT INTO reports SET ?";
         let data =  {
-            user_id: req.session.user_id,
+            user_id: user_id,
             post_id: post_id,
             type: 'report_user',
             description: description,
@@ -70,7 +72,7 @@ const createReport = (req, res) => {
     }else{
         let sql = "INSERT INTO reports SET ?";
         let data =  {
-            user_id: req.session.user_id,
+            user_id: user_id,
             post_id: post_id,
             type: 'report_post',
             description: description,

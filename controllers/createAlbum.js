@@ -16,8 +16,8 @@ const createAlbum = (req, res) =>{
             album_name: title,
             album_cover: req.file.filename,
             album_description: description,
-            user_id: userid,
-            username: username,
+            user_id: req.session.user_id,
+            username: req.session.username,
         };
         query(sql, data);
         res.redirect("/");

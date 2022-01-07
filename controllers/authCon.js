@@ -111,7 +111,8 @@ const forgot = async (req, res, next) => {
 };
 
 const change = async (req, res) => {
-    const { userid,  password, confirmPassword } = req.body;
+    const userid = req.session.user_id;
+    const { password, confirmPassword } = req.body;
     let errPass;
     if (password.length < 5) {
         errPass = "Password must be at least 5 characters long";
