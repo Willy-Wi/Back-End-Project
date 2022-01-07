@@ -103,11 +103,9 @@ const forgot = async (req, res, next) => {
         return res.render("forgot-password", { invalidCheck });
     }
 
-    const userid = result[0].user_id;
+    req.session.user_id = result[0].user_id;
 
-    res.render('change-password', {
-        userid: userid,
-    });
+    res.render('change-password');
 };
 
 const change = async (req, res) => {
