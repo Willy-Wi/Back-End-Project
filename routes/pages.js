@@ -177,7 +177,7 @@ router.get("/album/:id", async (req, res) => {
     });
 });
 
-router.get("/report/post/:id", async (req, res) => {
+router.get("/reportpost/:id", async (req, res) => {
     const postId = req.params.id;
 
     let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
@@ -414,8 +414,8 @@ router.post("/posts/:id/act", isLoggedIn, likes);
 router.post("/users/:id/act", isLoggedIn, follow);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/createalbum", isLoggedIn, createAlbum);
-router.post("/createreport", isLoggedIn, createReport);
-router.post("/report/:id", isLoggedIn, createReport);
+router.post("/reportuser/:id", isLoggedIn, createReport);
+router.post("/reportpost/:id2", isLoggedIn, createReport);
 router.post("/feedback", isLoggedIn, createFeedback);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/users/edit/:id/", isLoggedIn, edituser);

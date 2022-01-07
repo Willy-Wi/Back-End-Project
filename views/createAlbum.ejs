@@ -14,8 +14,6 @@
     <main> 
         <%- include("../components/nav") %>
         <form action="/createalbum" method="post" class="users-form form__create" enctype="multipart/form-data">
-            <input type="hidden" name="userid" value = "<%= user_id %> ">
-            <input type="hidden" name="username" value = "<%= username %> ">
             <textarea type = "text" name="title" id="title" rows="1" placeholder="Title" required></textarea>
             <textarea type = "text" placeholder="Description (Optional)" name="description" id="description" cols="30" rows="15" ></textarea>
             <br />

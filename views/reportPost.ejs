@@ -39,9 +39,8 @@
                                 </div>
                             <% } %> 
                         <% }) %>
-                        <form action="/report/<%= post.post_id %> " method = "POST">
+                        <form action="/reportpost/<%= post.post_id %> " method = "POST">
                             <p id = "reporterr"></p>
-                            <input type="hidden" name = "post_id" id = "post_id" value = "<%= post.post_id %>" autocomplete = "off">
                             <br>
                             <input type="radio" id = "info1" name = "description" autocomplete="off" value = "Sexual Content" required>
                             <label for="info1">Sexual content</label><br><br>

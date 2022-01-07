@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <title>Home</title>
+    <title>Featured Post</title>
 </head>
 
 <body>
@@ -17,10 +17,8 @@
             <h2 class = "featuring">Featured Post</h2>
             <div class="card__list">
                 <% posts.forEach(item => { %>
-
                 <% if (typeof likes == 'object' && likes) { %>
                 <% let filtered = likes.filter((v) => { return v.post_id === item.post_id }) %>
-
                 <% if (filtered.length > 0) { %>
                 <% status = "Unlike" %>
                 <% } else { %>
@@ -29,10 +27,8 @@
                 <% } else { %>
                 <% status = "Like" %>
                 <% } %>
-
                 <div class="card card__post">
                     <div class="card__like">
-
                         <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
                         <% if (status === "Unlike") { %>
                         <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
@@ -41,14 +37,11 @@
                         <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
                         <% } %>
-
                         <% } else { %>
                         <a href="/login"><i class="far fa-heart"></i></a>
                         <% } %>
-
                         <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
                     </div>
-
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
