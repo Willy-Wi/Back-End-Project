@@ -7,6 +7,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/../css/style.css">
     <title>Posts Comments</title>
+    <style>
+        .dropdown-comment {
+            display: none;
+            border: 0.5px solid #8c8c8c;
+            ;
+            position: absolute;
+            width: 50px;
+            justify-content: stretch;
+            background-color: white;
+            border-radius: 5%;
+            box-shadow: 0px 0px 2px black;
+            ;
+        }
+
+        .dropdown-comment a {
+            display: block;
+            padding: 5px 5px;
+            border-bottom: 0.5px solid #8c8c8c;
+            ;
+            width: 50px;
+            color: #8c8c8c;
+            font-weight: 500;
+        }
+
+        .dropdown-comment a:hover {
+            background-color: rgba(118, 97, 255, 0.1);
+            color: var(--purple);
+        }
+
+        .close {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,7 +49,6 @@
         <div class="card__list">
             <% if (typeof likes == 'object' && likes) { %>
             <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
-
             <% if (filtered.length > 0) { %>
             <% status = "Unlike" %>
             <% } else { %>
@@ -30,7 +62,6 @@
                 <div class="card__like">
 
                     <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
-
                     <% if (status === "Unlike") { %>
                     <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
                         data-post-status="<%= status %>"></i>
@@ -38,7 +69,6 @@
                     <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
                         data-post-status="<%= status %>"></i>
                     <% } %>
-
                     <% } else { %>
                     <a href="/login"><i class="far fa-heart"></i></a>
                     <% } %>
@@ -49,12 +79,20 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <i class="far fa-trash-alt" role="button"></i>
+                        <a href="/editpost/<%= post.post_id %>/" style="margin-left: auto;"><i class="fas fa-edit"
+                                role="button"></i></a>
+                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
+
+                        <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
                         <img src="../images/<%= post.profile_image %>.png" alt="" width="40">
+                        <% } else { %>
+                        <img src="../images/0.png" alt="" width="40">
+                        <% } %>
+                        
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
@@ -69,9 +107,18 @@
                 <% } %>
             </div>
             <% comments.forEach((comment) => { %>
-            <div class="card card__comment">
+            <div class="card card_comment">
                 <div class="card__content card__content--small">
-                    <p><%= comment.comment_content %></p>
+                    <div class="card__header">
+                        <p><%= comment.comment_content %></p>
+                        <i class="fa fa-ellipsis-v show-button" role="button"
+                            onclick=<%='show(' +comment.comment_id+')' %>>
+                            <div class="dropdown-comment" id="dropdown-<%= comment.comment_id %>">
+                                <a onclick=<%='del_comment(' +comment.comment_id+')' %>>Delete</a>
+                                <a href="/editcomment/<%= comment.comment_id %>/<%= comment.post_id %>">Edit</a>
+                            </div>
+                        </i>
+                    </div>
                     <div>
                         <hr>
                         <div class="card__info card__info--small">
@@ -84,6 +131,34 @@
         </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
+    <script>
+        let del = (id) => {
+            alert('DELETE POST WHERE POST = ' + id)
+            axios.delete('/posts/' + id)
+                .then((result) => {
+                    location.href = '/';
+                }).catch((err) => {
+                    alert('error ' + err)
+                });
+        };
+        let del_comment = (id) => {
+            axios.delete('/comment/' + id).then((result) => {
+                location.reload();
+            }).catch((err) => {
+                alert('error ' + err);
+            });
+        }
+        let show = (id) => {
+            let dropdown = document.getElementById("dropdown-" + id);
+            dropdown.style.display = "block";
+            window.onclick = function (event) {
+                if (!event.target.matches(".show-button")) {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+    </script>
 </body>
 
 </html>

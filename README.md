@@ -1,4 +1,4 @@
- # Back-End Project
+# Back-End Project
 
 ## Links
 
@@ -11,31 +11,35 @@ To run the `index.js` file. You need to install a couple of dependencies.
 ```bash
 npm install
 ```
+
 Or you can do this instead
+
 ```bash
-npm install express mysql2 ejs bcrypt express-session dotenv express-fileupload
+npm install express express-fileupload ejs bcrypt express-session cors fluent-ffmpeg lightgallery dotenv mysql2 @ffmpeg-installer/ffmpeg multer
 ```
 
 ## Task List
 
--   [X] Register
--   [X] Login
--   [X] Profile
--   [X] Search (user and related posts)
--   [X] Like/Unlike feature
--   [X] Add Post
--   [X] Add Comments
--   [X] Follow/un-follow feature
--   [X] Edit Profile
--   [X] Profile Photos
--   [ ] Edit Comments
--   [ ] Delete Comments
--   [ ] Forgot password
--   [ ] Featured post
--   [ ] Feedback
--   [ ] Album
--   [ ] Report inappropriate content, user, etc.
--   [ ] Edit Post
--   [ ] Delete Post
--   [ ] Light / Dark mode
+-   [x] Register
+-   [x] Login
+-   [x] Profile
+-   [x] Search (user and related posts)
+-   [x] Like/Unlike feature
+-   [x] Add Post
+-   [x] Add Comments
+-   [x] Follow/un-follow feature
+-   [x] Add Comments
+-   [x] Edit Comments
+-   [x] Delete Comments
+-   [x] Forgot password
+-   [x] Featured post
+-   [x] Feedback
+-   [x] Album
+-   [x] Report inappropriate content, user, etc.
+-   [x] Edit Post
+-   [x] Delete Post
+-   [x] Light / Dark mode
+-   [x] Search
+-   [x] Share post in Album
+-   [ ] Permission
 -   [ ] Coming soon

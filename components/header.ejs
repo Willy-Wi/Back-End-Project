@@ -16,12 +16,16 @@
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
+            <a href="/users/edit/<%= user_id  %>">Settings</a>
             <a href="/logout">Logout</a>
+            <a id="dark-mode-toggle" class="dark-mode-toggle">Switch Theme</a>
             <% } else { %>
             <a href="/login">Login</a>
             <a href="/register">Register</a>
+            <a id="dark-mode-toggle" class="dark-mode-toggle">Switch Theme</a>
             <% } %>
         </div>
     </div>
 </header>
 <script src="/../js/dropdownMenu.js"></script>
+<script src="/../js/darkmode.js"></script>

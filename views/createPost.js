@@ -19,7 +19,7 @@ const createPost = (req, res) => {
             errTitle,
             errDesc,
         });
-    } else {
+    }else{
         let sql = `INSERT INTO posts SET ?`;
         let data = {
             user_id: req.session.user_id,
@@ -48,7 +48,7 @@ const createComment = (req, res) => {
         let data = {
             user_id: req.session.user_id,
             post_id: postId,
-            comment_content: comment,
+            comment_text: comment,
         };
         query(sql, data);
         res.redirect("/posts/" + postId);
@@ -59,22 +59,22 @@ const createReport = (req, res) => {
     const user_id = req.params.id || null;
     const post_id = req.params.id2 || null;
     const { description } = req.body;
-    if (post_id == "") {
+    if(post_id == ''){
         let sql = "INSERT INTO reports SET ?";
-        let data = {
+        let data =  {
             user_id: user_id,
             post_id: post_id,
-            type: "report_user",
+            type: 'report_user',
             description: description,
         };
         query(sql, data);
         res.redirect("/");
-    } else {
+    }else{
         let sql = "INSERT INTO reports SET ?";
-        let data = {
+        let data =  {
             user_id: user_id,
             post_id: post_id,
-            type: "report_post",
+            type: 'report_post',
             description: description,
         };
         query(sql, data);

@@ -5,11 +5,9 @@ const register = async (req, res) => {
     const { username, name, email, password, confirmPassword } = req.body;
     const regex = /[^A-Za-z0-9_]/g;
     let errUser, errEmail, errPass;
-    // Check Duplication
     let sql = `SELECT email, username FROM users WHERE BINARY email = '${email}' OR username = '@${username}'`;
     const result = await query(sql);
 
-    // Form Validation Check
     if (username.match(regex)) {
         errUser = "Username can only contain numbers, letters, and underscores";
     } else if (username.length < 5) {
@@ -47,7 +45,6 @@ const register = async (req, res) => {
         name: name,
         email: email,
         password: hashedPassword,
-        profile_image: 0
     };
 
     query(sql, data);
@@ -56,8 +53,10 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    let sql = `SELECT password, user_id, profile_image FROM users WHERE BINARY email = '${email}'`;
+    let sql = `SELECT password, user_id, username FROM users WHERE email = '${email}'`;
     let result = await query(sql);
+    sql = `SELECT profile FROM users WHERE user_id = '${result[0].user_id}'`;
+    let result2 = await query(sql);
     let invalidEmail = "That user does not exist";
     let invalidPassword = "Invalid Password";
     if (result.length < 1) {
@@ -70,8 +69,8 @@ const login = async (req, res) => {
 
     req.session.isLoggedIn = true;
     req.session.user_id = result[0].user_id;
-    req.session.pfp = result[0].profile_image;
     req.session.username = result[0].username;
+    req.session.profile_url = result2[0].profile;
     res.redirect("/");
 };
 
@@ -106,7 +105,7 @@ const forgot = async (req, res, next) => {
 
     req.session.user_id = result[0].user_id;
 
-    res.render('change-password');
+    res.render('change-password', {});
 };
 
 const change = async (req, res) => {
