@@ -5,9 +5,11 @@ const register = async (req, res) => {
     const { username, name, email, password, confirmPassword } = req.body;
     const regex = /[^A-Za-z0-9_]/g;
     let errUser, errEmail, errPass;
+    // Check Duplication
     let sql = `SELECT email, username FROM users WHERE BINARY email = '${email}' OR username = '@${username}'`;
     const result = await query(sql);
 
+    // Form Validation Check
     if (username.match(regex)) {
         errUser = "Username can only contain numbers, letters, and underscores";
     } else if (username.length < 5) {
