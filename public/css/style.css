@@ -411,7 +411,7 @@ main {
     font-size: 0.6rem;
 }
 
-.card__reply form {
+.card__reply--flex {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

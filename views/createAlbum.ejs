@@ -10,19 +10,34 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, image) %>
-    <main> 
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <main>
         <%- include("../components/nav") %>
         <form action="/createalbum" method="post" class="users-form form__create" enctype="multipart/form-data">
-            <textarea type = "text" name="title" id="title" rows="1" placeholder="Title" required></textarea>
-            <textarea type = "text" placeholder="Description (Optional)" name="description" id="description" cols="30" rows="15" ></textarea>
+            <textarea name="title" id="title" rows="1" placeholder="Title" required></textarea>
+            <textarea placeholder="Description (Optional)" name="description" id="description" rows="15"></textarea>
             <br />
             <h3>Add Album Cover (Optional)</h3>
-            <input type="file" name = "albumimg" accept = "image/*" id="albumimg">
+            <input type="file" name="myAlbum" id="myAlbum" hidden />
+            <div class="upload__button">
+                <label for="myAlbum"><i class="fas fa-plus"></i> Choose a Photo</label>
+                <span id="custom-text">No file chosen, yet.</span>
+            </div>
             <button type="submit">Create Album</button>
         </form>
     </main>
     <%- include("../components/scripts_links.ejs") %>
+    <script>
+        const fileUpload = document.getElementById("myAlbum");
+        const customTxt = document.getElementById("custom-text");
+        fileUpload.addEventListener("change", () => {
+            if (fileUpload.value) {
+                customTxt.textContent = fileUpload.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+            } else {
+                customTxt.textContent = "No file chosen, yet.";
+            }
+        })
+    </script>
 </body>
 
 </html>

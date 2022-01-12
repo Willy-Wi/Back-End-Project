@@ -3,7 +3,6 @@ const { query } = require("../controllers/dbCon");
 const router = Router();
 const { register, login, forgot, change } = require("../controllers/authCon");
 const { likes } = require("../controllers/postCon");
-const { createPost, createComment } = require("../controllers/createPost");
 const { follow, editUser } = require("../controllers/userCon");
 const {
     createPost,
@@ -32,7 +31,6 @@ router.get("/", loginRequired, async (req, res) => {
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
     let posts = await query(sql);
-
     res.render("home", {
         posts,
         post: posts[0],
@@ -40,7 +38,6 @@ router.get("/", loginRequired, async (req, res) => {
         profile_image: req.session.pfp,
         likes: req.currentUser,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
     });
 });
 
@@ -50,13 +47,10 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
 
-    // sql = `SELECT U.username, U.name, U.user_id, U.profile_image, COUNT(DISTINCT F.following_id) AS 'Followers', COUNT(DISTINCT P.post_id) AS 'Posts', COUNT(DISTINCT L.like_id) AS 'Likes'
-    // FROM Following F RIGHT JOIN Users U  ON F.user_id = U.user_id
-    // LEFT JOIN Posts P ON U.user_id = P.user_id
-    // LEFT JOIN Likes L ON P.post_id = L.post_id
-    // WHERE U.user_id = '${req.params.id}' GROUP BY U.user_id`
+    sql = `SELECT username, name, user_id, profile_image FROM users WHERE user_id = ${req.params.id}`;
+    let user = await query(sql);
 
-    sql = `SELECT album_id, album_name, album_cover, album_description, album_date, user_id, username FROM albums WHERE user_id = '${req.params.id}'`;
+    sql = `SELECT album_id, album_name, album_cover, album_description, album_date, user_id FROM albums WHERE user_id = '${req.params.id}'`;
     let albums = await query(sql);
 
     sql = `SELECT Users.user_id, COUNT(following.following_id) AS 'Followers', COUNT(Likes.like_id) AS 'Likes' , COUNT(Posts.post_id) AS 'Posts'
@@ -74,25 +68,12 @@ router.get("/users/:id", loginRequired, async (req, res) => {
         user_id: req.session.user_id,
         user: user[0],
         posts: posts,
-        users: user,
         stats: stats[0],
         likes: req.currentUser,
-        follow,
-        albums: albums,
-        image: req.session.profile_url,
-        id: req.params.id,
-    });
-});
-
-router.get("/users/:id/edit", isLoggedIn, async (req, res) => {
-    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
-    let user = await query(sql);
-
-    res.render("edit", {
-        isLoggedIn: req.session.isLoggedIn,
         profile_image: req.session.pfp,
-        user_id: req.session.user_id,
-        user: user[0],
+        follow: follow,
+        albums: albums,
+        id: req.params.id,
     });
 });
 
@@ -106,7 +87,7 @@ router.get("/posts/:id/", async (req, res) => {
 
     let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id, Comments.comment_content FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_id, Comments.post_id, Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
 
     let comments = await query(sql);
@@ -120,11 +101,9 @@ router.get("/posts/:id/", async (req, res) => {
             likes: req.currentUser,
             comments: comments,
             error: req.query.error,
-            image: req.session.profile_url,
             id: req.params.id,
         });
     }
-
     res.render("comments", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
@@ -132,7 +111,6 @@ router.get("/posts/:id/", async (req, res) => {
         likes: req.currentUser,
         profile_image: req.session.pfp,
         comments: comments,
-        image: req.session.profile_url,
         id: req.params.id,
     });
 });
@@ -141,14 +119,14 @@ router.get("/album/:id", async (req, res) => {
     const albumid = req.params.id;
 
     let sql = `SELECT file_id, album_id, file_url, file_type, thumb_url FROM files WHERE album_id = '${albumid}' ORDER BY created_at DESC`;
-    let files = await query(sql);
+    let files =  await query(sql);
 
-    sql = `SELECT name, username, user_id, email, profile FROM users WHERE user_id = '${req.params.id}'`;
-    let user = await query(sql);
+    sql = `SELECT Users.name, Users.username, Users.user_id, Users.email, Users.profile FROM Users INNER JOIN Albums ON Albums.user_id = Users.user_id WHERE Albums.album_id = ${albumid}`;
+    let user =  await query(sql);
 
     sql = `SELECT album_name, album_cover, album_description FROM albums WHERE album_id = '${albumid}'`;
     let album = await query(sql);
-
+    
     res.render("addfiles", {
         albumid: albumid,
         album: album[0],
@@ -165,7 +143,7 @@ router.get("/album/:id", async (req, res) => {
 router.get("/reportpost/:id", async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -178,7 +156,7 @@ router.get("/reportpost/:id", async (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         likes: req.currentUser,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp,
     });
 });
 
@@ -216,8 +194,20 @@ const isLoggedIn = (req, res, next) => {
     next();
 };
 
+router.get("/users/:id/edit", isLoggedIn, async (req, res) => {
+    let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
+    let user = await query(sql);
+
+    res.render("edit", {
+        isLoggedIn: req.session.isLoggedIn,
+        profile_image: req.session.pfp,
+        user_id: req.session.user_id,
+        user: user[0],
+    });
+});
+
 router.get("/featured-post", isNotLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id ORDER BY COUNT(Likes.post_id) DESC LIMIT 5;`;
 
@@ -229,12 +219,12 @@ router.get("/featured-post", isNotLoggedIn, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         likes: req.currentUser,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp
     });
 });
 
 router.get("/mytopics", isLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.session.user_id}' GROUP BY Posts.post_id;`;
 
@@ -246,14 +236,14 @@ router.get("/mytopics", isLoggedIn, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         likes: req.currentUser,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp
     });
 });
 
 router.get("/myanswers", isLoggedIn, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
@@ -273,7 +263,7 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
             likes: req.currentUser,
             comments: comments,
             error: req.query.error,
-            image: req.session.profile_url,
+            profile_image: req.session.pfp,
             id: req.params.id,
         });
     }
@@ -284,7 +274,7 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
         post: post[0],
         likes: req.currentUser,
         comments: comments,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp,
         id: req.params.id,
     });
 });
@@ -299,7 +289,7 @@ router.get("/feedback", isLoggedIn, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
         likes: req.currentUser,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp,
         id: req.params.id,
     });
 });
@@ -309,7 +299,7 @@ router.get("/createpost", isLoggedIn, (req, res) => {
         isLoggedIn: req.session.isLoggedIn,
         profile_image: req.session.pfp,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp
     });
 });
 
@@ -317,13 +307,12 @@ router.get("/createalbum", isLoggedIn, (req, res) => {
     res.render("createAlbum", {
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
-        username: req.session.username,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp
     });
 });
 
 router.get("/editpost/:id", isLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -340,7 +329,7 @@ router.get("/editpost/:id", isLoggedIn, async (req, res) => {
         data: result[0],
         isLoggedIn: req.session.isLoggedIn,
         user_id: req.session.user_id,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp,
     });
 });
 
@@ -348,19 +337,19 @@ router.get("/editcomment/:id2/:id", isLoggedIn, async (req, res) => {
     const postId = req.params.id;
     const commentId = req.params.id2;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
 
     let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
 
     let comments = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}' and Comments.comment_id = '${commentId}'`;
 
     let comment_edit = await query(sql);
@@ -373,7 +362,7 @@ router.get("/editcomment/:id2/:id", isLoggedIn, async (req, res) => {
             likes: req.currentUser,
             comments: comments,
             error: req.query.error,
-            image: req.session.profile_url,
+            profile_image: req.session.pfp,
             id: req.params.id,
             commentEdit: comment_edit[0],
         });
@@ -385,7 +374,7 @@ router.get("/editcomment/:id2/:id", isLoggedIn, async (req, res) => {
         post: post[0],
         likes: req.currentUser,
         comments: comments,
-        image: req.session.profile_url,
+        profile_image: req.session.pfp,
         id: req.params.id,
         commentEdit: comment_edit[0],
     });
@@ -422,8 +411,10 @@ router.post("/reportpost/:id2", isLoggedIn, createReport);
 router.post("/feedback", isLoggedIn, createFeedback);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/file/:id", uploadFiles);
+
 router.put("/api/post/:id", isLoggedIn, updatepost);
 router.put("/api/comment/:id", isLoggedIn, editComment);
+
 router.delete("/api/:id", deletepost);
 router.delete("/comment/:id", deleteComment);
 

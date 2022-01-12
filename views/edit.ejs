@@ -14,7 +14,7 @@
     <main>
         <%- include("../components/nav") %>
         <div class="center">
-            <form action="/users/edit/<%= user.user_id %>" method="post" class="users-form"
+            <form action="/users/<%= user.user_id %>/edit" method="post" class="users-form"
                 enctype="multipart/form-data">
                 <h2>Edit Profile</h2>
                 <label for="username">Username</label>

@@ -10,10 +10,10 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main>
         <%- include("../components/nav") %>
-        <div class="card__list">
+        <article class="card__list">
             <% if (typeof likes == 'object' && likes) { %>
             <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
             <% if (filtered.length > 0) { %>
@@ -46,63 +46,57 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <a href = "/editpost/<%= post.post_id %>/" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
+                        <a href="/editpost/<%= post.post_id %>/" style="margin-left: auto;"><i class="fas fa-edit"
+                                role="button"></i></a>
                         <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
                         <% if (post.profile == '') { %>
-                            <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                        <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
                         <% } else { %>
-                            <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
+                        <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
                         <% } %>
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
             </div>
             <% comments.forEach((comment) => { %>
-                <% if (comment.comment_id != commentEdit.comment_id) { %>
-                <div class="card">
-                    <div class="card__content card__content--small">
-                        <div class="card__header">
-                            <p><%= comment.comment_text %></p>
-                        </div>
-                        <div>
-                            <hr>
-                            <div class="card__info card__info--small">
-                                <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
-                            </div>
+            <% if (comment.comment_id != commentEdit.comment_id) { %>
+            <div class="card">
+                <div class="card__content card__content--small">
+                    <div class="card__header">
+                        <p><%= comment.comment_content %></p>
+                    </div>
+                    <div>
+                        <hr>
+                        <div class="card__info card__info--small">
+                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
                         </div>
                     </div>
                 </div>
-                   <% } %>
-                <% }) %>
-                <div class="card card__reply-form">
-                    <form action="/posts/<%= commentEdit.post_id %>" method="get">
-                        <textarea name="edit_comment" id="edit_comment" rows="1" required><%= commentEdit.comment_text %></textarea>
-                        <button type="submit" onclick=<%='edit('+ commentEdit.comment_id +')'%>>Edit</button>
-                    </form>
+            </div>
+            <% } %>
+            <% }) %>
+            <div class="card card__reply">
+                <div class="card__reply--flex">
+                    <textarea name="edit_comment" id="edit_comment" rows="1"
+                        required><%= commentEdit.comment_content %></textarea>
+                    <button onclick=<%= "edit(" + commentEdit.comment_id + ")"%>>Edit</button>
                 </div>
-        </div>
+            </div>
+        </article>
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script>
-        let edit = (id) => {
-            axios({
-                method: 'put',
-                url: '/api/comment/' + id,
-                data: {
-                   edit_comment: document.getElementById('edit_comment').value,
-                }
-            })
-            .then((result) => {
-                location.reload();
-            })
-            .catch((err) => {
-                alert('error' + err)
+        function edit(id) {
+            axios.put("/api/comment/" + id, { edit_comment: document.getElementById('edit_comment').value })
+            .then((response) => {
+                window.location = response.data.redirect;
             });
         };
     </script>
 </body>
+
 </html>

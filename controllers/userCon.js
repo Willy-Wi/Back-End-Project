@@ -24,8 +24,10 @@ const follow = (req, res) => {
 
 const editUser = async (req, res) => {
     const { username, name, email } = req.body;
+    let pfp = 0;
 
     if (req.files) {
+        pfp = req.params.id;
         sharp(req.files.myImage.data)
             .resize(100, 100, {
                 fit: "outside",
@@ -38,7 +40,7 @@ const editUser = async (req, res) => {
             );
     }
 
-    let sql = `UPDATE users SET username = '${username}', name = '${name}', email = '${email}', profile_image = '${req.params.id}' WHERE user_id = '${req.session.user_id}'`;
+    let sql = `UPDATE users SET username = '${username}', name = '${name}', email = '${email}', profile_image = '${pfp}' WHERE user_id = '${req.session.user_id}'`;
     await query(sql);
     res.redirect("/");
 };
