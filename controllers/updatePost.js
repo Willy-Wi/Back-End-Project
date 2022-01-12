@@ -1,6 +1,6 @@
-const { query } = require('./dbCon');
+const { query } = require("./dbCon");
 
-const updatepost = async (req, res) => {
+const updatePost = async (req, res) => {
     const { title, description } = req.body;
     let errTitle, errDesc;
     if (!(title.length >= 5 && title.length <= 255)) {
@@ -16,13 +16,13 @@ const updatepost = async (req, res) => {
             status: 404,
             error: errTitle,
         });
-    } else if(errDesc){
+    } else if (errDesc) {
         res.json({
             status: 404,
             error: errDesc,
         });
-    } else{
-        let sql = "UPDATE posts SET post_title = '" + title + "', post_content = '" + description + "' WHERE post_id='" + req.params.id + "'";
+    } else {
+        let sql = `UPDATE posts SET post_title = "${title}", post_content = "${description}" WHERE post_id = ${req.params.id}`;
         await query(sql);
         res.json({
             status: 200,
@@ -30,4 +30,4 @@ const updatepost = async (req, res) => {
     }
 };
 
-module.exports = { updatepost };
+module.exports = { updatePost };
