@@ -35,6 +35,9 @@
   --stats1: var(--form-h2);
   --stats2: var(--form-h2);
   --purple-shadow: 0 4px 5px rgba(118, 97, 255, 0.2);
+  --white2: hsl(0, 0%, 100%);
+  --area: hsl(0, 0%, 100%);
+  --label: #000000;
 }
 
 .darkmode {
@@ -49,6 +52,9 @@
   --label: var(--cardp);
   --stats1: var(--cardh3);
   --stats2: var(--cardp);
+  --white2: hsl(0, 0%, 100%);
+  --area: #161b22;
+  --label: #b9b9b9;
 }
 
 h4,
@@ -83,6 +89,10 @@ a {
   transition: 0.2s;
 }
 
+label{
+  color: var(--label);
+}
+
 button {
   border: 2px solid var(--purple);
   background-color: var(--purple);
@@ -102,6 +112,12 @@ input {
   outline: none;
   border: none;
   font-family: var(--font);
+  color: var(--cardp);
+  background-color: var(--area);
+}
+
+span{
+  color: var(--cardp);
 }
 
 ul {
@@ -142,9 +158,6 @@ ul a {
   border-left: 8px solid var(--purple);
   background-color: rgba(118, 97, 255, 0.1);
   color: var(--purple);
-  border-left: 8px solid var(--purple);
-  background-color: rgba(118, 97, 255, 0.1);
-  color: var(--purple);
 }
 
 hr {
@@ -160,18 +173,8 @@ textarea {
   outline: none;
   padding: 0.8rem 1rem;
   border-radius: 5px;
-  color: #8c8c8c;
-  font-family: var(--font);
-  font-size: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  resize: none;
-  -webkit-box-shadow: var(--shadow);
-  box-shadow: var(--shadow);
-  border: none;
-  outline: none;
-  padding: 0.8rem 1rem;
-  border-radius: 5px;
-  color: #8c8c8c;
+  color: var(--cardp);
+  background-color: var(--area);
   font-family: var(--font);
   font-size: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -190,6 +193,14 @@ textarea::-webkit-input-placeholder, textarea:-ms-input-placeholder, textarea::-
   font-weight: 400;
   color: #8c8c8c;
   font-weight: 400;
+}
+
+button{
+  color: var(--white2);
+}
+
+button:hover{
+  color: var(--purple);
 }
 
 body {
@@ -248,6 +259,7 @@ body {
   width: 100%;
   background-color: transparent;
   font-size: 1rem;
+  color: var(--cardp);
 }
 
 .header__dropdown {
@@ -849,12 +861,16 @@ main {
   -webkit-box-shadow: var(--shadow);
           box-shadow: var(--shadow);
   width: 100%;
-  background-color: #fff;
+  background-color:  var(--white);
   border-radius: 10px;
   -webkit-animation-name: fromtop;
           animation-name: fromtop;
   -webkit-animation-duration: 2.5s;
           animation-duration: 2.5s;
+}
+
+.reportdata2 h2{
+  color: var(--form-h2);
 }
 
 .report-header {
