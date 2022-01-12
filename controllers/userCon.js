@@ -26,8 +26,14 @@ const editUser = async (req, res) => {
     const { username, name, email } = req.body;
     let pfp = 0;
 
+    let sql = `SELECT profile_image FROM users WHERE user_id = '${req.params.user}'`;
+    let result = await query(sql);
+    if (!(result[0].profile_image === 0)) {
+        pfp = req.params.user;
+    }
+
     if (req.files) {
-        pfp = req.params.id;
+        pfp = req.params.user;
         sharp(req.files.myImage.data)
             .resize(100, 100, {
                 fit: "outside",
@@ -40,8 +46,9 @@ const editUser = async (req, res) => {
             );
     }
 
-    let sql = `UPDATE users SET username = '${username}', name = '${name}', email = '${email}', profile_image = '${pfp}' WHERE user_id = '${req.session.user_id}'`;
+    sql = `UPDATE users SET username = '@${username}', name = '${name}', email = '${email}', profile_image = '${pfp}' WHERE user_id = '${req.session.user_id}'`;
     await query(sql);
+    req.session.pfp = req.session.user_id;
     res.redirect("/");
 };
 
