@@ -1,18 +1,16 @@
-CREATE DATABASE popsicle;
-USE popsicle;
 CREATE TABLE `Users`(
-    `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `profile_image` INT UNSIGNED NOT NULL,
+    `profile_image` INT NOT NULL,
     PRIMARY KEY `users_user_id_primary`(`user_id`)
 );
 
 CREATE TABLE `Posts`(
-    `post_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
+    `post_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
     `post_title` VARCHAR(255) NOT NULL,
     `post_content` VARCHAR(1000) NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,21 +19,21 @@ CREATE TABLE `Posts`(
 );
 
 CREATE TABLE `Following`(
-    `following_id` INT UNSIGNED NOT NULL,
-    `user_id` INT UNSIGNED NOT NULL
+    `following_id` INT NOT NULL,
+    `user_id` INT NOT NULL
 );
 
 CREATE TABLE `Likes`(
-    `like_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `post_id` INT UNSIGNED NOT NULL,
+    `like_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `post_id` INT NOT NULL,
     PRIMARY KEY `likes_like_id_primary`(`like_id`)
 );
 
 CREATE TABLE `Comments`(
-    `comment_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `post_id` INT UNSIGNED NOT NULL,
-    `user_id` INT UNSIGNED NOT NULL,
+    `comment_id` INT NOT NULL AUTO_INCREMENT,
+    `post_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
     `comment_content` VARCHAR(1000) NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatet_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -43,24 +41,24 @@ CREATE TABLE `Comments`(
 );
 
 CREATE TABLE `Comments_Likes`(
-    `comments_likes_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `comment_id` INT UNSIGNED NOT NULL,
+    `comments_likes_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `comment_id` INT NOT NULL,
     PRIMARY KEY `comments_likes_comments_likes_id_primary`(`comments_likes_id`)
 );
 
 CREATE TABLE `albums` (
-  `album_id` int UNSIGNED NOT NULL,
+  `album_id` int NOT NULL,
   `album_name` varchar(255) NOT NULL,
   `album_cover` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `album_description` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `album_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `user_id` int UNSIGNED NOT NULL
+  `user_id` int NOT NULL
 );
 
 CREATE TABLE `feedback` (
-  `id` int UNSIGNED NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
   `subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -70,8 +68,8 @@ CREATE TABLE `feedback` (
 );
 
 CREATE TABLE `files` (
-  `file_id` int UNSIGNED NOT NULL,
-  `album_id` int UNSIGNED NOT NULL,
+  `file_id` int NOT NULL,
+  `album_id` int NOT NULL,
   `file_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `file_type` varchar(255) NOT NULL,
   `thumb_url` varchar(255) DEFAULT NULL,
@@ -80,8 +78,8 @@ CREATE TABLE `files` (
 
 CREATE TABLE `reports` (
   `id` int NOT NULL,
-  `user_id` int UNSIGNED DEFAULT NULL,
-  `post_id` int UNSIGNED DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `post_id` int DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
