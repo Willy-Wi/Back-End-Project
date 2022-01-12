@@ -1,12 +1,14 @@
 const { query } = require("./dbCon");
 
-const deletepost = async(req, res) => {
-    const postid = req.params.id;
-    let sql = "DELETE FROM posts WHERE post_id=" + postid;
+const deletePost = async (req, res) => {
+    const postId = req.params.id;
+
+    let sql = `DELETE FROM posts WHERE post_id = ${postId}`;
     await query(sql);
+
     res.json({
         status: 200,
     });
 };
 
-module.exports = { deletepost };
+module.exports = { deletePost };
