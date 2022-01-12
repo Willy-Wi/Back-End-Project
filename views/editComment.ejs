@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/../css/style.css">
+    <title>Edit Comment</title>
+</head>
+
+<body>
+    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <main>
+        <%- include("../components/nav") %>
+        <div class="card__list">
+            <% if (typeof likes == 'object' && likes) { %>
+            <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
+            <% if (filtered.length > 0) { %>
+            <% status = "Unlike" %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
+
+            <div class="card card__post">
+                <div class="card__like">
+
+                    <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+                    <% if (status === "Unlike") { %>
+                    <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
+                        data-post-status="<%= status %>"></i>
+                    <% } else { %>
+                    <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
+                        data-post-status="<%= status %>"></i>
+                    <% } %>
+                    <% } else { %>
+                    <a href="/login"><i class="far fa-heart"></i></a>
+                    <% } %>
+
+                    <p id="likes-count-<%= post.post_id %>"><%= post.likes %></p>
+                </div>
+
+                <div class="card__content">
+                    <div class="card__header">
+                        <h3><%= post.post_title %> </h3>
+                        <a href = "/editpost/<%= post.post_id %>/" style = "margin-left: auto;"><i class="fas fa-edit" role = "button"></i></a>
+                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
+                    </div>
+                    <p><%= post.post_content %> </p>
+                    <hr>
+                    <div class="card__info">
+                        <% if (post.profile == '') { %>
+                            <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
+                        <% } else { %>
+                            <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
+                        <% } %>
+                        <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
+                    </div>
+                </div>
+            </div>
+            <% comments.forEach((comment) => { %>
+                <% if (comment.comment_id != commentEdit.comment_id) { %>
+                <div class="card">
+                    <div class="card__content card__content--small">
+                        <div class="card__header">
+                            <p><%= comment.comment_text %></p>
+                        </div>
+                        <div>
+                            <hr>
+                            <div class="card__info card__info--small">
+                                <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   <% } %>
+                <% }) %>
+                <div class="card card__reply-form">
+                    <form action="/posts/<%= commentEdit.post_id %>" method="get">
+                        <textarea name="edit_comment" id="edit_comment" rows="1" required><%= commentEdit.comment_text %></textarea>
+                        <button type="submit" onclick=<%='edit('+ commentEdit.comment_id +')'%>>Edit</button>
+                    </form>
+                </div>
+        </div>
+    </main>
+    <%- include("../components/scripts_links.ejs") %>
+    <script>
+        let edit = (id) => {
+            axios({
+                method: 'put',
+                url: '/api/comment/' + id,
+                data: {
+                   edit_comment: document.getElementById('edit_comment').value,
+                }
+            })
+            .then((result) => {
+                location.reload();
+            })
+            .catch((err) => {
+                alert('error' + err)
+            });
+        };
+    </script>
+</body>
+</html>
