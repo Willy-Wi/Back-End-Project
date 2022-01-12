@@ -19,7 +19,7 @@
                 <h2>Edit Profile</h2>
                 <label for="username">Username</label>
                 <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required
-                    value="<%= user.username %>" />
+                    value="<%= user.username.slice(1) %>" />
                 <% if (typeof errUser=='string' && errUser) { %>
                 <p class="users-form__error"><%= errUser %> </p>
                 <% } %>

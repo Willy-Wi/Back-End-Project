@@ -53,8 +53,12 @@
                         <div>
                             <a href="/reportpost/<%= item.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <a href="/editpost/<%= item.post_id %>"><i class="fas fa-edit" role="button"></i></a>
-                            <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
+                            <% if (item.user_id === user_id) { %>
+                            <a href="/editpost/<%= item.post_id %>/<%= item.user_id %>"><i class="fas fa-edit"
+                                    role="button"></i></a>
+                            <i class="far fa-trash-alt" role="button"
+                                onclick=<%='del(' + item.post_id + ',' + item.user_id +')' %>></i>
+                            <% } %>
                         </div>
                     </div>
                     <p><%= item.post_content %></p>
@@ -74,8 +78,8 @@
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script>
-        let del = (id) => {
-            axios.delete('/api/post/' + id)
+        let del = (id, user_id) => {
+            axios.delete('/posts/' + id + "/" + user_id)
                 .then((result) => {
                     location.reload();
                 }).catch((err) => {

@@ -8,32 +8,56 @@
     <link rel="stylesheet" href="/../css/style.css">
     <title>Posts Comments</title>
     <style>
-        .dropdown-comment {
-            display: none;
-            border: 0.5px solid #8c8c8c;
-            ;
-            position: absolute;
-            width: 50px;
-            justify-content: stretch;
-            background-color: white;
-            border-radius: 5%;
-            box-shadow: 0px 0px 2px black;
-            ;
+        .dropdown__comment {
+            position: relative;
         }
 
-        .dropdown-comment a {
-            display: block;
-            padding: 5px 5px;
-            border-bottom: 0.5px solid #8c8c8c;
-            ;
-            width: 50px;
+        .dropdown__menu {
+            position: absolute;
+            left: calc(100% + 2rem);
+            top: calc(100% - 1.4rem);
+            background-color: var(--white);
+            box-shadow: var(--box-shadow);
+            border-radius: 3px;
+            transition: 0.2s;
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            pointer-events: none;
+            -webkit-transform: translateX(-2rem);
+            transform: translateX(-2rem);
+        }
+
+        .dropdown__menu a {
+            width: 100%;
             color: #8c8c8c;
             font-weight: 500;
+            text-align: center;
+            padding: 0.6rem 0.8rem;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            cursor: pointer;
         }
 
-        .dropdown-comment a:hover {
+        .dropdown__menu a:first-child {
+            border: 3px 3px 0 0;
+        }
+
+        .dropdown__menu a:last-child {
+            border: 0 0 3px 3px;
+        }
+
+        .dropdown__menu a:hover,
+        .dropdown__menu a:focus-visible {
             background-color: rgba(118, 97, 255, 0.1);
             color: var(--purple);
+        }
+
+        .commment__menu--active {
+            pointer-events: auto;
+            opacity: 1;
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
         }
 
         .close {
@@ -82,20 +106,18 @@
                         <div>
                             <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <a href="/editpost/<%= post.post_id %>"><i class="fas fa-edit" role="button"></i></a>
-                            <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
+                            <% if (post.user_id === user_id) { %>
+                            <a href="/editpost/<%= post.post_id %>/<%= post.user_id %>"><i class="fas fa-edit"
+                                    role="button"></i></a>
+                            <i class="far fa-trash-alt" role="button"
+                                onclick=<%='del(' + post.post_id + ',' + post.user_id +')' %>></i>
+                            <% } %>
                         </div>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
-
-                        <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
                         <img src="../images/<%= post.profile_image %>.png" alt="" width="40">
-                        <% } else { %>
-                        <img src="../images/0.png" alt="" width="40">
-                        <% } %>
-
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
@@ -110,17 +132,23 @@
                 <% } %>
             </div>
             <% comments.forEach((comment) => { %>
-            <div class="card card_comment">
+            <div class="card card__comment">
                 <div class="card__content card__content--small">
                     <div class="card__header">
                         <p><%= comment.comment_content %></p>
-                        <i class="fa fa-ellipsis-v show-button" role="button"
-                            onclick=<%='show(' +comment.comment_id+')' %>>
-                            <div class="dropdown-comment" id="dropdown-<%= comment.comment_id %>">
-                                <a onclick=<%='del_comment(' +comment.comment_id+')' %>>Delete</a>
-                                <a href="/editcomment/<%= comment.comment_id %>/<%= comment.post_id %>">Edit</a>
+                        <div class="dropdown__comment">
+                            <% if (comment.user_id === user_id) { %> 
+                            <i class="fa fa-ellipsis-v show-button" role="button"
+                                onclick=<%='show(' +comment.comment_id+')' %>>
+                            </i>
+                            <% } %> 
+                            <div class="dropdown__menu" id="dropdown-<%= comment.comment_id %>">
+                                <a
+                                    href="/editcomment/<%= comment.comment_id %>/<%= comment.post_id %>/<%= comment.user_id %>">Edit</a>
+                                <a
+                                    onclick=<%='del_comment(' +comment.comment_id+ ',' + comment.user_id + ')'%>>Delete</a>
                             </div>
-                        </i>
+                        </div>
                     </div>
                     <div>
                         <hr>
@@ -135,17 +163,16 @@
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script>
-        let del = (id) => {
-            alert('DELETE POST WHERE POST = ' + id)
-            axios.delete('/posts/' + id)
+        let del = (id, user_id) => {
+            axios.delete('/posts/' + id + '/' + user_id)
                 .then((result) => {
                     location.href = '/';
                 }).catch((err) => {
                     alert('error ' + err)
                 });
         };
-        let del_comment = (id) => {
-            axios.delete('/comment/' + id).then((result) => {
+        let del_comment = (id, user_id) => {
+            axios.delete('/comment/' + id + '/' + user_id).then((result) => {
                 location.reload();
             }).catch((err) => {
                 alert('error ' + err);
@@ -153,10 +180,10 @@
         }
         let show = (id) => {
             let dropdown = document.getElementById("dropdown-" + id);
-            dropdown.style.display = "block";
+            dropdown.classList.toggle("commment__menu--active");
             window.onclick = function (event) {
                 if (!event.target.matches(".show-button")) {
-                    dropdown.style.display = "none";
+                    dropdown.classList.remove("commment__menu--active");
                 }
             }
         }

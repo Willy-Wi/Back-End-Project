@@ -46,52 +46,38 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <a href="/editpost/<%= post.post_id %>/" style="margin-left: auto;"><i class="fas fa-edit"
-                                role="button"></i></a>
-                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
+                        <div>
+                            <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
+                                    role="button"></i></a>
+                            <% if (post.user_id === user_id) { %>
+                            <a href="/editpost/<%= post.post_id %>/<%= post.user_id %>"><i class="fas fa-edit"
+                                    role="button"></i></a>
+                            <i class="far fa-trash-alt" role="button"
+                                onclick=<%='del(' + post.post_id + ',' + post.user_id +')' %>></i>
+                            <% } %>
+                        </div>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
-                        <% if (post.profile == '') { %>
-                        <img src="/images/Unknown_person.jpg" alt="" width="35" height="35">
-                        <% } else { %>
-                        <img src="/images/<%= post.profile %>" alt="" width="35" height="35">
-                        <% } %>
+                        <img src="/images/<%= post.profile_image %>.png" alt="" width="40">
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>
             </div>
-            <% comments.forEach((comment) => { %>
-            <% if (comment.comment_id != commentEdit.comment_id) { %>
-            <div class="card">
-                <div class="card__content card__content--small">
-                    <div class="card__header">
-                        <p><%= comment.comment_content %></p>
-                    </div>
-                    <div>
-                        <hr>
-                        <div class="card__info card__info--small">
-                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% } %>
-            <% }) %>
             <div class="card card__reply">
                 <div class="card__reply--flex">
                     <textarea name="edit_comment" id="edit_comment" rows="1"
-                        required><%= commentEdit.comment_content %></textarea>
-                    <button onclick=<%= "edit(" + commentEdit.comment_id + ")"%>>Edit</button>
+                        required><%= comment.comment_content %></textarea>
+                    <button onclick=<%= "edit(" + comment.comment_id + "," + comment.user_id + "," + comment.post_id + ")"%>>Edit</button>
                 </div>
             </div>
         </article>
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script>
-        function edit(id) {
-            axios.put("/api/comment/" + id, { edit_comment: document.getElementById('edit_comment').value })
+        function edit(id, user_id, post_id) {
+            axios.put("/comment/" + id + "/" + user_id, { edit_comment: document.getElementById('edit_comment').value, postId: post_id })
                 .then((response) => {
                     window.location = response.data.redirect;
                 });

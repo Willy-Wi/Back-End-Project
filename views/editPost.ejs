@@ -13,27 +13,30 @@
     <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main>
         <%- include("../components/nav") %>
-        <div action="/api/post/<%= data.post_id %> " method="post" class="users-form form__create">
-            <textarea name="title" id="title" rows="1" placeholder="Title" required><%= data.post_title %> </textarea>
-            <p id="errTitle"></p>
-            <% if (typeof errTitle == 'string' && errTitle) { %>
-            <p><%= errTitle %> </p>
-            <% } %>
-            <textarea placeholder="Description" name="description" id="description" cols="30" rows="15"
-                required><%= data.post_content %> </textarea>
-            <p id="errDesc"></p>
-            <% if (typeof errDesc == 'string' && errDesc) { %>
-            <p id="errDesc"><%= errDesc %> </p>
-            <% } %>
-            <button type="submit" onclick=<%='edit('+ data.post_id +')'%>>Edit Post</button>
+        <div class="center">
+            <div class="users-form form__create">
+                <textarea name="title" id="title" rows="1" placeholder="Title"
+                    required><%= data.post_title %></textarea>
+                <p id="errTitle"></p>
+                <% if (typeof errTitle == 'string' && errTitle) { %>
+                <p><%= errTitle %> </p>
+                <% } %>
+                <textarea placeholder="Description" name="description" id="description" cols="30" rows="15"
+                    required><%= data.post_content %> </textarea>
+                <p id="errDesc"></p>
+                <% if (typeof errDesc == 'string' && errDesc) { %>
+                <p id="errDesc"><%= errDesc %> </p>
+                <% } %>
+                <button onclick=<%="edit("+ data.post_id + "," + data.user_id +")"%>>Edit Post</button>
+            </div>
         </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script>
-        let edit = (id) => {
+        let edit = (id, user_id) => {
             axios({
                 method: 'put',
-                url: '/api/post/' + id,
+                url: '/posts/' + id + "/" + user_id,
                 data: {
                     title: document.getElementById('title').value,
                     description: document.getElementById('description').value
