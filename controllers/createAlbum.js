@@ -58,7 +58,7 @@ const createAlbum = (req, res) => {
 
     query(sql, data);
 
-    res.redirect("/");
+    res.redirect("/users/" + req.session.user_id);
 };
 
 module.exports = { createAlbum };
