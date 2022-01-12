@@ -121,7 +121,8 @@
                     <div class="item">
                         <a href="/album/<%= item.album_id %>">
                             <div class="img-album">
-                                <img src="/images/album<%= item.album_cover %>.png" alt="" width="100%" height="200px">
+                                <img src="/images/album<%= item.album_cover %>.png" alt="" width="100%" height="200px"
+                                    style="border-radius: 0;">
                             </div>
                             <div class="album-content">
                                 <h1><%= item.album_name %> </h1>
@@ -169,11 +170,13 @@
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
-                            <a href="/reportpost/<%= item.post_id %>"><i class="fas fa-flag post__flag"
-                                    role="button"></i></a>
-                            <a href="/editpost/<%= item.post_id %>" style="margin-left: auto;"><i class="fas fa-edit"
-                                    role="button"></i></a>
-                            <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
+                            <div>
+                                <a href="/reportpost/<%= item.post_id %>"><i class="fas fa-flag post__flag"
+                                        role="button"></i></a>
+                                <a href="/editpost/<%= item.post_id %>"><i class="fas fa-edit"
+                                        role="button"></i></a>
+                                <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
+                            </div>
                         </div>
                         <p><%= item.post_content %> </p>
                         <hr>

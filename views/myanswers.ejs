@@ -34,11 +34,11 @@
         let del = (id) => {
             alert('DELETE POST WHERE POST = ' + id)
             axios.delete('/posts/' + id)
-            .then((result) => {
-                location.href = '/';
-            }).catch((err) => {
-                alert('error ' + err)
-            });
+                .then((result) => {
+                    location.href = '/';
+                }).catch((err) => {
+                    alert('error ' + err)
+                });
         };
     </script>
 </body>

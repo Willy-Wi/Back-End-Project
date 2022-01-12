@@ -79,9 +79,12 @@
                 <div class="card__content">
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
-                        <a href="/editpost/<%= post.post_id %>/" style="margin-left: auto;"><i class="fas fa-edit"
-                                role="button"></i></a>
-                        <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
+                        <div>
+                            <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
+                                    role="button"></i></a>
+                            <a href="/editpost/<%= post.post_id %>"><i class="fas fa-edit" role="button"></i></a>
+                            <i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>
+                        </div>
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>
@@ -92,7 +95,7 @@
                         <% } else { %>
                         <img src="../images/0.png" alt="" width="40">
                         <% } %>
-                        
+
                         <p>Posted by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
                     </div>
                 </div>

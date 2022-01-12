@@ -92,9 +92,9 @@
     <script>
         function edit(id) {
             axios.put("/api/comment/" + id, { edit_comment: document.getElementById('edit_comment').value })
-            .then((response) => {
-                window.location = response.data.redirect;
-            });
+                .then((response) => {
+                    window.location = response.data.redirect;
+                });
         };
     </script>
 </body>

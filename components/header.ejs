@@ -16,7 +16,7 @@
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
-            <a href="/users/edit/<%= user_id  %>">Settings</a>
+            <a href="/users/<%= user_id  %>/edit">Settings</a>
             <a href="/logout">Logout</a>
             <a id="dark-mode-toggle" class="dark-mode-toggle">Switch Theme</a>
             <% } else { %>
