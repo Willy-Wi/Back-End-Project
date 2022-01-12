@@ -12,8 +12,8 @@ const {
 } = require("../controllers/createPost");
 const { createAlbum } = require("../controllers/createAlbum");
 const { uploadFiles } = require("../controllers/filesCon");
-const { updatepost } = require("../controllers/updatePost");
-const { deletepost } = require("../controllers/deletePost");
+const { updatePost } = require("../controllers/updatePost");
+const { deletePost } = require("../controllers/deletePost");
 const { deleteComment, editComment } = require("../controllers/editComment");
 
 // Additional query only if the user is logged in and approved
@@ -21,6 +21,13 @@ const loginRequired = async (req, res, next) => {
     if (req.session.user_id) {
         let sql = `SELECT * FROM likes WHERE user_id = '${req.session.user_id}'`;
         req.currentUser = await query(sql);
+    }
+    next();
+};
+
+const permissionRequired = async (req, res, next) => {
+    if (!(req.session.user_id == req.params.user)) {
+        return res.redirect("/");
     }
     next();
 };
@@ -77,7 +84,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     });
 });
 
-router.get("/posts/:id/", async (req, res) => {
+router.get("/posts/:id/", loginRequired, async (req, res) => {
     const postId = req.params.id;
 
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
@@ -249,7 +256,7 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
 
     let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_text FROM Users INNER JOIN Comments ON
+    sql = `SELECT Users.username, Users.user_id, Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Users.user_id = '${req.session.user_id}' ORDER BY Comments.created_at DESC`;
 
     let comments = await query(sql);
@@ -310,74 +317,69 @@ router.get("/createalbum", isLoggedIn, (req, res) => {
     });
 });
 
-router.get("/editpost/:id", isLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
+router.get(
+    "/editpost/:id/:user",
+    isLoggedIn,
+    permissionRequired,
+    async (req, res) => {
+        let sql = `SELECT Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id
+    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id WHERE post_id = '${req.params.id}'`;
 
-    let posts = await query(sql);
+        let result = await query(sql);
 
-    sql =
-        `SELECT post_id, post_title, post_content FROM posts WHERE post_id=` +
-        req.params.id;
-    let result = await query(sql);
+        res.render("editPost", {
+            data: result[0],
+            isLoggedIn: req.session.isLoggedIn,
+            user_id: req.session.user_id,
+            profile_image: req.session.pfp,
+        });
+    }
+);
 
-    res.render("editPost", {
-        posts,
-        res: res,
-        data: result[0],
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
-    });
-});
+router.get(
+    "/editcomment/:id2/:id/:user",
+    isLoggedIn,
+    permissionRequired,
+    async (req, res) => {
+        const postId = req.params.id;
+        const commentId = req.params.id2;
 
-router.get("/editcomment/:id2/:id", isLoggedIn, async (req, res) => {
-    const postId = req.params.id;
-    const commentId = req.params.id2;
-
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+        let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
 
-    let post = await query(sql);
+        let post = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON
-    Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}'`;
+        sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON
+    Users.user_id = Comments.user_id WHERE Comments.comment_id = '${commentId}'`;
 
-    let comments = await query(sql);
+        let comment = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON
-    Users.user_id = Comments.user_id WHERE Comments.post_id = '${postId}' and Comments.comment_id = '${commentId}'`;
+        if (req.query.error) {
+            return res.render("editComment", {
+                isLoggedIn: req.session.isLoggedIn,
+                user_id: req.session.user_id,
+                post: post[0],
+                likes: req.currentUser,
+                comment: comment[0],
+                error: req.query.error,
+                profile_image: req.session.pfp,
+                id: req.params.id,
+            });
+        }
 
-    let comment_edit = await query(sql);
-
-    if (req.query.error) {
-        return res.render("editComment", {
+        res.render("editComment", {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
             post: post[0],
             likes: req.currentUser,
-            comments: comments,
-            error: req.query.error,
+            comment: comment[0],
             profile_image: req.session.pfp,
             id: req.params.id,
-            commentEdit: comment_edit[0],
         });
     }
-
-    res.render("editComment", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        post: post[0],
-        likes: req.currentUser,
-        comments: comments,
-        profile_image: req.session.pfp,
-        id: req.params.id,
-        commentEdit: comment_edit[0],
-    });
-});
+);
 
 router.get("/register", isNotLoggedIn, (req, res) => {
     res.render("register");
@@ -402,7 +404,6 @@ router.post("/login", isNotLoggedIn, login);
 router.post("/change-password", change);
 router.post("/posts/:id/act", isLoggedIn, likes);
 router.post("/users/:id/act", isLoggedIn, follow);
-router.post("/users/:id/edit", isLoggedIn, editUser);
 router.post("/createpost", isLoggedIn, createPost);
 router.post("/createalbum", isLoggedIn, createAlbum);
 router.post("/reportuser/:id", isLoggedIn, createReport);
@@ -411,10 +412,11 @@ router.post("/feedback", isLoggedIn, createFeedback);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/file/:id", uploadFiles);
 
-router.put("/api/post/:id", isLoggedIn, updatepost);
-router.put("/api/comment/:id", isLoggedIn, editComment);
+router.post("/users/:user/edit", isLoggedIn, permissionRequired, editUser);
+router.put("/posts/:id/:user", isLoggedIn, permissionRequired, updatePost);
+router.put("/comment/:id/:user", isLoggedIn, permissionRequired, editComment);
 
-router.delete("/api/:id", deletepost);
-router.delete("/comment/:id", deleteComment);
+router.delete("/posts/:id/:user", permissionRequired, deletePost);
+router.delete("/comment/:id/:user", permissionRequired, deleteComment);
 
 module.exports = router;
