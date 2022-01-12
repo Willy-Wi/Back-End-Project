@@ -15,7 +15,7 @@ const createPost = (req, res) => {
         res.render("createPost", {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
-            image: req.session.profile_url,
+            profile_image: req.session.pfp,
             errTitle,
             errDesc,
         });
