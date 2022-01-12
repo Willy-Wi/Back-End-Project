@@ -47,7 +47,7 @@ const register = async (req, res) => {
         name: name,
         email: email,
         password: hashedPassword,
-        profile_image: 0
+        profile_image: 0,
     };
 
     query(sql, data);
@@ -81,7 +81,8 @@ const forgot = async (req, res, next) => {
     let errUser, errEmail;
     let sql = `SELECT password, user_id FROM users WHERE email = '${email}' AND username = '@${username}'`;
     let result = await query(sql);
-    let invalidCheck = "That user does not exist. Please check again your username or email.";
+    let invalidCheck =
+        "That user does not exist. Please check again your username or email.";
 
     if (username.match(regex)) {
         errUser = "Username can only contain numbers, letters, and underscores";
@@ -96,17 +97,17 @@ const forgot = async (req, res, next) => {
     if (errUser || errEmail) {
         return res.render("forgot-password", {
             errUser,
-            errEmail
+            errEmail,
         });
     }
 
-    if(result.length < 1) {
+    if (result.length < 1) {
         return res.render("forgot-password", { invalidCheck });
     }
 
     req.session.user_id = result[0].user_id;
 
-    res.render('change-password');
+    res.render("change-password");
 };
 
 const change = async (req, res) => {
@@ -119,7 +120,6 @@ const change = async (req, res) => {
     const errPassMatch =
         password !== confirmPassword ? "Password does not match" : null;
 
-
     if (errPass || errPassMatch) {
         return res.render("change-password", {
             userid,
@@ -128,13 +128,15 @@ const change = async (req, res) => {
         });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    let sql = "UPDATE users SET password ='" + hashedPassword +
-        "' WHERE user_id=" + userid;
+    let sql =
+        "UPDATE users SET password ='" +
+        hashedPassword +
+        "' WHERE user_id=" +
+        userid;
 
     await query(sql);
 
     res.redirect("/login");
-
 };
 
 module.exports = { login, register, forgot, change };
