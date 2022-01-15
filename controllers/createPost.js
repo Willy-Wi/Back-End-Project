@@ -15,11 +15,11 @@ const createPost = (req, res) => {
         res.render("createPost", {
             isLoggedIn: req.session.isLoggedIn,
             user_id: req.session.user_id,
-            image: req.session.profile_url,
+            profile_image: req.session.profile_url,
             errTitle,
             errDesc,
         });
-    }else{
+    } else {
         let sql = `INSERT INTO posts SET ?`;
         let data = {
             user_id: req.session.user_id,
@@ -35,46 +35,42 @@ const createPost = (req, res) => {
 const createComment = (req, res) => {
     const postId = req.params.id;
     const { comment } = req.body;
-    let errReply;
 
     if (!(comment.length >= 5 && comment.length <= 1000)) {
-        errReply = encodeURIComponent(
-            "Comment length must be between 5 and 1000 characters"
-        );
-    } else if (errReply) {
-        return res.redirect("/posts/" + postId + "/?error=" + errReply);
+        req.session.error = 'Comment length must be between 5 and 1000 characters';
     } else {
         let sql = "INSERT INTO comments SET ?";
         let data = {
             user_id: req.session.user_id,
             post_id: postId,
-            comment_text: comment,
+            comment_content: comment,
         };
         query(sql, data);
-        res.redirect("/posts/" + postId);
     }
+
+    res.redirect("/posts/" + postId);
 };
 
 const createReport = (req, res) => {
     const user_id = req.params.id || null;
     const post_id = req.params.id2 || null;
     const { description } = req.body;
-    if(post_id == ''){
+    if (post_id == "") {
         let sql = "INSERT INTO reports SET ?";
-        let data =  {
+        let data = {
             user_id: user_id,
             post_id: post_id,
-            type: 'report_user',
+            type: "report_user",
             description: description,
         };
         query(sql, data);
         res.redirect("/");
-    }else{
+    } else {
         let sql = "INSERT INTO reports SET ?";
-        let data =  {
+        let data = {
             user_id: user_id,
             post_id: post_id,
-            type: 'report_post',
+            type: "report_post",
             description: description,
         };
         query(sql, data);

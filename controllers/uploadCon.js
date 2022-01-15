@@ -16,11 +16,11 @@ const addprofile = (req, res) => {
     let upload = multer({storage: storage}).single('profile');
     upload(req, res, err => {
         if(err) throw err;
-        let sql = "UPDATE users SET profile='" + req.file.filename + 
+        let sql = "UPDATE users SET profile_image='" + req.file.filename + 
         "' WHERE user_id=" + userid;
         query(sql);
-        req.session.profile_url = req.file.filename;
-        res.redirect('/users/edit/' + req.params.id);
+        req.session.pfp = req.file.filename;
+        res.redirect('/users/' + req.params.id + '/edit/');
     });
 };
  

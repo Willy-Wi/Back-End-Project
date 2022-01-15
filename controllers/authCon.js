@@ -45,6 +45,7 @@ const register = async (req, res) => {
         name: name,
         email: email,
         password: hashedPassword,
+        profile_image: '',
     };
 
     query(sql, data);
@@ -55,7 +56,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     let sql = `SELECT password, user_id, username FROM users WHERE email = '${email}'`;
     let result = await query(sql);
-    sql = `SELECT profile FROM users WHERE user_id = '${result[0].user_id}'`;
+    sql = `SELECT profile_image FROM users WHERE user_id = '${result[0].user_id}'`;
     let result2 = await query(sql);
     let invalidEmail = "That user does not exist";
     let invalidPassword = "Invalid Password";
@@ -70,7 +71,7 @@ const login = async (req, res) => {
     req.session.isLoggedIn = true;
     req.session.user_id = result[0].user_id;
     req.session.username = result[0].username;
-    req.session.profile_url = result2[0].profile;
+    req.session.pfp = result2[0].profile_image;
     res.redirect("/");
 };
 
@@ -103,14 +104,15 @@ const forgot = async (req, res, next) => {
         return res.render("forgot-password", { invalidCheck });
     }
 
-    req.session.user_id = result[0].user_id;
+    const userid = result[0].user_id;
 
-    res.render('change-password');
+    res.render('change-password', {
+        userid: userid,
+    });
 };
 
 const change = async (req, res) => {
-    const userid = req.session.user_id;
-    const { password, confirmPassword } = req.body;
+    const { userid,  password, confirmPassword } = req.body;
     let errPass;
     if (password.length < 5) {
         errPass = "Password must be at least 5 characters long";

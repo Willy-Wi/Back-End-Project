@@ -1,14 +1,14 @@
 const { query } = require("./dbCon");
 
-const edituser = async (req, res) => {
+const editUser = async (req, res) => {
     const { username, name, email } = req.body;
     const regex = /[^A-Za-z0-9_]/g;
     let errUser, errEmail;
 
-    let sql = `SELECT name, username, user_id, email, profile FROM users WHERE user_id = '${req.params.id}'`;
+    let sql = `SELECT name, username, user_id, email, profile_image FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
 
-    sql = `SELECT Users.username, Users.user_id, Users.profile, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
@@ -42,7 +42,7 @@ const edituser = async (req, res) => {
             stats: stats[0],
             likes: req.currentUser,
             follow,
-            image: req.session.profile_url,
+            image: req.session.pfp,
             users: user,
             id: req.params.id,
             errUser,
@@ -55,7 +55,7 @@ const edituser = async (req, res) => {
         "', email ='" + email +
         "' WHERE user_id=" + req.params.id;
     await query(sql);
-    res.redirect("/users/edit/" + req.params.id);
+    res.redirect("/users/" + req.params.id + "/edit");
 };
 
-module.exports = { edituser };
+module.exports = { editUser };

@@ -10,7 +10,7 @@ const deleteComment = (req, res) => {
 const editComment = async (req, res) => {
     const { edit_comment } = req.body;
     const commentId = req.params.id;
-    let sql = `UPDATE comments SET comment_text = '${edit_comment}' WHERE comment_id= `+ commentId;
+    let sql = `UPDATE comments SET comment_content = '${edit_comment}' WHERE comment_id= `+ commentId;
         await query(sql);
 };
 
