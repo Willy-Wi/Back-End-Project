@@ -6,8 +6,8 @@
     </form>
     <div class="header__dropdown">
         <button data-dropdown-toggle>
-            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn && image.length != 0) { %>
-                <img src="/images/<%= image %>" alt="" width="50" height="50" data-dropdown-toggle>
+            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn && profile_image != '') { %>
+                <img src="/images/<%= profile_image %>" alt="" width="50" height="50" data-dropdown-toggle>
             <% } else { %>
                 <img src="/images/Unknown_person.jpg" alt="" width="50" height="50" data-dropdown-toggle>
             <% } %>
@@ -15,7 +15,7 @@
         <div class="header__menu">
             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
             <a href="/users/<%= user_id %>">Profile</a>
-            <a href = "/users/edit/<%= user_id  %>">Settings</a>
+            <a href = "/users/<%= user_id  %>/edit">Settings</a>
             <a href="/logout">Logout</a>
             <a id="dark-mode-toggle" class="dark-mode-toggle">Switch Theme</a>
             <% } else { %>
