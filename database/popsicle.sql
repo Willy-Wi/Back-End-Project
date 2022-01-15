@@ -1,60 +1,71 @@
 CREATE TABLE albums (
-  album_id int NOT NULL,
+  album_id int UNSIGNED NOT NULL,
   album_name varchar(255) NOT NULL,
   album_cover varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   album_description text CHARACTER SET utf8 COLLATE utf8_general_ci,
   album_date datetime DEFAULT CURRENT_TIMESTAMP,
-  user_id int NOT NULL,
-  username varchar(255) NOT NULL
+  user_id int UNSIGNED NOT NULL
 );
 
 CREATE TABLE comments (
-  comment_id int NOT NULL,
-  post_id int NOT NULL,
-  user_id int NOT NULL,
-  comment_text varchar(255) NOT NULL,
+  comment_id int UNSIGNED NOT NULL,
+  post_id int UNSIGNED NOT NULL,
+  user_id int UNSIGNED NOT NULL,
+  comment_content varchar(1000) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at datetime DEFAULT CURRENT_TIMESTAMP
+  updatet_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE comment_likes (
-  comment_likes_id int UNSIGNED NOT NULL,
-  user_id int NOT NULL,
-  comment_id int NOT NULL
+CREATE TABLE comments_likes (
+  comments_likes_id int UNSIGNED NOT NULL,
+  user_id int UNSIGNED NOT NULL,
+  comment_id int UNSIGNED NOT NULL
 );
 
 CREATE TABLE files (
-  file_id int NOT NULL,
-  album_id int NOT NULL,
+  file_id int UNSIGNED NOT NULL,
+  album_id int UNSIGNED NOT NULL,
   file_url varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   file_type varchar(255) NOT NULL,
   thumb_url varchar(255) DEFAULT NULL,
   created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE feedback (
+  id int NOT NULL,
+  user_id int UNSIGNED NOT NULL,
+  subject varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  message varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  name varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  contact varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  email varchar(255) NOT NULL,
+  date_created datetime DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE `following` (
-  following_id int NOT NULL,
-  user_id int NOT NULL
+  following_id int UNSIGNED NOT NULL,
+  user_id int UNSIGNED NOT NULL
 );
 
 CREATE TABLE likes (
   like_id int UNSIGNED NOT NULL,
-  user_id int NOT NULL,
-  post_id int NOT NULL
+  user_id int UNSIGNED NOT NULL,
+  post_id int UNSIGNED NOT NULL
 );
+
 CREATE TABLE posts (
-  post_id int NOT NULL,
-  user_id int NOT NULL,
+  post_id int UNSIGNED NOT NULL,
+  user_id int UNSIGNED NOT NULL,
   post_title varchar(255) NOT NULL,
-  post_content varchar(255) NOT NULL,
+  post_content varchar(1000) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at datetime DEFAULT CURRENT_TIMESTAMP
+  updated_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE reports (
   id int NOT NULL,
-  user_id int DEFAULT NULL,
-  post_id int DEFAULT NULL,
+  user_id int UNSIGNED DEFAULT NULL,
+  post_id int UNSIGNED DEFAULT NULL,
   type varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -62,14 +73,12 @@ CREATE TABLE reports (
 );
 
 CREATE TABLE users (
-  user_id int NOT NULL,
+  user_id int UNSIGNED NOT NULL,
   username varchar(255) NOT NULL,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
-  profile varchar(255) NOT NULL,
-  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at datetime DEFAULT CURRENT_TIMESTAMP
+  profile_image varchar(255) NOT NULL
 );
 
 
@@ -79,30 +88,34 @@ ALTER TABLE albums
 
 ALTER TABLE comments
   ADD PRIMARY KEY (comment_id),
-  ADD KEY FK_comments_posts (post_id),
-  ADD KEY FK_comments_users (user_id);
+  ADD KEY comments_user_id_foreign (user_id),
+  ADD KEY comments_post_id_foreign (post_id);
 
-ALTER TABLE comment_likes
-  ADD PRIMARY KEY (comment_likes_id),
-  ADD KEY FK_comment_likes_and_users (user_id),
-  ADD KEY FK_comment_likes_and_comments (comment_id);
+ALTER TABLE comments_likes
+  ADD PRIMARY KEY (comments_likes_id),
+  ADD KEY comments_likes_user_id_foreign (user_id),
+  ADD KEY comments_likes_comment_id_foreign (comment_id);
+
+ALTER TABLE feedback
+  ADD PRIMARY KEY (id),
+  ADD KEY fk_feedback_users (user_id);
 
 ALTER TABLE files
   ADD PRIMARY KEY (file_id),
   ADD KEY FK_image_albums (album_id);
 
 ALTER TABLE following
-  ADD KEY FK_following_users_1 (following_id),
-  ADD KEY FK_following_users_2 (user_id);
+  ADD KEY following_user_id_foreign (user_id),
+  ADD KEY following_following_id_foreign (following_id);
 
 ALTER TABLE likes
   ADD PRIMARY KEY (like_id),
-  ADD KEY FK_likes_users (user_id),
-  ADD KEY FK_likes_posts (post_id);
+  ADD KEY likes_user_id_foreign (user_id),
+  ADD KEY likes_post_id_foreign (post_id);
 
 ALTER TABLE posts
   ADD PRIMARY KEY (post_id),
-  ADD KEY FK_posts_users (user_id);
+  ADD KEY posts_user_id_foreign (user_id);
 
 ALTER TABLE reports
   ADD PRIMARY KEY (id),
@@ -112,58 +125,62 @@ ALTER TABLE reports
 ALTER TABLE users
   ADD PRIMARY KEY (user_id);
 
-
 ALTER TABLE albums
-  MODIFY album_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY album_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE comments
-  MODIFY comment_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY comment_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE comment_likes
-  MODIFY comment_likes_id int UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE comments_likes
+  MODIFY comments_likes_id int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE feedback
+  MODIFY id int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE files
-  MODIFY file_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+  MODIFY file_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE likes
-  MODIFY like_id int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY like_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE posts
-  MODIFY post_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY post_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE reports
-  MODIFY id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY id int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE users
-  MODIFY user_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY user_id int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 
 ALTER TABLE albums
   ADD CONSTRAINT FK_albums_users_user_id FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE comments
-  ADD CONSTRAINT FK_comments_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT FK_comments_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+  ADD CONSTRAINT comments_post_id_foreign FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE,
+  ADD CONSTRAINT comments_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 
-ALTER TABLE comment_likes
-  ADD CONSTRAINT FK_comment_likes_and_comments FOREIGN KEY (comment_id) REFERENCES comments (comment_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT FK_comment_likes_and_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE comments_likes
+  ADD CONSTRAINT comments_likes_comment_id_foreign FOREIGN KEY (comment_id) REFERENCES comments (comment_id) ON DELETE CASCADE,
+  ADD CONSTRAINT comments_likes_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
+
+ALTER TABLE feedback
+  ADD CONSTRAINT fk_feedback_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE files
-  ADD CONSTRAINT FK_image_albums FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+  ADD CONSTRAINT FK_files_albums_album_id FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE following
-  ADD CONSTRAINT FK_following_users_1 FOREIGN KEY (following_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT FK_following_users_2 FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT following_following_id_foreign FOREIGN KEY (following_id) REFERENCES users (user_id) ON DELETE CASCADE,
+  ADD CONSTRAINT following_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 
 ALTER TABLE likes
-  ADD CONSTRAINT FK_likes_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT FK_likes_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT likes_post_id_foreign FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE,
+  ADD CONSTRAINT likes_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 
 ALTER TABLE posts
-  ADD CONSTRAINT FK_posts_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+  ADD CONSTRAINT posts_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 
 ALTER TABLE reports
   ADD CONSTRAINT FK_reports_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE RESTRICT,
   ADD CONSTRAINT FK_reports_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
-COMMIT;
