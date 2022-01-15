@@ -37,8 +37,6 @@ Tinggal Permission
 -   [X] Delete Post 
 -   [X] Light / Dark mode
 -   [X] Search
--   [ ] Permission 
--   [ ] Coming soon
 -   [X] Share post in Album 
 <!-- -   [ ] Realtime notifications -->
 <!-- -   [ ] Chatting -->
