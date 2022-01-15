@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/../css/style.css">
     <title>Edit Post</title>
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main>
         <%- include("../components/nav") %>
-        <div action="/api/post/<%= data.post_id %> " method="post" class="users-form form__create">
-            <textarea name="title" id="title" rows="1" placeholder="Title" required><%= data.post_title %> </textarea>
+        <div action="/api/comment/<%= data.comment_id %> " method="post" class="users-form form__create">
+            <textarea name="title" id="title" rows="1" placeholder="Title" required><%=data.post_title%></textarea>
             <p id = "errTitle"></p>
             <% if (typeof errTitle == 'string' && errTitle) { %>
             <p><%= errTitle %> </p>
             <% } %>
-            <textarea placeholder="Description" name="description" id="description" cols="30" rows="15" required><%= data.post_content %> </textarea>
+            <textarea placeholder="Description" name="description" id="description" cols="30" rows="15" required><%= data.post_content %></textarea>
             <p id = "errDesc"></p>
             <% if (typeof errDesc == 'string' && errDesc) { %>
             <p id = "errDesc"><%= errDesc %> </p>

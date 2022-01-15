@@ -11,59 +11,59 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main> 
         <%- include("../components/nav") %>
-        <div class="card-photos">
-        <h1>Recent Picture / Videos of <%= album.album_name %> </h1>
-        <div class="showpictures" >
-        <% files.forEach(item => { %>
-            <% if (item.file_type.match(/(png|jpeg|jpg)/)) { %>
-                <div class="showbox" data-src="/images/<%= item.file_url %>">
-                    <img src="/images/<%= item.file_url %> " alt="">
-                </div>   
-            <% } else if (item.file_type.match(/(mp4|mkv)/)) { %>
-                <a
+            <div class="card-photos">
+            <h1>Recent Picture / Videos of <%= album.album_name %> </h1>
+            <div class="showpictures" >
+            <% files.forEach(item => { %>
+                <% if (item.file_type.match(/(png|jpeg|jpg)/)) { %>
+                    <div class="showbox" data-src="/images/<%= item.file_url %>">
+                        <img src="/images/<%= item.file_url %> " alt="">
+                    </div>   
+                <% } else if (item.file_type.match(/(mp4|mkv)/)) { %>
+                    <a
+                        data-lg-size="1280-720"
+                        data-video='{"source": [{"src":"/images/<%= item.file_url %>", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+                        data-poster="/images/<%= item.thumb_url %>"
+                    >
+                    <div class="showbox">
+                        <img
+                            class="img-responsive"
+                            src="/images/<%= item.thumb_url %>"
+                        />
+                    </div>
+                    </a>
+                <% } else if(item.file_type.match(/(mpeg)/)) { %>
+                    <a
                     data-lg-size="1280-720"
-                    data-video='{"source": [{"src":"/images/<%= item.file_url %>", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
-                    data-poster="/images/<%= item.thumb_url %>"
-                >
-                <div class="showbox">
-                    <img
-                        class="img-responsive"
-                        src="/images/<%= item.thumb_url %>"
-                    />
-                </div>
-                </a>
-            <% } else if(item.file_type.match(/(mpeg)/)) { %>
-                <a
-                data-lg-size="1280-720"
-                data-video='{"source": [{"src":"/images/<%= item.file_url %> ", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
-                data-poster="/images/music.jpg"
-                >
-                <div class="showbox">
-                    <img
-                        class="img-responsive"
-                        src="/images/music.jpg"
-                    />
-                </div>
-                </a>
-            <% } %>
-        <% }) %>
-        </div>
-        <form action="/file/<%= albumid %>"  method="POST" enctype="multipart/form-data" role="form">
-            <label for = "file-upload" class="file-upload"><i class="fas fa-image icon-image"></i>&nbsp;&nbsp;Add Photos/ Videos</label>
-            <input id = "file-upload" type="file" name = "file-upload" class = "insertfile"  onchange = "submitForm();" multiple/>
-        </form>
-        <div class="progress">
-            <p id = "status-progress"></p>
-            <div class="bar">
-                <div class="bar-fill"></div>
+                    data-video='{"source": [{"src":"/images/<%= item.file_url %> ", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+                    data-poster="/images/music.jpg"
+                    >
+                    <div class="showbox">
+                        <img
+                            class="img-responsive"
+                            src="/images/music.jpg"
+                        />
+                    </div>
+                    </a>
+                <% } %>
+            <% }) %>
             </div>
-            <div class="percent">0%</div >
-        </div>
-        <div id="status"></div>
-        </div>
+            <form action="/file/<%= albumid %>"  method="POST" enctype="multipart/form-data" role="form">
+                <label for = "file-upload" class="file-upload"><i class="fas fa-image icon-image"></i>&nbsp;&nbsp;Add Photos/ Videos</label>
+                <input id = "file-upload" type="file" name = "file-upload" class = "insertfile"  onchange = "submitForm();" multiple/>
+            </form>
+            <div class="progress">
+                <p id = "status-progress"></p>
+                <div class="bar">
+                    <div class="bar-fill"></div>
+                </div>
+                <div class="percent">0%</div >
+            </div>
+            <div id="status"></div>
+            </div>
     </main>
     <%- include("../components/scripts_links.ejs") %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
@@ -91,7 +91,7 @@
 
         lightGallery(document.querySelector('.showpictures'), {
             thumbnail: true,
-            plugins: [lgZoom, lgThumbnail, lgThumbnail, lgAutoplay, lgComment, lgFullscreen, lgRotate, lgHash, lgVideo, lgShare],
+            plugins: [lgZoom, lgShare, lgThumbnail, lgThumbnail, lgAutoplay, lgComment, lgFullscreen, lgRotate, lgHash, lgVideo],
             mode: 'lg-fade',
         });
 
@@ -118,7 +118,7 @@
                     percent.html("100%");
                     if(percentVal == "100%" && xhr.status == 200){
                         document.getElementById("status-progress").innerHTML = "";
-                        document.getElementById("status-progress").innerHTML = `Your file has been successfully uploaded`;
+                        document.getElementById("status-progress").innerHTML = `Your file have been successfully uploaded`;
                     }
                     if(xhr.status == 200){
                         location.reload(); 

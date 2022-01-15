@@ -5,27 +5,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/../css/style.css">
     <title>My Answers</title>
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, image) %>
+    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
     <main>
         <%- include("../components/nav") %>
         <div class="card__list">
             <% comments.forEach((comment) => { %>
-            <div class="card">
-                <div class="card__content card__content--small">
-                    <p><%= comment.comment_text %></p>
-                    <div>
-                        <hr>
-                        <div class="card__info card__info--small">
-                            <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                <div class="card card__comment">
+                    <div class="card__content card__content--small">
+                        <div class="card__header">
+                            <p><%= comment.comment_content %></p>
+                            <div class="dropdown__comment">
+                                <% if (comment.user_id === user_id) { %> 
+                                <i class="fa fa-ellipsis-v show-button" role="button"
+                                    onclick=<%='show(' +comment.comment_id+')' %>>
+                                </i>
+                                <% } %> 
+                                <div class="dropdown__menu" id="dropdown-<%= comment.comment_id %>">
+                                    <a
+                                        href="/editcomment/<%= comment.comment_id %>/<%= comment.post_id %>">Edit</a>
+                                    <a
+                                        onclick=<%='del_comment(' +comment.comment_id+ ',' + comment.user_id + ')'%>>Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <hr>
+                            <div class="card__info card__info--small">
+                                <p>Comment by <a href="/users/<%= comment.user_id %>"><%= comment.username %></a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <% }) %>
         </div>
     </main>
@@ -33,12 +48,28 @@
     <script>
         let del = (id) => {
             alert('DELETE POST WHERE POST = ' + id)
-            axios.delete('/posts/' + id)
+            axios.delete('/api/post/' + id)
             .then((result) => {
                 location.href = '/';
             }).catch((err) => {
                 alert('error ' + err)
             });
+        };
+        let del_comment = (id) => {
+            axios.delete('/comment/' + id).then((result) => {
+                location.reload();
+            }).catch((err) => {
+                alert('error ' + err);
+            });
+        }
+        let show = (id) => {
+            let dropdown = document.getElementById("dropdown-"+id);
+            dropdown.classList.toggle("comment_menu--active");
+            window.onclick = function(event){
+                if (!event.target.matches(".show-button")) {
+                    dropdown.classList.remove("comment_menu--active");
+                }
+            }
         };
     </script>
 </body>
