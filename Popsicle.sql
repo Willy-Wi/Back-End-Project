@@ -97,7 +97,7 @@ ALTER TABLE
 ALTER TABLE
     `Likes` ADD CONSTRAINT `likes_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON UPDATE CASCADE;
 ALTER TABLE
-    `Comments` ADD CONSTRAINT `comments_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON UPDATE CASCADE;
+    `Comments` ADD CONSTRAINT `comments_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE
     `Reports` ADD CONSTRAINT `reports_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON UPDATE CASCADE;
 ALTER TABLE
