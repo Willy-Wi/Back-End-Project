@@ -517,6 +517,12 @@ hr {
     grid-row-gap: 1rem;
 }
 
+.card__header h3,
+.card__content p {
+    word-break: break-all;
+    white-space: normal;
+}
+
 .card__header {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -542,6 +548,8 @@ hr {
 .card__content p {
     color: var(--cardp);
     font-weight: 500;
+    word-break: break-all;
+    white-space: normal;
 }
 
 .card__info {
