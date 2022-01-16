@@ -301,6 +301,7 @@ router.get("/feedback", isLoggedIn, async (req, res) => {
 });
 
 router.get("/createpost", isLoggedIn, (req, res) => {
+    console.log(req.session.pfp);
     res.render("createPost", {
         isLoggedIn: req.session.isLoggedIn,
         profile_image: req.session.pfp,
@@ -387,15 +388,21 @@ router.get("/editcomment/:id2/:id", isLoggedIn, async (req, res) => {
 });
 
 router.get("/register", isNotLoggedIn, (req, res) => {
-    res.render("register");
+    res.render("register", {
+        profile_image: req.session.pfp
+    });
 });
 
 router.get("/login", isNotLoggedIn, (req, res) => {
-    res.render("login");
+    res.render("login", {
+        profile_image: req.session.pfp
+    });
 });
 
 router.get("/forgot-password", isNotLoggedIn, (req, res) => {
-    res.render("forgot-password");
+    res.render("forgot-password", {
+        profile_image: req.session.pfp
+    });
 });
 
 router.get("/logout", (req, res) => {

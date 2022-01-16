@@ -44,32 +44,32 @@
                     </div>
                     <div class="card__content">
                         <div class="card__header">
-                            <h3 style = "margin-right: auto;"><%= item.post_title %> </h3>
-                            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %> 
-                                <% if (item.user_id === user_id) { %>
-                                    <div class="dropdown__comment">
-                                        <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
-                                                onclick=<%='show(' +item.post_id+')' %>>
-                                        </i>
-                                        <div class="dropdown__menu" id="dropdown-<%= item.post_id %>">
-                                            <a href = "/post/<%= item.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
-                                            <a href = "/post/<%= item.post_id %>/edit"><i class="fas fa-edit" role = "button"></i>&nbsp;Edit Post</a>
-                                            <a href = "#"><i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>&nbsp;Delete Post</a>
+                            <a href = "/posts/<%= item.post_id %>/" style = "margin-right: auto;"><h3><%= item.post_title %> </h3></a>
+                                <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %> 
+                                    <% if (item.user_id === user_id) { %>
+                                        <div class="dropdown__comment">
+                                            <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
+                                                    onclick=<%='show(' +item.post_id+')' %>>
+                                            </i>
+                                            <div class="dropdown__menu" id="dropdown-<%= item.post_id %>">
+                                                <a href = "/post/<%= item.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
+                                                <a href = "/post/<%= item.post_id %>/edit"><i class="fas fa-edit" role = "button"></i>&nbsp;Edit Post</a>
+                                                <a href = "#"><i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>&nbsp;Delete Post</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                <% } else { %>
-                                    <div class="dropdown__comment">
-                                        <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
-                                                onclick=<%='show(' +item.post_id+')' %>>
-                                        </i>
-                                        <div class="dropdown__menu" id="dropdown-<%= item.post_id %>">
-                                            <a href = "/post/<%= item.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
+                                    <% } else { %>
+                                        <div class="dropdown__comment">
+                                            <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
+                                                    onclick=<%='show(' +item.post_id+')' %>>
+                                            </i>
+                                            <div class="dropdown__menu" id="dropdown-<%= item.post_id %>">
+                                                <a href = "/post/<%= item.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                <% } %>
-                            <% } %> 
+                                    <% } %>
+                                <% } %> 
                         </div>
-                        <p><%= item.post_content %> </p>
+                        <a href = "/posts/<%= item.post_id %>/"><p><%= item.post_content %> </p></a>
                         <hr>
                         <div class="card__info">
                             <% if (item.profile_image == '') { %>

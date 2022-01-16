@@ -49,7 +49,7 @@
 
                 <div class="card__content">
                     <div class="card__header">
-                        <h3 style = "margin-right: auto;"><%= item.post_title %> </h3>
+                        <a href = "/posts/<%= item.post_id %>/" style = "margin-right: auto;"><h3><%= item.post_title %> </h3></a>
                             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %> 
                                 <% if (item.user_id === user_id) { %>
                                     <div class="dropdown__comment">
@@ -74,7 +74,7 @@
                                 <% } %>
                             <% } %> 
                     </div>
-                    <p><%= item.post_content %> </p>
+                    <a href = "/posts/<%= item.post_id %>/"><p><%= item.post_content %> </p></a>
                     <hr>
                     <div class="card__info">
                         <% if (item.profile_image == '') { %>

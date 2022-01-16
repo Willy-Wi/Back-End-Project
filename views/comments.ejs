@@ -50,17 +50,28 @@
                     <div class="card__header">
                         <h3 style = "margin-right: auto;"><%= post.post_title %> </h3>
                             <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %> 
-                                <div class="dropdown__comment">
-                                    <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
-                                            onclick=<%='show(' +post.post_id+')' %>>
-                                    </i>
-                                    <div class="dropdown__menu" id="dropdown-<%= post.post_id %>">
-                                        <a href = "/post/<%= post.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
-                                        <a href = "/post/<%= post.post_id %>/edit"><i class="fas fa-edit" role = "button"></i>&nbsp;Edit Post</a>
-                                        <a href = "#"><i class="far fa-trash-alt" role="button" onclick=<%='del(' + post.post_id +')' %>></i>&nbsp;Delete Post</a>
+                                <% if (post.user_id === user_id) { %>
+                                    <div class="dropdown__comment">
+                                        <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
+                                                onclick=<%='show(' +post.post_id+')' %>>
+                                        </i>
+                                        <div class="dropdown__menu" id="dropdown-<%= post.post_id %>">
+                                            <a href = "/post/<%= post.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
+                                            <a href = "/post/<%= post.post_id %>/edit"><i class="fas fa-edit" role = "button"></i>&nbsp;Edit Post</a>
+                                            <a href = "#"><i class="far fa-trash-alt" role="button" onclick=<%='del(' +post.post_id+')' %>></i>&nbsp;Delete Post</a>
+                                        </div>
                                     </div>
-                                </div>
-                            <% } %>
+                                <% } else { %>
+                                    <div class="dropdown__comment">
+                                        <i class="fa fa-ellipsis-v show-button" style = "margin-left: auto;"  role="button"
+                                                onclick=<%='show(' +post.post_id+')' %>>
+                                        </i>
+                                        <div class="dropdown__menu" id="dropdown-<%= post.post_id %>">
+                                            <a href = "/post/<%= post.post_id %>/report"><i class="fas fa-flag post__flag" role = "button"></i>&nbsp;Report Post</a>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% } %> 
                     </div>
                     <p><%= post.post_content %> </p>
                     <hr>

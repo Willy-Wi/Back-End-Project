@@ -98,7 +98,7 @@
                 }
             })
             .then((result) => {
-                location.reload();
+                window.location = "/posts/" + id;
             })
             .catch((err) => {
                 alert('error' + err)

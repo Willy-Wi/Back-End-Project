@@ -47,7 +47,7 @@
                 }else if(result.data.status == 404 && result.data.error === errDesc){
                     document.querySelector("p#errDesc").innerHTML = errDesc;
                 }else if(result.data.status == 200){
-                    location.reload();
+                    window.location = "/posts/" + id;
                 }
             })
             .catch((err) => {
