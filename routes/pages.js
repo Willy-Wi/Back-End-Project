@@ -60,7 +60,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     sql = `SELECT album_id, album_name, album_cover, album_description, album_date, user_id FROM albums WHERE user_id = '${req.params.id}'`;
     let albums = await query(sql);
 
-    sql = `SELECT Users.user_id, COUNT(following.following_id) AS 'Followers', COUNT(Likes.like_id) AS 'Likes' , COUNT(Posts.post_id) AS 'Posts'
+    sql = `SELECT Users.user_id, COUNT(DISTINCT following.following_id) AS 'Followers', COUNT(DISTINCT Likes.like_id) AS 'Likes' , COUNT(DISTINCT Posts.post_id) AS 'Posts'
     FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
     LEFT JOIN Posts ON Users.user_id = Posts.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id

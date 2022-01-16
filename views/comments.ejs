@@ -124,7 +124,7 @@
             </div>
             <div class="card card__reply">
                 <form class="card__reply--flex" action="/posts/<%= post.post_id %>/create_comment" method="post">
-                    <textarea name="comment" id="comment" rows="2" placeholder="Reply..." required></textarea>
+                    <textarea name="comment" id="comment" rows="1" placeholder="Reply..." required></textarea>
                     <button type="submit">Reply</button>
                 </form>
                 <% if (typeof error == 'string' && error) { %>
