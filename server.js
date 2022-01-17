@@ -31,6 +31,11 @@ app.use(upload());
 
 app.use("/", pages);
 
+// If page does not exist
+app.use((req, res) => {
+    res.redirect("/");
+})
+
 app.listen(PORT, () => {
     console.log(`Server running at localhost:${PORT}`);
 });
