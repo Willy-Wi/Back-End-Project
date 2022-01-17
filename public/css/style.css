@@ -125,6 +125,10 @@ input {
     background-color: var(--area);
 }
 
+input:autofill {
+    background: var(--area); /* or any other */
+}
+
 span {
     color: var(--cardp);
 }
