@@ -108,7 +108,7 @@ button {
     cursor: pointer;
     -webkit-transition: 0.2s;
     transition: 0.2s;
-    color: var(--white);
+    color: var(--white2);
 }
 
 button:hover,
@@ -195,6 +195,7 @@ textarea {
     font-size: 1rem;
     border: 1px solid rgba(0, 0, 0, 0.08);
     resize: none;
+    overflow-y: hidden;
 }
 
 textarea::-webkit-input-placeholder,
@@ -203,14 +204,6 @@ textarea::-ms-input-placeholder,
 textarea::-webkit-input-placeholder {
     color: #8c8c8c;
     font-weight: 400;
-}
-
-button {
-    color: var(--white2);
-}
-
-button:hover {
-    color: var(--purple);
 }
 
 body {
