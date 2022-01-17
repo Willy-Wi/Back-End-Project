@@ -167,7 +167,7 @@ router.get("/reportpost/:id", async (req, res) => {
 });
 
 router.get("/search", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Users.username LIKE '%${req.query.search}%' OR Posts.post_title LIKE '%${req.query.search}%' OR Posts.post_content LIKE '%${req.query.search}%'
@@ -181,6 +181,7 @@ router.get("/search", loginRequired, async (req, res) => {
         profile_image: req.session.pfp,
         likes: req.currentUser,
         user_id: req.session.user_id,
+        search: req.query.search
     });
 });
 
