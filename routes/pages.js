@@ -26,9 +26,13 @@ const loginRequired = async (req, res, next) => {
 };
 
 const permissionRequired = async (req, res, next) => {
-    if (!(req.session.user_id == req.params.user)) {
+    let sql = `SELECT user_id FROM posts WHERE post_id = ${req.params.id}`;
+    let result = await query(sql);
+
+    if (result.length < 1 || (!(result[0].user_id == req.params.user)) || (!(req.session.user_id == req.params.user))) {
         return res.redirect("/");
     }
+
     next();
 };
 
@@ -85,7 +89,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     });
 });
 
-router.get("/posts/:id/", loginRequired, async (req, res) => {
+router.get("/posts/:id", loginRequired, async (req, res) => {
     const postId = req.params.id;
 
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
