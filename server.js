@@ -22,7 +22,7 @@ app.use(
     session({
         secret: "Secret Key",
         path: "/",
-        cookie: { maxAge: 300000 },
+        cookie: { maxAge: 60 * 60 * 1000 },
         resave: false,
         saveUninitialized: false,
     })
