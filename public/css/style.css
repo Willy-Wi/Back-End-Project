@@ -519,6 +519,11 @@ main {
 .card__header h3 {
     color: var(--cardh3);
     font-weight: 600;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    hyphens: manual;
 }
 
 .card__info {
