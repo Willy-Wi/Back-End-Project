@@ -25,7 +25,7 @@ const loginRequired = async (req, res, next) => {
     next();
 };
 
-const permissionRequired = async (req, res, next) => {
+const postPermsReq = async (req, res, next) => {
     let sql = `SELECT user_id FROM posts WHERE post_id = ${req.params.id}`;
     let result = await query(sql);
 
@@ -35,6 +35,24 @@ const permissionRequired = async (req, res, next) => {
 
     next();
 };
+
+const userPermsReq = async( req, res, next) => {
+    if ((!(req.session.user_id == req.params.user))) {
+        return res.redirect("/");
+    }
+    next();
+}
+
+const commentPermsReq = async (req, res, next) => {
+    let sql = `SELECT user_id FROM comments WHERE comment_id = ${req.params.id}`;
+    let result = await query(sql);
+
+    if (result.length < 1 || (!(result[0].user_id == req.params.user)) || (!(req.session.user_id == req.params.user))) {
+        return res.redirect("/");
+    }
+
+    next();
+}
 
 router.get("/", loginRequired, async (req, res) => {
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
@@ -326,7 +344,7 @@ router.get("/createalbum", isLoggedIn, (req, res) => {
 router.get(
     "/editpost/:id/:user",
     isLoggedIn,
-    permissionRequired,
+    postPermsReq,
     async (req, res) => {
         let sql = `SELECT Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id WHERE post_id = '${req.params.id}'`;
@@ -343,12 +361,12 @@ router.get(
 );
 
 router.get(
-    "/editcomment/:id2/:id/:user",
+    "/editcomment/:id/:postId/:user",
     isLoggedIn,
-    permissionRequired,
+    commentPermsReq,
     async (req, res) => {
-        const postId = req.params.id;
-        const commentId = req.params.id2;
+        const postId = req.params.postId;
+        const commentId = req.params.id;
 
         let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
@@ -418,11 +436,11 @@ router.post("/feedback", isLoggedIn, createFeedback);
 router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/file/:id", uploadFiles);
 
-router.post("/users/:user/edit", isLoggedIn, permissionRequired, editUser);
-router.put("/posts/:id/:user", isLoggedIn, permissionRequired, updatePost);
-router.put("/comment/:id/:user", isLoggedIn, permissionRequired, editComment);
+router.post("/users/:user/edit", isLoggedIn, userPermsReq, editUser);
+router.put("/posts/:id/:user", isLoggedIn, postPermsReq, updatePost);
+router.put("/comment/:id/:user", isLoggedIn, commentPermsReq, editComment);
 
-router.delete("/posts/:id/:user", permissionRequired, deletePost);
-router.delete("/comment/:id/:user", permissionRequired, deleteComment);
+router.delete("/posts/:id/:user", postPermsReq, deletePost);
+router.delete("/comment/:id/:user", postPermsReq, deleteComment);
 
 module.exports = router;
