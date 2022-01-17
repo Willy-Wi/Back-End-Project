@@ -45,6 +45,7 @@ router.get("/", loginRequired, async (req, res) => {
         profile_image: req.session.pfp,
         likes: req.currentUser,
         user_id: req.session.user_id,
+        search: req.query.search
     });
 });
 
