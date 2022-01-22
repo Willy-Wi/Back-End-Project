@@ -55,14 +55,13 @@ const commentPermsReq = async (req, res, next) => {
 }
 
 router.get("/", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
     let posts = await query(sql);
     res.render("home", {
         posts,
-        post: posts[0],
         isLoggedIn: req.session.isLoggedIn,
         profile_image: req.session.pfp,
         likes: req.currentUser,
@@ -72,7 +71,7 @@ router.get("/", loginRequired, async (req, res) => {
 });
 
 router.get("/users/:id", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
@@ -110,7 +109,7 @@ router.get("/users/:id", loginRequired, async (req, res) => {
 router.get("/posts/:id", loginRequired, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
@@ -172,7 +171,7 @@ router.get("/album/:id", async (req, res) => {
 router.get("/reportpost/:id", async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title,Posts.post_file , Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
 
@@ -237,7 +236,7 @@ router.get("/users/:id/edit", isLoggedIn, async (req, res) => {
 });
 
 router.get("/featured-post", isNotLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file , Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id ORDER BY COUNT(Likes.post_id) DESC LIMIT 5;`;
 
@@ -254,7 +253,7 @@ router.get("/featured-post", isNotLoggedIn, async (req, res) => {
 });
 
 router.get("/mytopics", isLoggedIn, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.session.user_id}' GROUP BY Posts.post_id;`;
 
@@ -273,7 +272,7 @@ router.get("/mytopics", isLoggedIn, async (req, res) => {
 router.get("/myanswers", isLoggedIn, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
 LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
@@ -346,7 +345,7 @@ router.get(
     isLoggedIn,
     postPermsReq,
     async (req, res) => {
-        let sql = `SELECT Users.user_id, Posts.post_title, Posts.post_content, Posts.post_id
+        let sql = `SELECT Users.user_id, Posts.post_title, Posts.post_file,Posts.post_content, Posts.post_id
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id WHERE post_id = '${req.params.id}'`;
 
         let result = await query(sql);
@@ -368,7 +367,7 @@ router.get(
         const postId = req.params.postId;
         const commentId = req.params.id;
 
-        let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
+        let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_file , Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
@@ -441,6 +440,6 @@ router.put("/posts/:id/:user", isLoggedIn, postPermsReq, updatePost);
 router.put("/comment/:id/:user", isLoggedIn, commentPermsReq, editComment);
 
 router.delete("/posts/:id/:user", postPermsReq, deletePost);
-router.delete("/comment/:id/:user", postPermsReq, deleteComment);
+router.delete("/comment/:id/:user", commentPermsReq, deleteComment);
 
 module.exports = router;

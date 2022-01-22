@@ -1,7 +1,21 @@
 const { query } = require("./dbCon");
-
+const path = require("path");
+const sharp = require("sharp");
+ 
 const createPost = (req, res) => {
+    let namaPost = "";
+    let time = Date.now();
     const { title, description } = req.body;
+    if (req.files) {
+        sharp(req.files.imgPost.data)
+            .toFile(
+                path.resolve(
+                    __dirname,
+                    "../public/images/imgPost/Post-" + time + ".png"
+                )
+            );
+            namaPost = "Post-" + time + ".png";
+    }
     let errTitle, errDesc;
     if (!(title.length >= 5 && title.length <= 255)) {
         errTitle = "Title length must be between 5 and 255 characters";
@@ -10,7 +24,6 @@ const createPost = (req, res) => {
     if (!(description.length >= 5 && description.length <= 1000)) {
         errDesc = "Description length must be between 5 and 1000 characters";
     }
-
     if (errTitle || errDesc) {
         res.render("createPost", {
             isLoggedIn: req.session.isLoggedIn,
@@ -25,12 +38,16 @@ const createPost = (req, res) => {
             user_id: req.session.user_id,
             post_title: title,
             post_content: description,
+            post_file: namaPost,
         };
         query(sql, data);
 
         res.redirect("/");
     }
 };
+
+
+
 
 const createComment = (req, res) => {
     const postId = req.params.id;

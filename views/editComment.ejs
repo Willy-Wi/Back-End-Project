@@ -57,6 +57,12 @@
                             <% } %>
                         </div>
                     </div>
+
+                    <% if (post.post_file) { %>
+                        <div class="card__postingan">
+                            <img src="/images/imgPost/<%= post.post_file %>">
+                        </div>
+                    <% } %>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">

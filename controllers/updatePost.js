@@ -1,5 +1,6 @@
 const { query } = require("./dbCon");
 
+
 const updatePost = async (req, res) => {
     const { title, description } = req.body;
     let errTitle, errDesc;

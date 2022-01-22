@@ -61,4 +61,4 @@ const createAlbum = (req, res) => {
     res.redirect("/users/" + req.session.user_id);
 };
 
-module.exports = { createAlbum };
+module.exports = { createAlbum }; 

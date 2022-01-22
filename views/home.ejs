@@ -61,6 +61,12 @@
                             <% } %>
                         </div>
                     </div>
+
+                    <% if (item.post_file) { %>
+                        <div class="card__postingan">
+                            <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
+                        </div>
+                    <% } %>
                     <p><%= item.post_content %></p>
                     <hr>
                     <div class="card__info">
