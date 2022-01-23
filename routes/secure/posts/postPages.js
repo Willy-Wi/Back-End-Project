@@ -15,7 +15,6 @@ router.get("/featured-post", isNotLoggedIn, async (req, res) => {
 
     res.render("posts/featured-post", {
         posts,
-        post: posts[0],
         isLoggedIn: req.session.isLoggedIn || false,
         likes: req.likesInfo,
         user: req.session.user || "",
@@ -31,7 +30,6 @@ router.get("/mytopics", isLoggedIn, async (req, res) => {
 
     res.render("posts/mytopics", {
         posts,
-        post: posts[0],
         isLoggedIn: req.session.isLoggedIn || false,
         likes: req.likesInfo,
         user: req.session.user || "",
