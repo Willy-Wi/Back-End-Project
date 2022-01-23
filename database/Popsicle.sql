@@ -7,104 +7,172 @@
 -- USE popsicle;
 
 
-CREATE TABLE `Users`(
-    `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `profile_image` INT UNSIGNED NOT NULL,
-    PRIMARY KEY `users_user_id_primary`(`user_id`)
+CREATE TABLE albums (
+  album_id int NOT NULL,
+  album_name varchar(255) NOT NULL,
+  album_cover varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  album_description text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  album_date datetime DEFAULT CURRENT_TIMESTAMP,
+  user_id int NOT NULL,
+  username varchar(255) NOT NULL
 );
-CREATE TABLE `Posts`(
-    `post_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `post_title` VARCHAR(255) NOT NULL,
-    `post_file` VARCHAR(255) NULL,
-    `post_content` VARCHAR(1000) NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY `posts_post_id_primary`(`post_id`)
+
+CREATE TABLE comments (
+  comment_id int NOT NULL,
+  post_id int NOT NULL,
+  user_id int NOT NULL,
+  comment_text varchar(255) NOT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE `Following`(
-    `following_id` INT UNSIGNED NOT NULL,
-    `user_id` INT UNSIGNED NOT NULL
+
+CREATE TABLE comment_likes (
+  comment_likes_id int UNSIGNED NOT NULL,
+  user_id int NOT NULL,
+  comment_id int NOT NULL
 );
-CREATE TABLE `Likes`(
-    `like_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `post_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY `likes_like_id_primary`(`like_id`)
+
+CREATE TABLE files (
+  file_id int NOT NULL,
+  album_id int NOT NULL,
+  file_url varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  file_type varchar(255) NOT NULL,
+  thumb_url varchar(255) DEFAULT NULL,
+  created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE `Comments`(
-    `comment_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `post_id` INT UNSIGNED NOT NULL,
-    `user_id` INT UNSIGNED NOT NULL,
-    `comment_content` VARCHAR(1000) NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY `comments_comment_id_primary`(`comment_id`)
+
+CREATE TABLE `following` (
+  following_id int NOT NULL,
+  user_id int NOT NULL
 );
-CREATE TABLE `albums`(
-    `album_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `album_name` VARCHAR(255) NOT NULL,
-    `album_cover` VARCHAR(255) NULL,
-    `album_description` TEXT NULL,
-    `album_date` DATETIME NULL,
-    `user_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY `albums_album_id_primary`(`album_id`)
+
+CREATE TABLE likes (
+  like_id int UNSIGNED NOT NULL,
+  user_id int NOT NULL,
+  post_id int NOT NULL
 );
-CREATE TABLE `feedback`(
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `subject` VARCHAR(255) NOT NULL,
-    `message` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
-    `contact` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `date_created` DATETIME NULL,
-    PRIMARY KEY `feedback_id_primary`(`id`)
+CREATE TABLE posts (
+  post_id int NOT NULL,
+  user_id int NOT NULL,
+  post_title varchar(255) NOT NULL,
+  post_content varchar(255) NOT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE `Files`(
-    `file_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `album_id` INT UNSIGNED NOT NULL,
-    `file_url` VARCHAR(255) NOT NULL,
-    `file_type` VARCHAR(255) NOT NULL,
-    `thumb_url` VARCHAR(255) NOT NULL,
-    `created_at` DATETIME NOT NULL,
-    PRIMARY KEY `files_file_id_primary`(`file_id`)
+
+CREATE TABLE reports (
+  id int NOT NULL,
+  user_id int DEFAULT NULL,
+  post_id int DEFAULT NULL,
+  type varchar(255) NOT NULL,
+  description text NOT NULL,
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE `Reports`(
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `post_id` INT UNSIGNED NOT NULL,
-    `type` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `created_at` DATETIME NOT NULL,
-    `updated_at` DATETIME NOT NULL,
-    PRIMARY KEY `reports_id_primary`(`id`)
+
+CREATE TABLE users (
+  user_id int NOT NULL,
+  username varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  profile varchar(255) NOT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP
 );
-ALTER TABLE
-    `Posts` ADD CONSTRAINT `posts_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Following` ADD CONSTRAINT `following_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Following` ADD CONSTRAINT `following_following_id_foreign` FOREIGN KEY(`following_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Likes` ADD CONSTRAINT `likes_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `feedback` ADD CONSTRAINT `feedback_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Comments` ADD CONSTRAINT `comments_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `albums` ADD CONSTRAINT `albums_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Reports` ADD CONSTRAINT `reports_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`user_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Likes` ADD CONSTRAINT `likes_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE
-    `Comments` ADD CONSTRAINT `comments_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE
-    `Reports` ADD CONSTRAINT `reports_post_id_foreign` FOREIGN KEY(`post_id`) REFERENCES `Posts`(`post_id`) ON UPDATE CASCADE;
-ALTER TABLE
-    `Files` ADD CONSTRAINT `files_album_id_foreign` FOREIGN KEY(`album_id`) REFERENCES `albums`(`album_id`) ON UPDATE CASCADE;
+
+
+ALTER TABLE albums
+  ADD PRIMARY KEY (album_id),
+  ADD KEY FK_albums_users_user_id (user_id);
+
+ALTER TABLE comments
+  ADD PRIMARY KEY (comment_id),
+  ADD KEY FK_comments_posts (post_id),
+  ADD KEY FK_comments_users (user_id);
+
+ALTER TABLE comment_likes
+  ADD PRIMARY KEY (comment_likes_id),
+  ADD KEY FK_comment_likes_and_users (user_id),
+  ADD KEY FK_comment_likes_and_comments (comment_id);
+
+ALTER TABLE files
+  ADD PRIMARY KEY (file_id),
+  ADD KEY FK_image_albums (album_id);
+
+ALTER TABLE following
+  ADD KEY FK_following_users_1 (following_id),
+  ADD KEY FK_following_users_2 (user_id);
+
+ALTER TABLE likes
+  ADD PRIMARY KEY (like_id),
+  ADD KEY FK_likes_users (user_id),
+  ADD KEY FK_likes_posts (post_id);
+
+ALTER TABLE posts
+  ADD PRIMARY KEY (post_id),
+  ADD KEY FK_posts_users (user_id);
+
+ALTER TABLE reports
+  ADD PRIMARY KEY (id),
+  ADD KEY FK_reports_users (user_id),
+  ADD KEY FK_reports_posts (post_id);
+
+ALTER TABLE users
+  ADD PRIMARY KEY (user_id);
+
+
+ALTER TABLE albums
+  MODIFY album_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+ALTER TABLE comments
+  MODIFY comment_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+ALTER TABLE comment_likes
+  MODIFY comment_likes_id int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE files
+  MODIFY file_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+
+ALTER TABLE likes
+  MODIFY like_id int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+ALTER TABLE posts
+  MODIFY post_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+
+ALTER TABLE reports
+  MODIFY id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+ALTER TABLE users
+  MODIFY user_id int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+
+ALTER TABLE albums
+  ADD CONSTRAINT FK_albums_users_user_id FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE comments
+  ADD CONSTRAINT FK_comments_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT FK_comments_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE comment_likes
+  ADD CONSTRAINT FK_comment_likes_and_comments FOREIGN KEY (comment_id) REFERENCES comments (comment_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT FK_comment_likes_and_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE files
+  ADD CONSTRAINT FK_image_albums FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE following
+  ADD CONSTRAINT FK_following_users_1 FOREIGN KEY (following_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT FK_following_users_2 FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE likes
+  ADD CONSTRAINT FK_likes_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT FK_likes_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE posts
+  ADD CONSTRAINT FK_posts_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE reports
+  ADD CONSTRAINT FK_reports_posts FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT FK_reports_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE RESTRICT;
+COMMIT;
