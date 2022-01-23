@@ -47,10 +47,10 @@
                     <div class="card__header">
                         <h3><%= post.post_title %> </h3>
                         <div>
-                            <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
+                            <a href="/posts/report/<%= post.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
                             <% if (post.user_id === user.user_id) { %>
-                            <a href="/editpost/<%= post.post_id %>/<%= post.user_id %>"><i class="fas fa-edit"
+                            <a href="/posts/<%= post.post_id %>/<%= post.user_id %>/edit"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button"
                                 onclick=<%='del(' + post.post_id + ',' + post.user_id +')' %>></i>

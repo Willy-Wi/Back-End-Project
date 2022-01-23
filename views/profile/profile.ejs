@@ -35,12 +35,12 @@
                                 </div>
                                 <div class="report-body">
                                     <% if (userInfo.user_id == user.user_id) { %>
-                                    <form action="/reportuser/<%= userInfo.user_id %>" method="POST">
+                                    <form action="/users/report/<%= userInfo.user_id %>" method="POST">
                                         <p id="reporterr">you can't report yourself</p>
                                         <div id="submit" style="margin: 20px auto;"></div>
                                     </form>
                                     <% } else { %>
-                                    <form action="/reportuser/<%= userInfo.user_id %>  " method="POST">
+                                    <form action="/users/report/<%= userInfo.user_id %>  " method="POST">
                                         <p id="reporterr"></p>
                                         <br>
                                         <input type="radio" id="info1" name="description" autocomplete="off"

@@ -70,7 +70,6 @@ const login = async (req, res) => {
 
     req.session.user = result[0];
     req.session.isLoggedIn = true;
-    req.session.username = result[0].username;
     res.redirect("/");
 };
 
