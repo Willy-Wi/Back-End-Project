@@ -13,9 +13,6 @@ const updatePostStats = {
 };
 
 const likes = (req, res) => {
-    if (!req.session.isLoggedIn) {
-        return res.redirect("/login");
-    }
     const user_id = req.session.user.user_id;
     const { action } = req.body;
     const postId = req.params.id;
