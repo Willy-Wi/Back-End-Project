@@ -13,7 +13,7 @@ router.get("/", loginRequired, async (req, res) => {
         user: req.session.user || "",
         isLoggedIn: req.session.isLoggedIn || false,
         likes: req.likesInfo,
-        search: req.query.search,
+        search: req.query.search || "",
     });
 });
 
@@ -31,7 +31,7 @@ router.get("/search", loginRequired, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn || false,
         likes: req.likesInfo,
         user: req.session.user || "",
-        search: req.query.search,
+        search: req.query.search || "",
     });
 });
 

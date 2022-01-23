@@ -2,7 +2,7 @@
     <h2><a href="/">Pop<span>sicle</span></a></h2>
     <form action="/search" class="header__search">
         <button type="submit"><i class="fas fa-search"></i></button>
-        <% if (typeof search == 'string' && search) { %>
+        <% if (search) { %>
         <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects..."
             value="<%= search %>">
         <% } else { %>
