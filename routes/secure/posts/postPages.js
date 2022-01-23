@@ -41,35 +41,16 @@ router.get("/mytopics", isLoggedIn, async (req, res) => {
 router.get("/myanswers", isLoggedIn, async (req, res) => {
     const postId = req.params.id;
 
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
-
-    let post = await query(sql);
-
     sql = `SELECT Users.username, Users.user_id, Comments.comment_content FROM Users INNER JOIN Comments ON
     Users.user_id = Comments.user_id WHERE Users.user_id = '${req.session.user.user_id}' ORDER BY Comments.created_at DESC`;
 
     let comments = await query(sql);
 
-    if (req.query.error) {
-        return res.render("posts/myanswers", {
-            isLoggedIn: req.session.isLoggedIn || false,
-            user: req.session.user || "",
-            post: post[0],
-            likes: req.likesInfo,
-            comments: comments,
-            error: req.query.error,
-        });
-    }
-
     res.render("posts/myanswers", {
         isLoggedIn: req.session.isLoggedIn || false,
         user: req.session.user || "",
-        post: post[0],
-        likes: req.likesInfo,
         comments: comments,
+        error: req.query.error || ""
     });
 });
 
