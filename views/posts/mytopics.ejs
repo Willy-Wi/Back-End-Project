@@ -15,7 +15,16 @@
         <%- include("../../components/nav") %>
         <div class="card__list">
             <% posts.forEach(item => { %>
-
+            <% if (typeof likes == 'object' && likes) { %>
+            <% let filtered = likes.filter((v) => { return v.post_id === item.post_id }) %>
+            <% if (filtered.length > 0) { %>
+            <% status = "Unlike" %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
+            <% } else { %>
+            <% status = "Like" %>
+            <% } %>
             <div class="card card__post">
                 <div class="card__like">
 
@@ -41,7 +50,7 @@
                         <div>
                             <a href="/posts/report/<%= item.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <% if (item.user_id === user_id) { %>
+                            <% if (item.user_id === user.user_id) { %>
                             <a href="/posts/<%= item.post_id %>/<%= item.user_id %>/edit"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button"

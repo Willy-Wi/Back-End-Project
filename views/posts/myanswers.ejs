@@ -6,6 +6,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .dropdown__comment {
+            position: relative;
+        }
+
+        .dropdown__menu {
+            position: absolute;
+            left: calc(100% + 2rem);
+            top: calc(100% - 1.4rem);
+            background-color: var(--white);
+            box-shadow: var(--box-shadow);
+            border-radius: 3px;
+            transition: 0.2s;
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            pointer-events: none;
+            -webkit-transform: translateX(-2rem);
+            transform: translateX(-2rem);
+        }
+
+        .dropdown__menu a {
+            width: 100%;
+            color: #8c8c8c;
+            font-weight: 500;
+            text-align: center;
+            padding: 0.6rem 0.8rem;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .dropdown__menu a:first-child {
+            border: 3px 3px 0 0;
+        }
+
+        .dropdown__menu a:last-child {
+            border: 0 0 3px 3px;
+        }
+
+        .dropdown__menu a:hover,
+        .dropdown__menu a:focus-visible {
+            background-color: rgba(118, 97, 255, 0.1);
+            color: var(--purple);
+        }
+
+        .commment__menu--active {
+            pointer-events: auto;
+            opacity: 1;
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+
+        .close {
+            display: none;
+        }
+    </style>
     <title>My Answers</title>
 </head>
 
@@ -17,7 +74,24 @@
             <% comments.forEach((comment) => { %>
             <div class="card">
                 <div class="card__content card__content--small">
-                    <p><%= comment.comment_content %></p>
+                    <div class="card__header">
+                        <p><%= comment.comment_content %></p>
+                        <div class="dropdown__comment">
+                            <% if (isLoggedIn) { %>
+                            <% if (comment.user_id === user.user_id) { %>
+                            <i class="fa fa-ellipsis-v show-button" role="button"
+                                onclick=<%='show(' +comment.comment_id+')' %>>
+                            </i>
+                            <% } %>
+                            <% } %>
+                            <div class="dropdown__menu" id="dropdown-<%= comment.comment_id %>">
+                                <a
+                                    href="/comment/edit/<%= comment.comment_id %>/<%= comment.post_id %>/<%= comment.user_id %>">Edit</a>
+                                <a
+                                    onclick=<%='del_comment(' +comment.comment_id+ ',' + comment.user_id + ')'%>>Delete</a>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <hr>
                         <div class="card__info card__info--small">
@@ -31,15 +105,30 @@
     </main>
     <%- include("../../components/scripts_links.ejs") %>
     <script>
-        let del = (id) => {
-            alert('DELETE POST WHERE POST = ' + id)
-            axios.delete('/posts/' + id)
+        let del = (id, user_id) => {
+            axios.delete('/posts/' + id + '/' + user_id)
                 .then((result) => {
                     location.href = '/';
                 }).catch((err) => {
                     alert('error ' + err)
                 });
         };
+        let del_comment = (id, user_id) => {
+            axios.delete('/comment/' + id + '/' + user_id).then((result) => {
+                location.reload();
+            }).catch((err) => {
+                alert('error ' + err);
+            });
+        }
+        let show = (id) => {
+            let dropdown = document.getElementById("dropdown-" + id);
+            dropdown.classList.toggle("commment__menu--active");
+            window.onclick = function (event) {
+                if (!event.target.matches(".show-button")) {
+                    dropdown.classList.remove("commment__menu--active");
+                }
+            }
+        }
     </script>
 </body>
 
