@@ -2,15 +2,14 @@ const { Router } = require("express");
 const router = Router();
 const { query } = require("../../../controllers/dbCon");
 const {
-    isNotLoggedIn,
     isLoggedIn,
     loginRequired,
 } = require("../../../controllers/middleware/middleware");
 
-router.get("/featured-post", isNotLoggedIn, loginRequired, async (req, res) => {
+router.get("/featured-post", loginRequired, async (req, res) => {
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file , Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id ORDER BY COUNT(Likes.post_id) DESC LIMIT 5;`;
+    LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id ORDER BY likes DESC LIMIT 5;`;
 
     let posts = await query(sql);
 
