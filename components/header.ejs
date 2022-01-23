@@ -2,12 +2,8 @@
     <h2><a href="/">Pop<span>sicle</span></a></h2>
     <form action="/search" class="header__search">
         <button type="submit"><i class="fas fa-search"></i></button>
-        <% if (search) { %>
         <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects..."
             value="<%= search %>">
-        <% } else { %>
-        <input type="text" name="search" id="search" placeholder="Search for creators, inspirations, projects...">
-        <% } %>
     </form>
     <div class="header__dropdown">
         <div class="image">
