@@ -79,11 +79,12 @@ router.get("/report/:id", async (req, res) => {
     });
 });
 
-router.post("/:id/create_comment", isLoggedIn, createComment);
-router.post("/:id/act", isLoggedIn, likes);
 router.post("/create", isLoggedIn, createPost);
 router.put("/:id/:user/edit", isLoggedIn, postPerms, editPost);
 router.delete("/:id/:user", postPerms, deletePost);
+router.post("/:id/act", isLoggedIn, likes);
+
+router.post("/:id/create_comment", isLoggedIn, createComment);
 router.post("/posts/report/:id2", isLoggedIn, createReport);
 
 module.exports = router;
