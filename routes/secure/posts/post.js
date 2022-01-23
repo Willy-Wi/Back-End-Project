@@ -5,6 +5,7 @@ const { likes } = require("../../../controllers/likeCon");
 const { createPost, editPost, deletePost } = require("../../../controllers/postCon");
 const { createComment } = require("../../../controllers/commentCon");
 const { isLoggedIn, postPerms, loginRequired } = require("../../../controllers/middleware/middleware");
+const { createReport } = require("../../../controllers/report_feedbackCon");
 
 router.get("/create", isLoggedIn, (req, res) => {
     res.render("posts/createPost", {
@@ -85,5 +86,6 @@ router.post("/:id/act", isLoggedIn, likes);
 router.post("/create", isLoggedIn, createPost);
 router.put("/:id/:user/edit", isLoggedIn, postPerms, editPost);
 router.delete("/:id/:user", postPerms, deletePost);
+router.post("/posts/report/:id2", isLoggedIn, createReport);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const router = Router();
 const { query } = require('../../../controllers/dbCon');
 const { isLoggedIn, loginRequired, userPerms } = require("../../../controllers/middleware/middleware");
 const { editUser, follow } = require("../../../controllers/userCon");
+const { createReport } = require("../../../controllers/report_feedbackCon");
 
 router.get("/:id", loginRequired, async (req, res) => {
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
@@ -45,5 +46,6 @@ router.get("/:id/edit", isLoggedIn, async (req, res) => {
 
 router.post("/:id/act", isLoggedIn, follow);
 router.post("/:user/edit", isLoggedIn, userPerms, editUser);
+router.post("/users/report/:id", isLoggedIn, createReport);
 
 module.exports = router;
