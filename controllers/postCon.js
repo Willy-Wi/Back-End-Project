@@ -26,8 +26,7 @@ const createPost = (req, res) => {
     if (errTitle || errDesc) {
         res.render("posts/createPost", {
             isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user.user_id,
-            profile_image: req.session.pfp,
+            user: req.session.user || "",
             errTitle,
             errDesc,
         });
