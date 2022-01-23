@@ -28,7 +28,7 @@
                 <% } %>
                 <div class="card card__post">
                     <div class="card__like">
-    
+
                         <% if (isLoggedIn) { %>
                         <% if (status === "Unlike") { %>
                         <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
@@ -37,14 +37,14 @@
                         <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
                         <% } %>
-    
+
                         <% } else { %>
                         <a href="/auth/login"><i class="far fa-heart"></i></a>
                         <% } %>
-    
+
                         <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
                     </div>
-    
+
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
@@ -61,11 +61,11 @@
                                 <% } %>
                             </div>
                         </div>
-    
+
                         <% if (item.post_file) { %>
-                            <div class="card__postingan">
-                                <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
-                            </div>
+                        <div class="card__postingan">
+                            <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
+                        </div>
                         <% } %>
                         <p><%= item.post_content %></p>
                         <hr>
@@ -75,7 +75,7 @@
                             <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
                         </div>
                     </div>
-    
+
                 </div>
                 <% }) %>
             </div>

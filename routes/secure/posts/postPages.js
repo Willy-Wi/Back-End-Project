@@ -45,7 +45,7 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn || false,
         user: req.session.user || "",
         comments: comments,
-        error: req.query.error || ""
+        error: req.query.error || "",
     });
 });
 

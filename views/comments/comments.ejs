@@ -118,9 +118,9 @@
                     </div>
 
                     <% if (post.post_file) { %>
-                        <div class="card__postingan">
-                            <img src="../images/imgPost/<%= post.post_file %>" id="postingan">
-                        </div>
+                    <div class="card__postingan">
+                        <img src="../images/imgPost/<%= post.post_file %>" id="postingan">
+                    </div>
                     <% } %>
                     <p><%= post.post_content %></p>
                     <hr>
@@ -145,13 +145,13 @@
                     <div class="card__header">
                         <p><%= comment.comment_content %></p>
                         <div class="dropdown__comment">
-                            <% if (isLoggedIn) { %> 
+                            <% if (isLoggedIn) { %>
                             <% if (comment.user_id === user.user_id) { %>
                             <i class="fa fa-ellipsis-v show-button" role="button"
                                 onclick=<%='show(' +comment.comment_id+')' %>>
                             </i>
                             <% } %>
-                            <% } %> 
+                            <% } %>
                             <div class="dropdown__menu" id="dropdown-<%= comment.comment_id %>">
                                 <a
                                     href="/comment/edit/<%= comment.comment_id %>/<%= comment.post_id %>/<%= comment.user_id %>">Edit</a>

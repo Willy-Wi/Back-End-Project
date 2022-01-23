@@ -1236,14 +1236,13 @@ main {
     }
 }
 
-
 /*Css - Leonardi*/
 
-.container{
+.container {
     display: grid;
     place-items: center;
-  }
-  .container .wrapper{
+}
+.container .wrapper {
     position: relative;
     height: 300px;
     width: 100%;
@@ -1254,38 +1253,38 @@ main {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-  }
-  .wrapper.active{
+}
+.wrapper.active {
     border: none;
-  }
-  .wrapper .image{
+}
+.wrapper .image {
     position: absolute;
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .wrapper img{
+}
+.wrapper img {
     height: 100%;
     width: 100%;
     object-fit: contain;
     border-radius: 0%;
-  }
-  .wrapper .content{
-      display: grid;
-      justify-items: center;
-  }
-  .wrapper .icon{
+}
+.wrapper .content {
+    display: grid;
+    justify-items: center;
+}
+.wrapper .icon {
     font-size: 100px;
     color: #9658fe;
-  }
-  .wrapper .text{
+}
+.wrapper .text {
     font-size: 20px;
     font-weight: 500;
-    color: #5B5B7B;
-  }
-  .wrapper #cancel-btn i{
+    color: #5b5b7b;
+}
+.wrapper #cancel-btn i {
     position: absolute;
     font-size: 20px;
     right: 15px;
@@ -1293,15 +1292,15 @@ main {
     color: #9658fe;
     cursor: pointer;
     display: none;
-  }
-  .wrapper.active:hover #cancel-btn i{
+}
+.wrapper.active:hover #cancel-btn i {
     display: block;
-  }
-  .wrapper #cancel-btn i:hover{
+}
+.wrapper #cancel-btn i:hover {
     color: #e74c3c;
-  }
-  
-  .container #custom-btn{
+}
+
+.container #custom-btn {
     display: block;
     width: 100%;
     height: 50px;
@@ -1316,14 +1315,14 @@ main {
     font-family: var(--font);
     margin: auto;
     margin-top: 10px;
-  }
+}
 
-.card__postingan img{
+.card__postingan img {
     border-radius: 0%;
     max-height: 240px;
     aspect-ratio: 1/1;
-  }
-.card__postingan{
+}
+.card__postingan {
     margin: auto;
     display: grid;
     width: 380px;
@@ -1332,5 +1331,5 @@ main {
     align-items: center;
     box-sizing: border-box;
     padding: 5px 0px;
-    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 }

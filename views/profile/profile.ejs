@@ -30,7 +30,8 @@
                                     <span class="close-report">&times;</span>
                                     <h1>Report This User</h1>
                                     <p>Help us understand the problem. What issue with <a
-                                            href="/users/<%= userInfo.user_id %>"><%= userInfo.username %></a></p> are you
+                                            href="/users/<%= userInfo.user_id %>"><%= userInfo.username %></a></p> are
+                                    you
                                     reporting?</p>
                                 </div>
                                 <div class="report-body">
@@ -178,11 +179,11 @@
                                     onclick=<%='del(' + item.post_id + ',' + item.user_id + ')' %>></i>
                             </div>
                         </div>
-                        
+
                         <% if (item.post_file) { %>
-                            <div class="card__postingan">
-                                <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
-                            </div>
+                        <div class="card__postingan">
+                            <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
+                        </div>
                         <% } %>
                         <p><%= item.post_content %> </p>
                         <hr>

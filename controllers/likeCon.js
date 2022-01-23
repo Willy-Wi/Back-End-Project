@@ -22,4 +22,4 @@ const likes = (req, res) => {
     updatePostStats[action](postId, user_id);
 };
 
-module.exports = { likes }
+module.exports = { likes };

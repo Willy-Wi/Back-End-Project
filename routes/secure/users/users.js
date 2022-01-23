@@ -1,7 +1,11 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
-const { query } = require('../../../controllers/dbCon');
-const { isLoggedIn, loginRequired, userPerms } = require("../../../controllers/middleware/middleware");
+const { query } = require("../../../controllers/dbCon");
+const {
+    isLoggedIn,
+    loginRequired,
+    userPerms,
+} = require("../../../controllers/middleware/middleware");
 const { editUser, follow } = require("../../../controllers/userCon");
 const { createReport } = require("../../../controllers/report_feedbackCon");
 

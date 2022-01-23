@@ -9,8 +9,8 @@ const createComment = (req, res) => {
         errReply = encodeURIComponent(
             "Comment length must be between 5 and 1000 characters"
         );
-    } 
-    
+    }
+
     if (errReply) {
         return res.redirect("/posts/" + postId + "/?error=" + errReply);
     } else {

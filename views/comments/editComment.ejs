@@ -69,7 +69,8 @@
                 <div class="card__reply--flex">
                     <textarea name="edit_comment" id="edit_comment" rows="1"
                         required><%= comment.comment_content %></textarea>
-                    <button onclick=<%= "edit(" + comment.comment_id + "," + comment.user_id + "," + comment.post_id + ")"%>>Edit</button>
+                    <button
+                        onclick=<%= "edit(" + comment.comment_id + "," + comment.user_id + "," + comment.post_id + ")"%>>Edit</button>
                 </div>
             </div>
         </article>

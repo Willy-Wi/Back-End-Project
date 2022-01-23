@@ -19,33 +19,33 @@
                 <% if (typeof errTitle == 'string' && errTitle) { %>
                 <p><%= errTitle %> </p>
                 <% } %>
-                
+
                 <div class="container">
                     <div class="wrapper">
-                    <div class="image">
-                        <img alt="" id="post-img">
-                    </div>
-                    <div class="content">
-                        <div class="icon">
-                            <i class="fas fa-file-image"></i>
+                        <div class="image">
+                            <img alt="" id="post-img">
                         </div>
-                        <div class="text">
-                            No file chosen, yet!
+                        <div class="content">
+                            <div class="icon">
+                                <i class="fas fa-file-image"></i>
+                            </div>
+                            <div class="text">
+                                No file chosen, yet!
+                            </div>
                         </div>
-                    </div>
-                    <div id="cancel-btn">
-                        <i class="fas fa-times"></i>
-                    </div>
+                        <div id="cancel-btn">
+                            <i class="fas fa-times"></i>
+                        </div>
                     </div>
                     <button type="button" onclick="defaultBtnActive()" id="custom-btn">Choose a file</button>
-                    <input id="default-btn" type="file" name="imgPost" accept = "image/*" hidden>
+                    <input id="default-btn" type="file" name="imgPost" accept="image/*" hidden>
                 </div>
                 <textarea placeholder="Description" name="description" id="description" cols="30" rows="15"
                     required></textarea>
                 <% if (typeof errDesc == 'string' && errDesc) { %>
                 <p><%= errDesc %> </p>
                 <% } %>
-                <button type="submit">Create Post</button> 
+                <button type="submit">Create Post</button>
             </form>
         </div>
     </main>
@@ -57,26 +57,26 @@
         const cancelBtn = document.querySelector("#cancel-btn i");
         const img = document.querySelector("#post-img");
         let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
-        function defaultBtnActive(){
-          defaultBtn.click();
+        function defaultBtnActive() {
+            defaultBtn.click();
         }
-        defaultBtn.addEventListener("change", function(){
-          const file = this.files[0];
-          if(file){
-            const reader = new FileReader();
-            reader.onload = function(){
-              const result = reader.result;
-              img.setAttribute("src",result);
-              wrapper.classList.add("active");
+        defaultBtn.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const result = reader.result;
+                    img.setAttribute("src", result);
+                    wrapper.classList.add("active");
+                }
+                cancelBtn.addEventListener("click", function () {
+                    img.src = "";
+                    wrapper.classList.remove("active");
+                })
+                reader.readAsDataURL(file);
             }
-            cancelBtn.addEventListener("click", function(){
-               img.src = "";
-              wrapper.classList.remove("active");
-            })
-            reader.readAsDataURL(file);
-          }
         });
-     </script>
+    </script>
 </body>
 
 </html>

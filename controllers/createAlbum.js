@@ -4,7 +4,6 @@ const path = require("path");
 const sharp = require("sharp");
 
 const createAlbum = (req, res) => {
-
     const { title, description } = req.body;
     if (req.files) {
         sharp(req.files.myAlbum.data)
@@ -32,4 +31,4 @@ const createAlbum = (req, res) => {
     res.redirect("/users/" + req.session.user.user_id);
 };
 
-module.exports = { createAlbum }; 
+module.exports = { createAlbum };

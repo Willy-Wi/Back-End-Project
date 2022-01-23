@@ -1,4 +1,4 @@
-const { query } = require('../dbCon');
+const { query } = require("../dbCon");
 
 const postPerms = async (req, res, next) => {
     let sql = `SELECT user_id FROM posts WHERE post_id = ${req.params.id}`;
@@ -59,4 +59,11 @@ const isLoggedIn = (req, res, next) => {
     next();
 };
 
-module.exports = { loginRequired, commentPerms, userPerms, postPerms, isLoggedIn, isNotLoggedIn };
+module.exports = {
+    loginRequired,
+    commentPerms,
+    userPerms,
+    postPerms,
+    isLoggedIn,
+    isNotLoggedIn,
+};

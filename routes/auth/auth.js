@@ -1,7 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 const { isNotLoggedIn } = require("../../controllers/middleware/middleware");
-const { register, login, forgot, change } = require("../../controllers/authCon");
+const {
+    register,
+    login,
+    forgot,
+    change,
+} = require("../../controllers/authCon");
 
 router.get("/register", isNotLoggedIn, (req, res) => {
     res.render("register", {

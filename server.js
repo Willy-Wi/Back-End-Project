@@ -15,7 +15,6 @@ const users = require("./routes/secure/users/users");
 const app = express();
 const PORT = 3000;
 
-
 conn.connect((err) => {
     if (err) throw err;
     console.log("MySQL WorkBench is connected");
@@ -37,17 +36,17 @@ app.use(
 );
 app.use(upload());
 
-app.use("/auth/", auth)
+app.use("/auth/", auth);
 app.use("/users/", users);
 app.use("/comment", comment);
-app.use("/posts/", posts)
+app.use("/posts/", posts);
 app.use("/", index);
 app.use("/", postsOther);
 
 // If page does not exist
 app.use((req, res) => {
     res.redirect("/");
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Server running at localhost:${PORT}`);

@@ -1,10 +1,18 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
-const { query } = require('../../../controllers/dbCon');
+const { query } = require("../../../controllers/dbCon");
 const { likes } = require("../../../controllers/likeCon");
-const { createPost, editPost, deletePost } = require("../../../controllers/postCon");
+const {
+    createPost,
+    editPost,
+    deletePost,
+} = require("../../../controllers/postCon");
 const { createComment } = require("../../../controllers/commentCon");
-const { isLoggedIn, postPerms, loginRequired } = require("../../../controllers/middleware/middleware");
+const {
+    isLoggedIn,
+    postPerms,
+    loginRequired,
+} = require("../../../controllers/middleware/middleware");
 const { createReport } = require("../../../controllers/report_feedbackCon");
 
 router.get("/create", isLoggedIn, (req, res) => {
@@ -57,8 +65,7 @@ router.get("/:id/:user/edit", isLoggedIn, postPerms, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn || false,
         user: req.session.user || "",
     });
-}
-);
+});
 
 router.get("/report/:id", async (req, res) => {
     const postId = req.params.id;

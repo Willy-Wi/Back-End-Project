@@ -11,7 +11,7 @@ let updateStat = {
     },
 };
 
-function follow (event) {
+function follow(event) {
     let action = event.target.dataset.followStatus;
     let userId = event.target.dataset.userId;
 

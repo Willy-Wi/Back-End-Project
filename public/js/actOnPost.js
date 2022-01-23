@@ -1,4 +1,4 @@
- let updatePostStats = {
+let updatePostStats = {
     Like: function (postId) {
         document.querySelector("#likes-count-" + postId).textContent++;
     },
@@ -22,7 +22,7 @@ let toggleButtonText = {
     },
 };
 
-function actOnPost (event) {
+function actOnPost(event) {
     let postId = event.target.dataset.postId;
     let action = event.target.dataset.postStatus;
 
@@ -30,4 +30,4 @@ function actOnPost (event) {
     updatePostStats[action](postId);
 
     axios.post("/posts/" + postId + "/act", { action: action });
-};
+}
