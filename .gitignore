@@ -10,5 +10,6 @@ uploads/
 tes.js
 drawSQL-mysql-export-2021-12-14(1).sql
 SQL/
-public/images/*
+public/images/*.png
 !public/images/0.png
+public/images/imgPost/*.png
