@@ -12,7 +12,7 @@ router.get("/album/:id", async (req, res) => {
     let files = await query(sql);
 
     sql = `SELECT Users.name, Users.username, Users.user_id, Users.email, Users.profile_image FROM Users INNER JOIN Albums ON Albums.user_id = Users.user_id WHERE Albums.album_id = ${albumid}`;
-    let user = await query(sql);
+    let userInfo = await query(sql);
 
     sql = `SELECT album_name, album_cover, album_description FROM albums WHERE album_id = '${albumid}'`;
     let album = await query(sql);
@@ -23,7 +23,7 @@ router.get("/album/:id", async (req, res) => {
         files: files,
         file: files[0],
         isLoggedIn: req.session.isLoggedIn || false,
-        user: user[0],
+        userInfo: userInfo[0],
         user: req.session.user || "",
     });
 });
