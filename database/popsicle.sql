@@ -1,3 +1,12 @@
+
+-- DROP DATABASE IF EXISTS popsicle;
+-- CREATE DATABASE IF NOT EXISTS popsicle;
+
+-- CREATE DATABASE popsicle;
+
+-- USE popsicle;
+
+
 CREATE TABLE albums (
   album_id int NOT NULL,
   album_name varchar(255) NOT NULL,
