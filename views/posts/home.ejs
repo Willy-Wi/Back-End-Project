@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image, search) %>
+    <%- include("../../components/header", isLoggedIn, user, search) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <div class="card__list">
             <% posts.forEach(item => { %>
 
@@ -31,7 +31,7 @@
             <div class="card card__post">
                 <div class="card__like">
 
-                    <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+                    <% if (isLoggedIn) { %>
                     <% if (status === "Unlike") { %>
                     <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                         data-post-status="<%= status %>"></i>
@@ -53,11 +53,13 @@
                         <div>
                             <a href="/reportpost/<%= item.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <% if (item.user_id === user_id) { %>
+                            <% if (isLoggedIn) { %>
+                            <% if (item.user_id === user.user_id) { %>
                             <a href="/editpost/<%= item.post_id %>/<%= item.user_id %>"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button"
                                 onclick=<%='del(' + item.post_id + ',' + item.user_id +')' %>></i>
+                            <% } %>
                             <% } %>
                         </div>
                     </div>
@@ -82,7 +84,7 @@
         </div>
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../../components/scripts_links.ejs") %>
     <script>
         let del = (id, user_id) => {
             axios.delete('/posts/' + id + "/" + user_id)

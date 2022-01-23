@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <article class="card__list">
             <% if (typeof likes == 'object' && likes) { %>
             <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
@@ -57,12 +57,6 @@
                             <% } %>
                         </div>
                     </div>
-
-                    <% if (post.post_file) { %>
-                        <div class="card__postingan">
-                            <img src="/images/imgPost/<%= post.post_file %>">
-                        </div>
-                    <% } %>
                     <p><%= post.post_content %> </p>
                     <hr>
                     <div class="card__info">
@@ -80,7 +74,7 @@
             </div>
         </article>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../../components/scripts_links.ejs") %>
     <script>
         function edit(id, user_id, post_id) {
             axios.put("/comment/" + id + "/" + user_id, { edit_comment: document.getElementById('edit_comment').value, postId: post_id })

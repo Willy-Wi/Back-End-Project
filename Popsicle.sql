@@ -1,4 +1,5 @@
-CREATE DATABASE popsicle;
+DROP DATABASE IF EXISTS popsicle;
+CREATE DATABASE IF NOT EXISTS popsicle;
 
 USE popsicle;
 

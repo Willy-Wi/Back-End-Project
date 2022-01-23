@@ -67,9 +67,9 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <div class="card__list">
             <% if (typeof likes == 'object' && likes) { %>
             <% let filtered = likes.filter((v) => { return v.post_id === post.post_id }) %>
@@ -85,7 +85,7 @@
             <div class="card card__post">
                 <div class="card__like">
 
-                    <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+                    <% if (isLoggedIn) { %>
                     <% if (status === "Unlike") { %>
                     <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= post.post_id %>"
                         data-post-status="<%= status %>"></i>
@@ -106,11 +106,13 @@
                         <div>
                             <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <% if (post.user_id === user_id) { %>
-                            <a href="/editpost/<%= post.post_id %>/<%= post.user_id %>"><i class="fas fa-edit"
+                            <% if (isLoggedIn) { %>
+                            <% if (item.user_id === user.user_id) { %>
+                            <a href="/editpost/<%= item.post_id %>/<%= item.user_id %>"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button"
-                                onclick=<%='del(' + post.post_id + ',' + post.user_id +')' %>></i>
+                                onclick=<%='del(' + item.post_id + ',' + item.user_id +')' %>></i>
+                            <% } %>
                             <% } %>
                         </div>
                     </div>
@@ -143,11 +145,13 @@
                     <div class="card__header">
                         <p><%= comment.comment_content %></p>
                         <div class="dropdown__comment">
-                            <% if (comment.user_id === user_id) { %>
+                            <% if (isLoggedIn) { %> 
+                            <% if (comment.user_id === user.user_id) { %>
                             <i class="fa fa-ellipsis-v show-button" role="button"
                                 onclick=<%='show(' +comment.comment_id+')' %>>
                             </i>
                             <% } %>
+                            <% } %> 
                             <div class="dropdown__menu" id="dropdown-<%= comment.comment_id %>">
                                 <a
                                     href="/editcomment/<%= comment.comment_id %>/<%= comment.post_id %>/<%= comment.user_id %>">Edit</a>
@@ -167,7 +171,7 @@
             <% }) %>
         </div>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../../components/scripts_links.ejs") %>
     <script>
         let del = (id, user_id) => {
             axios.delete('/posts/' + id + '/' + user_id)

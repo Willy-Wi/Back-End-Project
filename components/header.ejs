@@ -11,17 +11,17 @@
     </form>
     <div class="header__dropdown">
         <div class="image">
-            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
-            <img src="/../images/<%= profile_image %>.png" alt="" width=50>
+            <% if (isLoggedIn) { %>
+            <img src="/../images/<%= user.profile_image %>.png" alt="" width=50>
             <% } else { %>
             <img src="/../images/0.png" alt="" width=50>
             <% } %>
             <div class="overlay" data-dropdown-toggle></div>
         </div>
         <div class="header__menu">
-            <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
-            <a href="/users/<%= user_id %>">Profile</a>
-            <a href="/users/<%= user_id  %>/edit">Settings</a>
+            <% if (isLoggedIn) { %>
+            <a href="/users/<%= user.user_id %>">Profile</a>
+            <a href="/users/<%= user.user_id  %>/edit">Settings</a>
             <a href="/logout">Logout</a>
             <a id="dark-mode-toggle" class="dark-mode-toggle">Switch Theme</a>
             <% } else { %>

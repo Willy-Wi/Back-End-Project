@@ -68,9 +68,12 @@ const login = async (req, res) => {
         return res.render("login", { invalidPassword });
     }
 
+    // TODO: REPLACE
+    req.session.user = result[0];
+    // * --------------------
     req.session.isLoggedIn = true;
-    req.session.user_id = result[0].user_id;
-    req.session.pfp = result[0].profile_image;
+    // req.session.user_id = result[0].user_id;
+    // req.session.pfp = result[0].profile_image;
     req.session.username = result[0].username;
     res.redirect("/");
 };
@@ -107,7 +110,7 @@ const forgot = async (req, res, next) => {
 
     req.session.user_id = result[0].user_id;
 
-    res.render("change-password");
+    res.render("/profile/change-password");
 };
 
 const change = async (req, res) => {
@@ -121,7 +124,7 @@ const change = async (req, res) => {
         password !== confirmPassword ? "Password does not match" : null;
 
     if (errPass || errPassMatch) {
-        return res.render("change-password", {
+        return res.render("/profile/change-password", {
             userid,
             errPass,
             errPassMatch,

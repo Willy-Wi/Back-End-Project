@@ -10,17 +10,17 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <article>
             <article class="card__list">
                 <div class="card__profile">
                     <header class="profile__header">
-                        <img src="../images/<%= user.profile_image %>.png" alt="" width="75">
+                        <img src="../images/<%= userInfo.profile_image %>.png" alt="" width="75">
                         <div class="profile__details">
-                            <h4><%= user.name %></h4>
-                            <p><%= user.username %></p>
+                            <h4><%= userInfo.name %></h4>
+                            <p><%= userInfo.username %></p>
                         </div>
                         <i class="fas fa-flag profile__flag" id="report"></i>
 
@@ -30,17 +30,17 @@
                                     <span class="close-report">&times;</span>
                                     <h1>Report This User</h1>
                                     <p>Help us understand the problem. What issue with <a
-                                            href="/users/<%= user.user_id %>"><%= user.username %></a></p> are you
+                                            href="/users/<%= userInfo.user_id %>"><%= userInfo.username %></a></p> are you
                                     reporting?</p>
                                 </div>
                                 <div class="report-body">
-                                    <% if (user_id == user.user_id) { %>
-                                    <form action="/reportuser/<%= user.user_id %>" method="POST">
+                                    <% if (userInfo.user_id == user.user_id) { %>
+                                    <form action="/reportuser/<%= userInfo.user_id %>" method="POST">
                                         <p id="reporterr">you can't report yourself</p>
                                         <div id="submit" style="margin: 20px auto;"></div>
                                     </form>
                                     <% } else { %>
-                                    <form action="/reportuser/<%= user.user_id %>  " method="POST">
+                                    <form action="/reportuser/<%= userInfo.user_id %>  " method="POST">
                                         <p id="reporterr"></p>
                                         <br>
                                         <input type="radio" id="info1" name="description" autocomplete="off"
@@ -71,12 +71,12 @@
                             </div>
                         </div>
 
-                        <% if (stats.user_id === user_id) { %>
-                        <a href="/users/<%= stats.user_id %>/edit"><i class="far fa-edit"></i></a>
+                        <% if (userInfo.user_id === userInfo.user_id) { %>
+                        <a href="/users/<%= userInfo.user_id %>/edit"><i class="far fa-edit"></i></a>
                         <% } %>
 
                         <% if (typeof follow == 'object' && follow) { %>
-                        <% let filteredFollow = follow.filter((v) => { return v.user_id === user.user_id }) %>
+                        <% let filteredFollow = follow.filter((v) => { return v.user_id === userInfo.user_id }) %>
                         <% if (filteredFollow.length > 0) { %>
                         <% followStatus = "Unfollow" %>
                         <% } else { %>
@@ -85,13 +85,13 @@
                         <% } else { %>
                         <% followStatus = "Follow" %>
                         <% } %>
-                        <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+                        <% if (isLoggedIn) { %>
                         <% if (followStatus === "Unfollow") { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= userInfo.user_id %>"
                             onclick="follow(event)"
                             class="profile__follow profile__follow--active"><%= followStatus %></button>
                         <% } else { %>
-                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= user.user_id %>"
+                        <button data-follow-status="<%= followStatus %>" data-user-id="<%= userInfo.user_id %>"
                             onclick="follow(event)" class="profile__follow"><%= followStatus %></button>
                         <% } %>
                         <% } else { %>
@@ -100,15 +100,15 @@
                     </header>
                     <div class="profile__stats">
                         <div>
-                            <h2><%= stats.Followers %></h2>
+                            <h2><%= userInfo.Followers %></h2>
                             <p>Followers</p>
                         </div>
                         <div>
-                            <h2><%= stats.Likes %></h2>
+                            <h2><%= userInfo.Likes %></h2>
                             <p>Likes</line-height cssp>
                         </div>
                         <div>
-                            <h2><%= stats.Posts %></h2>
+                            <h2><%= userInfo.Posts %></h2>
                             <p>Post Created</p>
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                 <% } %>
                 <div class="card card__post">
                     <div class="card__like">
-                        <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+                        <% if (isLoggedIn) { %>
                         <% if (status === "Unlike") { %>
                         <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
@@ -198,7 +198,7 @@
         </article>
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
-    <%- include("../components/scripts_links") %>
+    <%- include("../../components/scripts_links") %>
     <script>
         const error = 'please select one of the following options';
         const errTitle = document.getElementById('reporterr');

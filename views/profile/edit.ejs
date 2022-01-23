@@ -10,27 +10,27 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <div class="center">
-            <form action="/users/<%= user.user_id %>/edit" method="post" class="users-form"
+            <form action="/users/<%= userInfo.user_id %>/edit" method="post" class="users-form"
                 enctype="multipart/form-data">
                 <h2>Edit Profile</h2>
                 <label for="username">Username</label>
                 <input type="text" autocomplete="off" placeholder="Username" name="username" id="username" required
-                    value="<%= user.username.slice(1) %>" />
-                <% if (typeof errUser=='string' && errUser) { %>
-                <p class="users-form__error"><%= errUser %> </p>
+                    value="<%= userInfo.username.slice(1) %>" />
+                <% if (err.errUser) { %>
+                <p class="users-form__error"><%= err.errUser %> </p>
                 <% } %>
                 <label for="name">Full Name</label>
                 <input type="text" autocomplete="off" placeholder="Full Name" name="name" id="name" required
-                    value="<%= user.name %>" />
+                    value="<%= userInfo.name %>" />
                 <label for="email">Email</label>
                 <input type="text" autocomplete="off" placeholder="Email" name="email" id="email" required
-                    value="<%= user.email %>">
-                <% if (typeof errEmail=='string' && errEmail) { %>
-                <p class="users-form__error"><%= errEmail %> </p>
+                    value="<%= userInfo.email %>">
+                <% if (err.errEmail) { %>
+                <p class="users-form__error"><%= err.errEmail %> </p>
                 <% } %>
                 <input type="file" name="myImage" id="myImage" hidden />
                 <div class="upload__button">
@@ -41,7 +41,7 @@
             </form>
         </div>
     </main>
-    <%- include("../components/scripts_links") %>
+    <%- include("../../components/scripts_links") %>
     <script>
         const fileUpload = document.getElementById("myImage");
         const customTxt = document.getElementById("custom-text");

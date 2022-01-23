@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <section id="featured-post">
             <h2 class="featuring">Featured Post</h2>
             <div class="card__list">
@@ -51,12 +51,6 @@
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
                         </div>
-                        
-                        <% if (item.post_file) { %>
-                            <div class="card__postingan">
-                                <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
-                            </div>
-                        <% } %>
                         <p><%= item.post_content %> </p>
                         <hr>
                         <div class="card__info">
@@ -72,7 +66,7 @@
         </section>
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../../components/scripts_links.ejs") %>
     <script>
         let del = (id) => {
             axios.delete('/api/post/' + id)

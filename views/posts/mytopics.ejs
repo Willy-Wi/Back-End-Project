@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <%- include("../components/header", isLoggedIn, user_id, profile_image) %>
+    <%- include("../../components/header", isLoggedIn, user) %>
     <main>
-        <%- include("../components/nav") %>
+        <%- include("../../components/nav") %>
         <div class="card__list">
             <% posts.forEach(item => { %>
 
@@ -49,12 +49,6 @@
                             <% } %>
                         </div>
                     </div>
-
-                    <% if (item.post_file) { %>
-                        <div class="card__postingan">
-                            <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
-                        </div>
-                    <% } %>
                     <p><%= item.post_content %> </p>
                     <hr>
                     <div class="card__info">
@@ -70,7 +64,7 @@
         </div>
         <div><a class="createpost" href="/createpost">Create a New Post</a></div>
     </main>
-    <%- include("../components/scripts_links.ejs") %>
+    <%- include("../../components/scripts_links.ejs") %>
     <script>
         let del = (id, user_id) => {
             axios.delete('/posts/' + id + "/" + user_id)

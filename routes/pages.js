@@ -9,7 +9,7 @@ const {
     createComment,
     createReport,
     createFeedback,
-} = require("../controllers/createPost");
+} = require("../controllers/create");
 const { createAlbum } = require("../controllers/createAlbum");
 const { uploadFiles } = require("../controllers/filesCon");
 const { updatePost } = require("../controllers/updatePost");
@@ -18,9 +18,12 @@ const { deleteComment, editComment } = require("../controllers/editComment");
 
 // Additional query only if the user is logged in and approved
 const loginRequired = async (req, res, next) => {
-    if (req.session.user_id) {
-        let sql = `SELECT * FROM likes WHERE user_id = '${req.session.user_id}'`;
-        req.currentUser = await query(sql);
+    if (req.session.user) {
+        let sql = `SELECT * FROM likes WHERE user_id = '${req.session.user.user_id}'`;
+        req.likesInfo = await query(sql);
+        sql = `SELECT * FROM following WHERE following_id = '${req.session.user.user_id}'`;
+        req.followInfo = await query(sql);
+    
     }
     next();
 };
@@ -28,44 +31,48 @@ const loginRequired = async (req, res, next) => {
 const postPermsReq = async (req, res, next) => {
     let sql = `SELECT user_id FROM posts WHERE post_id = ${req.params.id}`;
     let result = await query(sql);
+    if (
+        result.length < 1 ||
+        !(result[0].user_id == req.params.user) ||
+        !(req.session.user.user_id == req.params.user)
+    ) {
+        return res.redirect("/");
+    }
+    next();
+};
 
-    if (result.length < 1 || (!(result[0].user_id == req.params.user)) || (!(req.session.user_id == req.params.user))) {
+const userPermsReq = async (req, res, next) => {
+    if (!(req.session.user.user_id == req.params.user)) {
+        return res.redirect("/");
+    }
+    next();
+};
+
+const commentPermsReq = async (req, res, next) => {
+    let sql = `SELECT user_id FROM comments WHERE comment_id = ${req.params.id}`;
+    let result = await query(sql);
+
+    if (
+        result.length < 1 ||
+        !(result[0].user_id == req.params.user) ||
+        !(req.session.user.user_id == req.params.user)
+    ) {
         return res.redirect("/");
     }
 
     next();
 };
 
-const userPermsReq = async( req, res, next) => {
-    if ((!(req.session.user_id == req.params.user))) {
-        return res.redirect("/");
-    }
-    next();
-}
-
-const commentPermsReq = async (req, res, next) => {
-    let sql = `SELECT user_id FROM comments WHERE comment_id = ${req.params.id}`;
-    let result = await query(sql);
-
-    if (result.length < 1 || (!(result[0].user_id == req.params.user)) || (!(req.session.user_id == req.params.user))) {
-        return res.redirect("/");
-    }
-
-    next();
-}
-
 router.get("/", loginRequired, async (req, res) => {
     let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
     FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id;`;
-
     let posts = await query(sql);
-    res.render("home", {
+    res.render("posts/home", {
         posts,
-        isLoggedIn: req.session.isLoggedIn,
-        profile_image: req.session.pfp,
-        likes: req.currentUser,
-        user_id: req.session.user_id,
+        user: req.session.user || "",
+        isLoggedIn: req.session.isLoggedIn || false,
+        likes: req.likesInfo,
         search: req.query.search,
     });
 });
@@ -76,32 +83,24 @@ router.get("/users/:id", loginRequired, async (req, res) => {
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
     let posts = await query(sql);
 
-    sql = `SELECT username, name, user_id, profile_image FROM users WHERE user_id = ${req.params.id}`;
-    let user = await query(sql);
-
     sql = `SELECT album_id, album_name, album_cover, album_description, album_date, user_id FROM albums WHERE user_id = '${req.params.id}'`;
     let albums = await query(sql);
 
-    sql = `SELECT Users.user_id, COUNT(DISTINCT following.following_id) AS 'Followers', COUNT(DISTINCT Likes.like_id) AS 'Likes' , COUNT(DISTINCT Posts.post_id) AS 'Posts'
+    sql = `SELECT Users.user_id, Users.username, Users.name, Users.profile_image, COUNT(DISTINCT following.following_id) AS 'Followers', COUNT(DISTINCT Likes.like_id) AS 'Likes' , COUNT(DISTINCT Posts.post_id) AS 'Posts'
     FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
     LEFT JOIN Posts ON Users.user_id = Posts.user_id
     LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
-    let stats = await query(sql);
-
-    sql = `SELECT * FROM following WHERE following_id = '${req.session.user_id}'`;
-    let follow = await query(sql);
-
-    res.render("profile", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        user: user[0],
-        posts: posts,
-        stats: stats[0],
-        likes: req.currentUser,
-        profile_image: req.session.pfp,
-        follow: follow,
-        albums: albums,
+    let userInfo = await query(sql);
+    
+    res.render("profile/profile", {
+        user: req.session.user || "",
+        isLoggedIn: req.session.isLoggedIn || false,
+        posts,
+        userInfo: userInfo[0],
+        likes: req.likesInfo,
+        follow: req.followInfo,
+        albums,
         id: req.params.id,
     });
 });
@@ -122,23 +121,21 @@ router.get("/posts/:id", loginRequired, async (req, res) => {
     let comments = await query(sql);
 
     if (req.query.error) {
-        return res.render("comments", {
-            isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user_id,
+        return res.render("comments/comments", {
+            user: req.session.user || "",
+            isLoggedIn: req.session.isLoggedIn || false,
             post: post[0],
-            profile_image: req.session.pfp,
-            likes: req.currentUser,
+            likes: req.likesInfo,
             comments: comments,
             error: req.query.error,
             id: req.params.id,
         });
     }
-    res.render("comments", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
+    res.render("comments/comments", {
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
         post: post[0],
-        likes: req.currentUser,
-        profile_image: req.session.pfp,
+        likes: req.likesInfo,
         comments: comments,
         id: req.params.id,
     });
@@ -156,15 +153,14 @@ router.get("/album/:id", async (req, res) => {
     sql = `SELECT album_name, album_cover, album_description FROM albums WHERE album_id = '${albumid}'`;
     let album = await query(sql);
 
-    res.render("addfiles", {
+    res.render("profile/addfiles", {
         albumid: albumid,
         album: album[0],
         files: files,
         file: files[0],
-        isLoggedIn: req.session.isLoggedIn,
+        isLoggedIn: req.session.isLoggedIn || false,
         user: user[0],
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+        user: req.session.user || "",
     });
 });
 
@@ -177,14 +173,13 @@ router.get("/reportpost/:id", async (req, res) => {
 
     let posts = await query(sql);
 
-    res.render("reportPost", {
+    res.render("posts/reportPost", {
         posts,
         post: posts[0],
         id: postId,
-        isLoggedIn: req.session.isLoggedIn,
-        likes: req.currentUser,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+        isLoggedIn: req.session.isLoggedIn || false,
+        likes: req.likesInfo,
+        user: req.session.user || "",
     });
 });
 
@@ -197,12 +192,11 @@ router.get("/search", loginRequired, async (req, res) => {
 
     let posts = await query(sql);
 
-    res.render("home", {
+    res.render("posts/home", {
         posts,
-        isLoggedIn: req.session.isLoggedIn,
-        profile_image: req.session.pfp,
-        likes: req.currentUser,
-        user_id: req.session.user_id,
+        isLoggedIn: req.session.isLoggedIn || false,
+        likes: req.likesInfo,
+        user: req.session.user || "",
         search: req.query.search,
     });
 });
@@ -226,12 +220,11 @@ const isLoggedIn = (req, res, next) => {
 router.get("/users/:id/edit", isLoggedIn, async (req, res) => {
     let sql = `SELECT name, username, user_id, email FROM users WHERE user_id = '${req.params.id}'`;
     let user = await query(sql);
-
-    res.render("edit", {
-        isLoggedIn: req.session.isLoggedIn,
-        profile_image: req.session.pfp,
-        user_id: req.session.user_id,
-        user: user[0],
+    res.render("profile/edit", {
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
+        err: req.session.err || "",
+        userInfo: user[0],
     });
 });
 
@@ -242,13 +235,12 @@ router.get("/featured-post", isNotLoggedIn, async (req, res) => {
 
     let posts = await query(sql);
 
-    res.render("featured-post", {
+    res.render("posts/featured-post", {
         posts,
         post: posts[0],
-        isLoggedIn: req.session.isLoggedIn,
-        likes: req.currentUser,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+        isLoggedIn: req.session.isLoggedIn || false,
+        likes: req.likesInfo,
+        user: req.session.user || "",
     });
 });
 
@@ -259,13 +251,12 @@ router.get("/mytopics", isLoggedIn, async (req, res) => {
 
     let posts = await query(sql);
 
-    res.render("mytopics", {
+    res.render("posts/mytopics", {
         posts,
         post: posts[0],
-        isLoggedIn: req.session.isLoggedIn,
-        likes: req.currentUser,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+        isLoggedIn: req.session.isLoggedIn || false,
+        likes: req.likesInfo,
+        user: req.session.user || "",
     });
 });
 
@@ -285,25 +276,23 @@ LEFT JOIN Likes ON Likes.post_id = Posts.post_id
     let comments = await query(sql);
 
     if (req.query.error) {
-        return res.render("myanswers", {
-            isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user_id,
+        return res.render("posts/myanswers", {
+            isLoggedIn: req.session.isLoggedIn || false,
+            user: req.session.user || "",
             post: post[0],
-            likes: req.currentUser,
+            likes: req.likesInfo,
             comments: comments,
             error: req.query.error,
-            profile_image: req.session.pfp,
             id: req.params.id,
         });
     }
 
-    res.render("myanswers", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
+    res.render("posts/myanswers", {
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
         post: post[0],
-        likes: req.currentUser,
+        likes: req.likesInfo,
         comments: comments,
-        profile_image: req.session.pfp,
         id: req.params.id,
     });
 });
@@ -315,28 +304,24 @@ router.get("/feedback", isLoggedIn, async (req, res) => {
 
     res.render("feedback", {
         user: user[0],
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        likes: req.currentUser,
-        profile_image: req.session.pfp,
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
+        likes: req.likesInfo,
         id: req.params.id,
     });
 });
 
 router.get("/createpost", isLoggedIn, (req, res) => {
-    res.render("createPost", {
-        isLoggedIn: req.session.isLoggedIn,
-        profile_image: req.session.pfp,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+    res.render("posts/createPost", {
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
     });
 });
 
 router.get("/createalbum", isLoggedIn, (req, res) => {
-    res.render("createAlbum", {
-        isLoggedIn: req.session.isLoggedIn,
-        user_id: req.session.user_id,
-        profile_image: req.session.pfp,
+    res.render("profile/createAlbum", {
+        isLoggedIn: req.session.isLoggedIn || false,
+        user: req.session.user || "",
     });
 });
 
@@ -350,11 +335,10 @@ router.get(
 
         let result = await query(sql);
 
-        res.render("editPost", {
+        res.render("posts/editPost", {
             data: result[0],
-            isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user_id,
-            profile_image: req.session.pfp,
+            isLoggedIn: req.session.isLoggedIn || false,
+            user: req.session.user || "",
         });
     }
 );
@@ -380,40 +364,44 @@ router.get(
         let comment = await query(sql);
 
         if (req.query.error) {
-            return res.render("editComment", {
-                isLoggedIn: req.session.isLoggedIn,
-                user_id: req.session.user_id,
+            return res.render("comments/editComment", {
+                isLoggedIn: req.session.isLoggedIn || false,
+                user: req.session.user || "",
                 post: post[0],
-                likes: req.currentUser,
+                likes: req.likesInfo,
                 comment: comment[0],
                 error: req.query.error,
-                profile_image: req.session.pfp,
                 id: req.params.id,
             });
         }
 
-        res.render("editComment", {
-            isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user_id,
+        res.render("commentseditComment", {
+            isLoggedIn: req.session.isLoggedIn || false,
+            user: req.session.user || "",
             post: post[0],
-            likes: req.currentUser,
+            likes: req.likesInfo,
             comment: comment[0],
-            profile_image: req.session.pfp,
             id: req.params.id,
         });
     }
 );
 
 router.get("/register", isNotLoggedIn, (req, res) => {
-    res.render("register");
+    res.render("register", {
+        isLoggedIn: req.session.isLoggedIn || false,
+    });
 });
 
 router.get("/login", isNotLoggedIn, (req, res) => {
-    res.render("login");
+    res.render("login", {
+        isLoggedIn: req.session.isLoggedIn || false,
+    });
 });
 
 router.get("/forgot-password", isNotLoggedIn, (req, res) => {
-    res.render("forgot-password");
+    res.render("profile/forgot-password", {
+        isLoggedIn: req.session.isLoggedIn || false,
+    });
 });
 
 router.get("/logout", (req, res) => {
@@ -421,9 +409,10 @@ router.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-router.post("/forgot-password", isNotLoggedIn, forgot);
 router.post("/register", isNotLoggedIn, register);
 router.post("/login", isNotLoggedIn, login);
+
+router.post("/forgot-password", isNotLoggedIn, forgot);
 router.post("/change-password", change);
 router.post("/posts/:id/act", isLoggedIn, likes);
 router.post("/users/:id/act", isLoggedIn, follow);
