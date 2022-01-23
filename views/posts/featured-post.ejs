@@ -28,7 +28,8 @@
                 <% } %>
                 <div class="card card__post">
                     <div class="card__like">
-                        <% if (typeof isLoggedIn == 'boolean' && isLoggedIn) { %>
+    
+                        <% if (isLoggedIn) { %>
                         <% if (status === "Unlike") { %>
                         <i class="fas fa-heart active" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
@@ -36,29 +37,45 @@
                         <i class="far fa-heart" onclick="actOnPost(event)" data-post-id="<%= item.post_id %>"
                             data-post-status="<%= status %>"></i>
                         <% } %>
+    
                         <% } else { %>
                         <a href="/auth/login"><i class="far fa-heart"></i></a>
                         <% } %>
+    
                         <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
                     </div>
+    
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
-                            <a href="/posts/report/<%= item.post_id %>"><i class="fas fa-flag post__flag"
-                                    role="button"></i></a>
-                            <a href="/posts/<%= item.post_id %>/edit" style="margin-left: auto;"><i class="fas fa-edit"
-                                    role="button"></i></a>
-                            <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
+                            <div>
+                                <a href="/posts/report/<%= item.post_id %>"><i class="fas fa-flag post__flag"
+                                        role="button"></i></a>
+                                <% if (isLoggedIn) { %>
+                                <% if (item.user_id === user.user_id) { %>
+                                <a href="/posts/<%= item.post_id %>/<%= item.user_id %>/edit"><i class="fas fa-edit"
+                                        role="button"></i></a>
+                                <i class="far fa-trash-alt" role="button"
+                                    onclick=<%='del(' + item.post_id + ',' + item.user_id +')' %>></i>
+                                <% } %>
+                                <% } %>
+                            </div>
                         </div>
-                        <p><%= item.post_content %> </p>
+    
+                        <% if (item.post_file) { %>
+                            <div class="card__postingan">
+                                <img src="../images/imgPost/<%= item.post_file %>" id="postingan">
+                            </div>
+                        <% } %>
+                        <p><%= item.post_content %></p>
                         <hr>
                         <div class="card__info">
                             <img src="../images/<%= item.profile_image %>.png" alt="" width=40>
-                            <p>Posted by <a href="/users/<%= item.user_id %>"><%= item.username %> </a></p>
+                            <p>Posted by <a href="/users/<%= item.user_id %>"><%= item.username %></a></p>
                             <a href="/posts/<%= item.post_id %>"><i class="far fa-comment-alt"></i></a>
                         </div>
                     </div>
-
+    
                 </div>
                 <% }) %>
             </div>
