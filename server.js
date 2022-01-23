@@ -1,12 +1,20 @@
 const express = require("express");
 const session = require("express-session");
-const pages = require("./routes/pages");
 const { conn } = require("./controllers/dbCon");
 const upload = require("express-fileupload");
 const path = require("path");
-const app = express();
 const cors = require("cors");
+
+const auth = require("./routes/auth/auth");
+const index = require("./routes/index");
+const comment = require("./routes/secure/posts/comments/comment");
+const posts = require("./routes/secure/posts/post");
+const postsOther = require("./routes/secure/posts/postPages");
+const users = require("./routes/secure/users/users");
+
+const app = express();
 const PORT = 3000;
+
 
 conn.connect((err) => {
     if (err) throw err;
@@ -29,7 +37,12 @@ app.use(
 );
 app.use(upload());
 
-app.use("/", pages);
+app.use("/auth/", auth)
+app.use("/users/", users);
+app.use("/comment", comment);
+app.use("/posts/", posts)
+app.use("/", index);
+app.use("/", postsOther);
 
 // If page does not exist
 app.use((req, res) => {

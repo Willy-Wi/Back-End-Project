@@ -34,7 +34,7 @@ const createFeedback = (req, res) => {
     let sql = "INSERT INTO feedback SET ?";
     let data = {
         subject: subject,
-        user_id: req.session.user_id,
+        user_id: req.session.user.user_id,
         message: message,
         name: name,
         contact: contact,

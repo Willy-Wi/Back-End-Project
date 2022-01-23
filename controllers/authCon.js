@@ -51,7 +51,7 @@ const register = async (req, res) => {
     };
 
     query(sql, data);
-    res.redirect("/login");
+    res.redirect("/auth/login");
 };
 
 const login = async (req, res) => {
@@ -68,12 +68,8 @@ const login = async (req, res) => {
         return res.render("login", { invalidPassword });
     }
 
-    // TODO: REPLACE
     req.session.user = result[0];
-    // * --------------------
     req.session.isLoggedIn = true;
-    // req.session.user_id = result[0].user_id;
-    // req.session.pfp = result[0].profile_image;
     req.session.username = result[0].username;
     res.redirect("/");
 };
@@ -108,13 +104,13 @@ const forgot = async (req, res, next) => {
         return res.render("forgot-password", { invalidCheck });
     }
 
-    req.session.user_id = result[0].user_id;
+    req.session.user.user_id = result[0].user_id;
 
     res.render("/profile/change-password");
 };
 
 const change = async (req, res) => {
-    const userid = req.session.user_id;
+    const userid = req.session.user.user_id;
     const { password, confirmPassword } = req.body;
     let errPass;
     if (password.length < 5) {
@@ -139,7 +135,7 @@ const change = async (req, res) => {
 
     await query(sql);
 
-    res.redirect("/login");
+    res.redirect("/auth/login");
 };
 
 module.exports = { login, register, forgot, change };

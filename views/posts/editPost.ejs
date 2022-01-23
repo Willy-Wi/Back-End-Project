@@ -36,7 +36,7 @@
         let edit = (id, user_id) => {
             axios({
                 method: 'put',
-                url: '/posts/' + id + "/" + user_id,
+                url: '/posts/' + id + "/" + user_id + "/edit",
                 data: {
                     title: document.getElementById('title').value,
                     description: document.getElementById('description').value

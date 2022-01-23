@@ -1,0 +1,11 @@
+{
+	"SQL Function": {
+		"scope": "javascript,typescript",
+		"prefix": "sql-function",
+		"body": [
+			"const { $1 } = require('../controllers/dbCon');",
+			"$2"
+		],
+		"description": "SQL Function"
+	}
+}

@@ -16,7 +16,7 @@ const createComment = (req, res) => {
     } else {
         let sql = "INSERT INTO comments SET ?";
         let data = {
-            user_id: req.session.user_id,
+            user_id: req.session.user.user_id,
             post_id: postId,
             comment_content: comment,
         };

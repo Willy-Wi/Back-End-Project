@@ -38,16 +38,16 @@
                             data-post-status="<%= status %>"></i>
                         <% } %>
                         <% } else { %>
-                        <a href="/login"><i class="far fa-heart"></i></a>
+                        <a href="/auth/login"><i class="far fa-heart"></i></a>
                         <% } %>
                         <p id="likes-count-<%= item.post_id %>"><%= item.likes %></p>
                     </div>
                     <div class="card__content">
                         <div class="card__header">
                             <h3><%= item.post_title %> </h3>
-                            <a href="/report/post/<%= item.post_id %>"><i class="fas fa-flag post__flag"
+                            <a href="/posts/report/<%= item.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <a href="/editpost/<%= item.post_id %>" style="margin-left: auto;"><i class="fas fa-edit"
+                            <a href="/posts/<%= item.post_id %>/edit" style="margin-left: auto;"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button" onclick=<%='del(' + item.post_id +')' %>></i>
                         </div>
@@ -64,7 +64,7 @@
                 <% }) %>
             </div>
         </section>
-        <div><a class="createpost" href="/createpost">Create a New Post</a></div>
+        <div><a class="createpost" href="/posts/create">Create a New Post</a></div>
     </main>
     <%- include("../../components/scripts_links.ejs") %>
     <script>

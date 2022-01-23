@@ -24,12 +24,12 @@ const createAlbum = (req, res) => {
         album_name: title,
         album_cover: title,
         album_description: description,
-        user_id: req.session.user_id,
+        user_id: req.session.user.user_id,
     };
 
     query(sql, data);
 
-    res.redirect("/users/" + req.session.user_id);
+    res.redirect("/users/" + req.session.user.user_id);
 };
 
 module.exports = { createAlbum }; 

@@ -26,7 +26,7 @@ const createPost = (req, res) => {
     if (errTitle || errDesc) {
         res.render("posts/createPost", {
             isLoggedIn: req.session.isLoggedIn,
-            user_id: req.session.user_id,
+            user_id: req.session.user.user_id,
             profile_image: req.session.pfp,
             errTitle,
             errDesc,
@@ -34,7 +34,7 @@ const createPost = (req, res) => {
     } else {
         let sql = `INSERT INTO posts SET ?`;
         let data = {
-            user_id: req.session.user_id,
+            user_id: req.session.user.user_id,
             post_title: title,
             post_content: description,
             post_file: namaPost,

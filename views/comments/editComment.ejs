@@ -37,7 +37,7 @@
                         data-post-status="<%= status %>"></i>
                     <% } %>
                     <% } else { %>
-                    <a href="/login"><i class="far fa-heart"></i></a>
+                    <a href="/auth/login"><i class="far fa-heart"></i></a>
                     <% } %>
 
                     <p id="likes-count-<%= post.post_id %>"><%= post.likes %></p>
@@ -49,7 +49,7 @@
                         <div>
                             <a href="/reportpost/<%= post.post_id %>"><i class="fas fa-flag post__flag"
                                     role="button"></i></a>
-                            <% if (post.user_id === user_id) { %>
+                            <% if (post.user_id === user.user_id) { %>
                             <a href="/editpost/<%= post.post_id %>/<%= post.user_id %>"><i class="fas fa-edit"
                                     role="button"></i></a>
                             <i class="far fa-trash-alt" role="button"

@@ -15,7 +15,7 @@ const followFunc = {
 };
 
 const follow = (req, res) => {
-    const user_id = req.session.user_id;
+    const user_id = req.session.user.user_id;
     const { action } = req.body;
     const userId = req.params.id;
 
@@ -58,7 +58,7 @@ const editUser = async (req, res) => {
             .toFile(
                 path.resolve(
                     __dirname,
-                    "../public/images/" + req.session.user_id + ".png"
+                    "../public/images/" + req.session.user.user_id + ".png"
                 )
             );
     }

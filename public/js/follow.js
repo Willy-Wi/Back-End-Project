@@ -12,7 +12,6 @@ let updateStat = {
 };
 
 function follow (event) {
-    console.log("Pass");
     let action = event.target.dataset.followStatus;
     let userId = event.target.dataset.userId;
 
