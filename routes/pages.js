@@ -2,19 +2,14 @@ const { Router } = require("express");
 const { query } = require("../controllers/dbCon");
 const router = Router();
 const { register, login, forgot, change } = require("../controllers/authCon");
-const { likes } = require("../controllers/postCon");
+const { likes } = require("../controllers/likeCon");
 const { follow, editUser } = require("../controllers/userCon");
-const {
-    createPost,
-    createComment,
-    createReport,
-    createFeedback,
-} = require("../controllers/create");
+const { createReport, createFeedback } = require("../controllers/report_feedbackCon");
 const { createAlbum } = require("../controllers/createAlbum");
 const { uploadFiles } = require("../controllers/filesCon");
-const { updatePost } = require("../controllers/updatePost");
-const { deletePost } = require("../controllers/deletePost");
-const { deleteComment, editComment } = require("../controllers/editComment");
+
+const { createComment, editComment, deleteComment } = require("../controllers/commentCon");
+const { createPost, editPost, deletePost } = require("../controllers/postCon");
 
 // Additional query only if the user is logged in and approved
 const loginRequired = async (req, res, next) => {
@@ -425,7 +420,7 @@ router.post("/posts/:id/create_comment", isLoggedIn, createComment);
 router.post("/file/:id", uploadFiles);
 
 router.post("/users/:user/edit", isLoggedIn, userPermsReq, editUser);
-router.put("/posts/:id/:user", isLoggedIn, postPermsReq, updatePost);
+router.put("/posts/:id/:user", isLoggedIn, postPermsReq, editPost);
 router.put("/comment/:id/:user", isLoggedIn, commentPermsReq, editComment);
 
 router.delete("/posts/:id/:user", postPermsReq, deletePost);
