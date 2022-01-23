@@ -13,7 +13,6 @@ router.get("/feedback", isLoggedIn, async (req, res) => {
         isLoggedIn: req.session.isLoggedIn || false,
         user: req.session.user || "",
         likes: req.likesInfo,
-        id: req.params.id,
     });
 });
 

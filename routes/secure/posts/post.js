@@ -35,7 +35,6 @@ router.get("/:id", loginRequired, async (req, res) => {
             likes: req.likesInfo,
             comments: comments,
             error: req.query.error,
-            id: req.params.id,
         });
     }
     res.render("comments/comments", {
@@ -44,7 +43,6 @@ router.get("/:id", loginRequired, async (req, res) => {
         post: post[0],
         likes: req.likesInfo,
         comments: comments,
-        id: req.params.id,
     });
 });
 

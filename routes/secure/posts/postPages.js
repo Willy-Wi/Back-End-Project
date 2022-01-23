@@ -61,7 +61,6 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
             likes: req.likesInfo,
             comments: comments,
             error: req.query.error,
-            id: req.params.id,
         });
     }
 
@@ -71,7 +70,6 @@ router.get("/myanswers", isLoggedIn, async (req, res) => {
         post: post[0],
         likes: req.likesInfo,
         comments: comments,
-        id: req.params.id,
     });
 });
 

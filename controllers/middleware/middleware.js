@@ -23,7 +23,6 @@ const userPerms = async (req, res, next) => {
 const commentPerms = async (req, res, next) => {
     let sql = `SELECT user_id FROM comments WHERE comment_id = ${req.params.id}`;
     let result = await query(sql);
-
     if (
         result.length < 1 ||
         !(result[0].user_id == req.params.user) ||
@@ -31,7 +30,6 @@ const commentPerms = async (req, res, next) => {
     ) {
         return res.redirect("/");
     }
-
     next();
 };
 

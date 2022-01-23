@@ -26,7 +26,6 @@ router.get("/edit/:id/:postId/:user", isLoggedIn, commentPerms, async (req, res)
             likes: req.likesInfo,
             comment: comment[0],
             error: req.query.error,
-            id: req.params.id,
         });
     }
 
@@ -36,7 +35,6 @@ router.get("/edit/:id/:postId/:user", isLoggedIn, commentPerms, async (req, res)
         post: post[0],
         likes: req.likesInfo,
         comment: comment[0],
-        id: req.params.id,
     });
 });
 

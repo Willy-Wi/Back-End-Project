@@ -29,7 +29,6 @@ router.get("/:id", loginRequired, async (req, res) => {
         likes: req.likesInfo,
         follow: req.followInfo,
         albums,
-        id: req.params.id,
     });
 });
 
