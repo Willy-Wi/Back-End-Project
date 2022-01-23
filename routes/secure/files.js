@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { query } = require("../controllers/dbCon");
+const { query } = require("../../controllers/dbCon");
 const router = Router();
 const { createAlbum } = require("../../controllers/createAlbum");
 const { uploadFiles } = require("../../controllers/filesCon");

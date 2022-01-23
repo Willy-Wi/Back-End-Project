@@ -11,6 +11,7 @@ const comment = require("./routes/secure/posts/comments/comment");
 const posts = require("./routes/secure/posts/post");
 const postsOther = require("./routes/secure/posts/postPages");
 const users = require("./routes/secure/users/users");
+const files = require("./routes/secure/files");
 
 const app = express();
 const PORT = 3000;
@@ -42,6 +43,7 @@ app.use("/comment", comment);
 app.use("/posts/", posts);
 app.use("/", index);
 app.use("/", postsOther);
+app.use("/", files);
 
 // If page does not exist
 app.use((req, res) => {
