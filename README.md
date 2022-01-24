@@ -2,11 +2,11 @@
 
 ## Links
 
-> [Classified Content](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Classified Content")
+> [Classified Content](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Do not click!")
 
 ## Code Blocks
 
-To run the `index.js` file. You need to install a couple of dependencies.
+To run the `server.js` file. You need to install a list of dependencies.
 
 ```bash
 npm install
