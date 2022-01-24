@@ -12,3 +12,6 @@ drawSQL-mysql-export-2021-12-14(1).sql
 SQL/
 public/images/*.png
 public/images/imgPost/*.png
+!public/images/0.png
+!public/images/music.jpg
+!public/images/Unknown_perso.jpg
