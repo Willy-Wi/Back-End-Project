@@ -2,7 +2,7 @@
 
 ## Links
 
-> [Classified Content](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Do not click!")
+> [Nothing](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Do not click!")
 
 ## Code Blocks
 
