@@ -1316,7 +1316,11 @@ main {
     margin: auto;
     margin-top: 10px;
 }
-
+.report-header p,
+.report-header a,
+.report-body label{
+    color: var(--gray);
+}
 .card__postingan img {
     border-radius: 0%;
     max-height: 240px;
