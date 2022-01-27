@@ -49,6 +49,6 @@ router.get("/:id/edit", isLoggedIn, async (req, res) => {
 
 router.post("/:id/act", isLoggedIn, follow);
 router.post("/:user/edit", isLoggedIn, userPerms, editUser);
-router.post("/users/report/:id", isLoggedIn, createReport);
+router.post("/report/:id", isLoggedIn, createReport);
 
 module.exports = router;
