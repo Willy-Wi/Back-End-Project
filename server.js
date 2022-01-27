@@ -12,6 +12,7 @@ const posts = require("./routes/secure/posts/post");
 const postsOther = require("./routes/secure/posts/postPages");
 const users = require("./routes/secure/users/users");
 const files = require("./routes/secure/files");
+const feedback = require("./routes/secure/feedback");
 
 const app = express();
 const PORT = 3000;
@@ -44,6 +45,7 @@ app.use("/posts/", posts);
 app.use("/", index);
 app.use("/", postsOther);
 app.use("/", files);
+app.use("/", feedback);
 
 // If page does not exist
 app.use((req, res) => {
