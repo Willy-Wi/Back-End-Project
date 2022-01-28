@@ -8,13 +8,13 @@
 
 To run the `server.js` file. You need to install a list of dependencies.
 
-```bash
+```sh
 npm install
 ```
 
 Or you can do this instead
 
-```bash
+```sh
 npm install express express-fileupload ejs bcrypt express-session cors fluent-ffmpeg lightgallery dotenv mysql2 @ffmpeg-installer/ffmpeg multer
 ```
 

@@ -58,7 +58,7 @@ CREATE TABLE `feedback`(
     `name` VARCHAR(255) NOT NULL,
     `contact` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `date_created` DATETIME NULL,
+    `date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY `feedback_id_primary`(`id`)
 );
 CREATE TABLE `Files`(
@@ -67,17 +67,17 @@ CREATE TABLE `Files`(
     `file_url` VARCHAR(255) NOT NULL,
     `file_type` VARCHAR(255) NOT NULL,
     `thumb_url` VARCHAR(255) NOT NULL,
-    `created_at` DATETIME NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY `files_file_id_primary`(`file_id`)
 );
 CREATE TABLE `Reports`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `post_id` INT UNSIGNED NOT NULL,
+    `user_id` INT UNSIGNED NULL,
+    `post_id` INT UNSIGNED NULL,
     `type` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
-    `created_at` DATETIME NOT NULL,
-    `updated_at` DATETIME NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY `reports_id_primary`(`id`)
 );
 ALTER TABLE
