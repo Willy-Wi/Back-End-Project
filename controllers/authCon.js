@@ -37,6 +37,7 @@ const register = async (req, res) => {
             errEmail,
             errPass,
             errPassMatch,
+            isLoggedIn: req.session.isLoggedIn || false,
         });
     }
 
