@@ -1,94 +1,58 @@
 const { query } = require("./dbCon");
-const multer = require("multer");
+const sharp = require("sharp");
 const path = require("path");
 const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const ffmpeg = require("fluent-ffmpeg");
 
-const storage = multer.diskStorage({
-    destination: path.join(__dirname + "./../public/images/"),
-    filename: function (req, file, cb) {
-        cb(
-            null,
-            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-        );
-    },
-});
-
-const timeUpload = function (req, res, next) {
-    res.setTimeout(180000, () => {
-        next();
-    });
-};
-
-const uploadFiles = function (req, res) {
-    let upload = multer({
-        storage: storage,
-        fileFilter(req, file, cb) {
-            if (!file.originalname.match(/\.(png|jpeg|jpg|mp4|mp3|mkv)$/)) {
-                req.fileValidationError =
-                    "Only support these media formats: PNG, JPEG, JPG, MP4, MP3, MKV";
-                return cb(
-                    null,
-                    false,
-                    new Error(
-                        "Only support these media formats: PNG, JPEG, JPG, MP4, MP3, MKV"
-                    )
-                );
+const uploadFiles = async function (req, res) {
+    files = req.files.fileUpload;
+    let albumid = req.params.id;
+    
+    if(files.name.match(/(mp4|mkv)/)) {
+        files.thumbnail = Date.now() + files.name;
+        let uploadData = path.resolve(__dirname, '../public/images/' + files.thumbnail);
+        let folder = path.resolve(__dirname, '../public/images/');
+        files.mv(uploadData, (err) => {
+            ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+            new ffmpeg(uploadData).takeScreenshots({
+                filename: `${files.thumbnail}.png`,
+                count: 1,
+                timemarks: ["0"],
+                folder: `${folder}`
+            });
+            if(err){
+                throw err;
             }
-            cb(undefined, true);
-        },
-    }).array("file-upload");
-
-    upload(req, res, (err) => {
-        let albumid = req.params.id;
-        let files = req.files;
-        req.socket.setTimeout(10 * 60 * 1000);
-        if (err) {
-            throw err;
-        }
-
-        function generateThumbName(length) {
-            let hasil = "";
-            let karakter =
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            let karakterget = karakter.length;
-            for (let index = 0; index < length; index++) {
-                hasil += karakter.charAt(
-                    Math.floor(Math.random() * karakterget)
-                );
-            }
-            return hasil;
-        }
-
-        for (let index = 0; index < files.length; index++) {
-            if (files[index].mimetype.match(/(mp4|mkv)/)) {
-                files[index].thumbnail = generateThumbName(29);
-
-                ffmpeg.setFfmpegPath(ffmpegInstaller.path);
-                new ffmpeg(req.files[index].path).takeScreenshots({
-                    filename: `${files[index].thumbnail}`,
-                    count: 1,
-                    timemarks: ["0"],
-                    folder: `${files[index].destination}`,
-                });
-
-                files[index].thumbnail = files[index].thumbnail.concat(".png");
-            }
-
-            let sql = "INSERT INTO files SET ?";
-            let data = {
-                album_id: albumid,
-                file_url: files[index].filename,
-                file_type: files[index].mimetype,
-                thumb_url: files[index].thumbnail,
-            };
-            query(sql, data);
-        }
-        res.json({
-            status: 200,
-            error: null,
         });
-    });
+        let sql = "INSERT INTO files SET ?";
+        let data = {
+            album_id: albumid,
+            file_url: files.thumbnail,
+            file_type: files.mimetype,
+            thumb_url: files.thumbnail + '.png',
+        };
+        await query(sql, data);
+    }else{
+        files.thumbnail = Date.now() + files.name;
+        sharp(files.data)
+            .toFile(
+                path.resolve(
+                    __dirname,
+                    "../public/images/" + files.thumbnail
+                )
+            );
+        let sql = "INSERT INTO files SET ?";
+        let data = {
+            album_id: albumid,
+            file_url: files.thumbnail,
+            file_type: files.mimetype,
+            thumb_url: null,
+        };
+        await query(sql, data);
+    }
+
+    res.redirect('/album/' + albumid);
+
 };
 
-module.exports = { uploadFiles, timeUpload };
+module.exports = { uploadFiles };
