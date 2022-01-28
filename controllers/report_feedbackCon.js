@@ -1,6 +1,4 @@
 const { query } = require("./dbCon");
-const path = require("path");
-const sharp = require("sharp");
 
 const createReport = (req, res) => {
     const user_id = req.params.id || null;
