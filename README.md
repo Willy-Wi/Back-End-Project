@@ -40,6 +40,5 @@ npm install express express-fileupload ejs bcrypt express-session cors fluent-ff
 -   [x] Delete Post
 -   [x] Light / Dark mode
 -   [x] Search
--   [x] Share post in Album
 -   [x] Permission
 -   [ ] Coming soon
