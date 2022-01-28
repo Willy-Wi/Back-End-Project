@@ -76,6 +76,15 @@ p {
 }
 
 img {
+    border-radius: 0%;
+    aspect-ratio: 1/1;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.image img,
+.card__info img,
+.profile__header img{
     border-radius: 50%;
     aspect-ratio: 1/1;
     -o-object-fit: cover;
