@@ -4,7 +4,7 @@ const createReport = (req, res) => {
     const user_id = req.params.id || null;
     const post_id = req.params.id2 || null;
     const { description } = req.body;
-    if (post_id == "") {
+    if (post_id == "" || post_id == null) {
         let sql = "INSERT INTO reports SET ?";
         let data = {
             user_id: user_id,
