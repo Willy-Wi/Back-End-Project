@@ -1328,7 +1328,7 @@ main {
 .report-header p,
 .report-header a,
 .report-body label{
-    color: var(--gray);
+    color: var(--stats1);
 }
 .card__postingan img {
     border-radius: 0%;
