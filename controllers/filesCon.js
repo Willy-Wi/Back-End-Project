@@ -32,6 +32,22 @@ const uploadFiles = async function (req, res) {
             thumb_url: files.thumbnail + '.png',
         };
         await query(sql, data);
+    }else if(files.name.match(/(mpeg|mp3)/)) {
+        files.thumbnail = Date.now() + files.name;
+        let uploadData = path.resolve(__dirname, '../public/images/' + files.thumbnail);
+        files.mv(uploadData, (err) => {
+            if(err){
+                throw err;
+            }
+        });
+        let sql = "INSERT INTO files SET ?";
+        let data = {
+            album_id: albumid,
+            file_url: files.thumbnail,
+            file_type: files.mimetype,
+            thumb_url: null,
+        };
+        await query(sql, data);
     }else{
         files.thumbnail = Date.now() + files.name;
         sharp(files.data)
