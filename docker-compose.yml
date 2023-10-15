@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-container
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: popsicle
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3307:3306"
+    networks:
+      - mynetwork
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  node-app:
+    build: .
+    image: willywijayaa/backendproject:latest
+    container_name: backendproject-container
+    restart: always
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    networks:
+      - mynetwork
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB: popsicle
+      DB_PASSWORD: password
+      DB_PORT: 3306
+    depends_on:
+      - mysql
+
+networks:
+  mynetwork:
+    driver: bridge
