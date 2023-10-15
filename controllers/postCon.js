@@ -77,8 +77,9 @@ const editPost = async (req, res) => {
             error: errDesc,
         });
     } else {
-        let sql = `UPDATE posts SET post_title = "${title}", post_content = "${description}" WHERE post_id = ${req.params.id}`;
-        await query(sql);
+        let sql = `UPDATE posts SET post_title = ?, post_content = ? WHERE post_id = ?`;
+        let data = [title, description, req.params.id]
+        await query(sql, data);
         res.json({
             status: 200,
         });
