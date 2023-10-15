@@ -16,7 +16,6 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   node-app:
-    build: .
     image: willywijayaa/backendproject:latest
     container_name: backendproject-container
     restart: always
