@@ -2,12 +2,12 @@ const { query } = require("./dbCon");
 
 const updatePostStats = {
     Like: function (postId, userId) {
-        let sql = "INSERT INTO Likes SET ?";
+        let sql = "INSERT INTO likes SET ?";
         let data = { user_id: userId, post_id: postId };
         query(sql, data);
     },
     Unlike: function (postId, userId) {
-        let sql = `DELETE FROM Likes WHERE user_id = '${userId}' AND post_id = '${postId}'`;
+        let sql = `DELETE FROM likes WHERE user_id = '${userId}' AND post_id = '${postId}'`;
         query(sql);
     },
 };

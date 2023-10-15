@@ -10,19 +10,19 @@ const { editUser, follow } = require("../../../controllers/userCon");
 const { createReport } = require("../../../controllers/report_feedbackCon");
 
 router.get("/:id", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(DISTINCT Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.params.id}' GROUP BY Posts.post_id`;
+    let sql = `SELECT users.username, users.user_id, users.profile_image, posts.post_title, posts.post_file ,posts.post_content, posts.post_id, COUNT(DISTINCT likes.user_id) AS 'likes'
+    FROM users INNER JOIN posts ON posts.user_id = users.user_id
+    LEFT JOIN likes ON likes.post_id = posts.post_id WHERE users.user_id = '${req.params.id}' GROUP BY posts.post_id`;
     let posts = await query(sql);
 
     sql = `SELECT album_id, album_name, album_cover, album_description, album_date, user_id FROM albums WHERE user_id = '${req.params.id}'`;
     let albums = await query(sql);
 
-    sql = `SELECT Users.user_id, Users.username, Users.name, Users.profile_image, COUNT(DISTINCT following.following_id) AS 'Followers', COUNT(DISTINCT Likes.like_id) AS 'Likes' , COUNT(DISTINCT Posts.post_id) AS 'Posts'
-    FROM Following RIGHT JOIN Users ON Users.user_id = Following.user_id
-    LEFT JOIN Posts ON Users.user_id = Posts.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Users.user_id = '${req.params.id}' GROUP BY Users.user_id`;
+    sql = `SELECT users.user_id, users.username, users.name, users.profile_image, COUNT(DISTINCT following.following_id) AS 'Followers', COUNT(DISTINCT likes.like_id) AS 'likes' , COUNT(DISTINCT posts.post_id) AS 'posts'
+    FROM following RIGHT JOIN users ON users.user_id = following.user_id
+    LEFT JOIN posts ON users.user_id = posts.user_id
+    LEFT JOIN likes ON likes.post_id = posts.post_id
+    WHERE users.user_id = '${req.params.id}' GROUP BY users.user_id`;
     let userInfo = await query(sql);
 
     res.render("profile/profile", {

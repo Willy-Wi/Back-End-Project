@@ -11,7 +11,7 @@ router.get("/album/:id", async (req, res) => {
     let sql = `SELECT file_id, album_id, file_url, file_type, thumb_url FROM files WHERE album_id = '${albumId}' ORDER BY created_at DESC`;
     let files = await query(sql);
 
-    sql = `SELECT Users.name, Users.username, Users.user_id, Users.email, Users.profile_image FROM Users INNER JOIN Albums ON Albums.user_id = Users.user_id WHERE Albums.album_id = ${albumId}`;
+    sql = `SELECT users.name, users.username, users.user_id, users.email, users.profile_image FROM users INNER JOIN albums ON albums.user_id = users.user_id WHERE albums.album_id = ${albumId}`;
     let userInfo = await query(sql);
 
     sql = `SELECT album_name, album_cover, album_description FROM albums WHERE album_id = '${albumId}'`;

@@ -17,14 +17,14 @@ router.get(
     async (req, res) => {
         const { postId, id } = req.params;
 
-        let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_content, Posts.post_file , Posts.post_id, COUNT(Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id
-    WHERE Posts.post_id = '${postId}' GROUP BY Posts.post_id`;
+        let sql = `SELECT users.username, users.user_id, users.profile_image, posts.post_title, posts.post_content, posts.post_file , posts.post_id, COUNT(likes.user_id) AS 'likes'
+    FROM users INNER JOIN posts ON posts.user_id = users.user_id
+    LEFT JOIN likes ON likes.post_id = posts.post_id
+    WHERE posts.post_id = '${postId}' GROUP BY posts.post_id`;
 
         let post = await query(sql);
 
-        sql = `SELECT Users.username, Users.user_id, Comments.comment_id,Comments.post_id ,Comments.comment_content FROM Users INNER JOIN Comments ON Users.user_id = Comments.user_id WHERE Comments.comment_id = '${id}'`;
+        sql = `SELECT users.username, users.user_id, comments.comment_id,comments.post_id ,comments.comment_content FROM users INNER JOIN comments ON users.user_id = comments.user_id WHERE comments.comment_id = '${id}'`;
 
         let comment = await query(sql);
 

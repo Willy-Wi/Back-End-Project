@@ -7,9 +7,9 @@ const {
 } = require("../../../controllers/middleware/middleware");
 
 router.get("/featured-post", loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file , Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id GROUP BY Posts.post_id ORDER BY likes DESC LIMIT 5;`;
+    let sql = `SELECT users.username, users.user_id, users.profile_image, posts.post_title, posts.post_file , posts.post_content, posts.post_id, COUNT(likes.user_id) AS 'likes'
+    FROM users INNER JOIN posts ON posts.user_id = users.user_id
+    LEFT JOIN likes ON likes.post_id = posts.post_id GROUP BY posts.post_id ORDER BY likes DESC LIMIT 5;`;
 
     let posts = await query(sql);
 
@@ -22,9 +22,9 @@ router.get("/featured-post", loginRequired, async (req, res) => {
 });
 
 router.get("/mytopics", isLoggedIn, loginRequired, async (req, res) => {
-    let sql = `SELECT Users.username, Users.user_id, Users.profile_image, Posts.post_title, Posts.post_file ,Posts.post_content, Posts.post_id, COUNT(Likes.user_id) AS 'likes'
-    FROM Users INNER JOIN Posts ON Posts.user_id = Users.user_id
-    LEFT JOIN Likes ON Likes.post_id = Posts.post_id WHERE Users.user_id = '${req.session.user.user_id}' GROUP BY Posts.post_id;`;
+    let sql = `SELECT users.username, users.user_id, users.profile_image, posts.post_title, posts.post_file ,posts.post_content, posts.post_id, COUNT(likes.user_id) AS 'likes'
+    FROM users INNER JOIN posts ON posts.user_id = users.user_id
+    LEFT JOIN likes ON likes.post_id = posts.post_id WHERE users.user_id = '${req.session.user.user_id}' GROUP BY posts.post_id;`;
 
     let posts = await query(sql);
 
@@ -37,8 +37,8 @@ router.get("/mytopics", isLoggedIn, loginRequired, async (req, res) => {
 });
 
 router.get("/myanswers", isLoggedIn, async (req, res) => {
-    sql = `SELECT Users.username, Users.user_id, Comments.comment_id, Comments.post_id, Comments.comment_content FROM Users INNER JOIN Comments ON
-    Users.user_id = Comments.user_id WHERE Users.user_id = '${req.session.user.user_id}' ORDER BY Comments.created_at DESC`;
+    sql = `SELECT users.username, users.user_id, comments.comment_id, comments.post_id, comments.comment_content FROM users INNER JOIN comments ON
+    users.user_id = comments.user_id WHERE users.user_id = '${req.session.user.user_id}' ORDER BY comments.created_at DESC`;
     let comments = await query(sql);
 
     res.render("posts/myanswers", {
