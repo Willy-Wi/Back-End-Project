@@ -1,0 +1,100 @@
+CREATE DATABASE IF NOT EXISTS popsicle;
+USE popsicle;
+
+CREATE TABLE users (
+    user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    profile_image INT UNSIGNED NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+CREATE TABLE posts (
+    post_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    post_title VARCHAR(255) NOT NULL,
+    post_file VARCHAR(255) NULL,
+    post_content VARCHAR(1000) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (post_id)
+);
+
+CREATE TABLE following (
+    following_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE likes (
+    like_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (like_id)
+);
+
+CREATE TABLE comments (
+    comment_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    post_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    comment_content VARCHAR(1000) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (comment_id)
+);
+
+CREATE TABLE albums (
+    album_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    album_name VARCHAR(255) NOT NULL,
+    album_cover VARCHAR(255) NULL,
+    album_description TEXT NULL,
+    album_date DATETIME NULL,
+    user_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (album_id)
+);
+
+CREATE TABLE feedback (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    date_created DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE files (
+    file_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    album_id INT UNSIGNED NOT NULL,
+    file_url VARCHAR(255) NOT NULL,
+    file_type VARCHAR(255) NOT NULL,
+    thumb_url VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (file_id)
+);
+
+CREATE TABLE reports (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NULL,
+    post_id INT UNSIGNED NULL,
+    type VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE posts ADD CONSTRAINT posts_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE following ADD CONSTRAINT following_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE following ADD CONSTRAINT following_following_id_foreign FOREIGN KEY (following_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE likes ADD CONSTRAINT likes_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE feedback ADD CONSTRAINT feedback_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE comments ADD CONSTRAINT comments_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE albums ADD CONSTRAINT albums_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE reports ADD CONSTRAINT reports_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE;
+ALTER TABLE likes ADD CONSTRAINT likes_post_id_foreign FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE comments ADD CONSTRAINT comments_post_id_foreign FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE reports ADD CONSTRAINT reports_post_id_foreign FOREIGN KEY (post_id) REFERENCES posts (post_id) ON UPDATE CASCADE;
