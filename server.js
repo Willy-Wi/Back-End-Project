@@ -17,10 +17,18 @@ const feedback = require("./routes/secure/feedback");
 const app = express();
 const PORT = 3000;
 
-conn.connect((err) => {
-    if (err) throw err;
-    console.log("MySQL WorkBench is connected");
-});
+function establishConnection() {
+    conn.connect((err) => {
+        if (err) {
+            console.log('Connection failed. Retrying...');
+            setTimeout(establishConnection, 2000);
+        } else {
+            console.log("MySQL WorkBench is connected");
+        }
+    });
+}
+
+establishConnection();
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
